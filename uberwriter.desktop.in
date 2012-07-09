@@ -1,0 +1,8 @@
+[Desktop Entry]
+_Name=Uberwriter
+_Comment=Uberwriter application
+Categories=GNOME;Utility;
+Exec=uberwriter
+Icon=uberwriter
+Terminal=false
+Type=Application
