@@ -5,7 +5,7 @@ Build-Depends: cdbs (>= 0.4.43),
  debhelper (>= 6),
  python (>= 2.6.6-3~),
  python-distutils-extra (>= 2.10)
-Maintainer: UNKNOWN <UNKNOWN>
+Maintainer: Wolf Vollprecht <w.vollprecht@gmail.com>
 Standards-Version: 3.8.3
 XS-Python-Version: current
 
@@ -20,5 +20,9 @@ Depends: ${misc:Depends},
  gir1.2-pango-1.0,
  gir1.2-launchpad-integration-3.0,
  yelp
-Description: UNKNOWN
- UNKNOWN
+Description: UberWriter, beautiful distraction free writing
+ With UberWriter you get only one thing: An empty textbox, that is to
+ fill with your ideas. There are no settings, you don't have to choose a
+ font, it is only for writing. You can use markdown for all your markup
+ needs. To use PDF, HTML and RTF export consider installing Pandoc from
+ the software center.
