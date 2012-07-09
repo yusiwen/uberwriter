@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
-  <!-- interface-requires preferences_uberwriter_dialog 1.0 -->
+  <!-- interface-requires preferences_texteditor_dialog 1.0 -->
   <object class="PreferencesUberwriterDialog" id="preferences_uberwriter_dialog">
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Uberwriter Preferences</property>

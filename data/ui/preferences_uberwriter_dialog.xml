@@ -1,8 +1,8 @@
-<glade-catalog name="preferences_uberwriter_dialog" domain="glade-3" 
+<glade-catalog name="preferences_texteditor_dialog" domain="glade-3" 
                depends="gtk+" version="1.0">
   <glade-widget-classes>
-    <glade-widget-class title="Uberwriter Preferences Dialog" name="PreferencesUberwriterDialog" 
-                        generic-name="PreferenceUberwriterDialog" parent="GtkDialog"
+    <glade-widget-class title="Texteditor Preferences Dialog" name="PreferencesTexteditorDialog" 
+                        generic-name="PreferenceTexteditorDialog" parent="GtkDialog"
                         icon-name="widget-gtk-dialog"/>
   </glade-widget-classes>
 
