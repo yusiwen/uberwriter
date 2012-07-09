@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-09 13:54+0200\n"
+"POT-Creation-Date: 2012-07-10 01:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,7 +34,24 @@ msgid "_Example entry:"
 msgstr ""
 
 #: ../data/ui/AboutUberwriterDialog.ui.h:1
-msgid "2012 Wolf Vollprecht\t"
+msgid ""
+"# Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>\n"
+"# This program is free software: you can redistribute it and/or modify it \n"
+"# under the terms of the GNU General Public License version 3, as "
+"published \n"
+"# by the Free Software Foundation.\n"
+"# \n"
+"# This program is distributed in the hope that it will be useful, but \n"
+"# WITHOUT ANY WARRANTY; without even the implied warranties of \n"
+"# MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR \n"
+"# PURPOSE.  See the GNU General Public License for more details.\n"
+"# \n"
+"# You should have received a copy of the GNU General Public License along \n"
+"# with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
+msgstr ""
+
+#: ../data/ui/AboutUberwriterDialog.ui.h:14
+msgid "Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:2
@@ -73,6 +90,6 @@ msgstr ""
 msgid "Lines: "
 msgstr ""
 
-#: ../uberwriter/__init__.py:23
+#: ../uberwriter/__init__.py:34
 msgid "Show debug messages (-vv debugs uberwriter_lib also)"
 msgstr ""

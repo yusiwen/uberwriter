@@ -1,8 +1,17 @@
-uberwriter (12.07.1) precise; urgency=low
+uberwriter (12.07.1-public1) precise; urgency=low
 
   * New release.
 
- -- Wolf <w.vollprecht@googlemail.com>  Mon, 09 Jul 2012 23:13:59 +0200
+ -- Wolf <w.vollprecht@googlemail.com>  Tue, 10 Jul 2012 01:58:32 +0200
+
+uberwriter (12.07.1) precise; urgency=low
+
+  [ Wolf ]
+  * New release.
+
+  [ wolf ]
+
+ -- wolf <wolf@wolf-laptop>  Tue, 10 Jul 2012 01:58:06 +0200
 
 uberwriter (12.07) precise; urgency=low
 
