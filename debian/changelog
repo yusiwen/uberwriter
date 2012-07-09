@@ -1,3 +1,9 @@
+uberwriter (12.07.1) precise; urgency=low
+
+  * New release.
+
+ -- Wolf <w.vollprecht@googlemail.com>  Mon, 09 Jul 2012 23:13:59 +0200
+
 uberwriter (12.07) precise; urgency=low
 
   * Creating ubuntu package

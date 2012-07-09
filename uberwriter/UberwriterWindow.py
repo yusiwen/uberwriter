@@ -36,8 +36,10 @@ from uberwriter.PreferencesUberwriterDialog import PreferencesUberwriterDialog
 
 
 # gtk_text_view_forward_display_line_end () !! !
+# move-viewport signal
 # See texteditor_lib.Window.py for more details about how this class works
 class UberwriterWindow(Window):
+
     __gtype_name__ = "UberwriterWindow"
 
     EMPHASIS = re.compile(r"\*\w(.+?)\*")
@@ -120,9 +122,35 @@ class UberwriterWindow(Window):
             start_sentence = cursor_iter.copy()
             start_sentence.backward_sentence_start()
             self.TextBuffer.apply_tag(self.blackfont, start_sentence, end_sentence)
-            mark = buf.create_mark('centermark', cursor_iter)
-            #self.TextEditor.scroll_to_mark(mark, True, True, 0.4, 0.4)
-            
+            #mark = buf.create_mark('centermark', cursor_iter)
+            #cursor_iter.forward_visible_lines(15)
+            self.typewriter()
+            #value  = self.TextEditor.scroll_to_iter(cursor_iter, 0.5, False, 0.5, 0.5)
+            #print value
+
+    def typewriter(self):
+        pass
+        #print "calculating typewriter stuff"
+        #firstIter = self.TextBuffer.get_start_iter()
+        #secIter = firstIter.copy()
+        #secIter.forward_char()
+        #self.TextBuffer.apply_tag(self.typewriter_pxabove,
+        #    firstIter,
+        #    secIter)
+
+
+        #cursor = self.TextBuffer.get_mark("insert")
+        #cursor_iter = self.TextBuffer.get_iter_at_mark(cursor)
+
+        #fflines = round(self.window_height/(2*20))
+
+        #cursor_iter.forward_visible_lines(fflines)
+        #self.typewriter()
+        #value  = self.TextEditor.scroll_to_iter(cursor_iter, 0.5, False, 0.5, 0.5)
+        #print value
+
+    def cursor_moved(self, widget, data=None):
+        print "cursor moved"
 
     def text_changed(self, widget, data=None):
         if self.did_change == False:
@@ -173,6 +201,10 @@ class UberwriterWindow(Window):
             name = "indent_left" + str(i)
             self.leftmargin[i].set_property("left-margin", (lm-10) - 10*(i+1))
             self.leftmargin[i].set_property("indent", - 10*(i+1) - 10)
+        y = widget.get_size()[1]
+        self.typewriter_pxabove.set_property("pixels_above_lines", (y/2)-30)
+        self.typewriter_pxbelow.set_property("pixels_below_lines", (y/2))
+        self.window_height = y
 
     def window_close(self, widget, data=None):
         if self.check_change():
@@ -278,6 +310,8 @@ class UberwriterWindow(Window):
         response = filechooser.run()
         if response == Gtk.ResponseType.OK:
             filename = filechooser.get_filename()
+            if filename[-(len(export_type)-1):] == "." + export_type:
+                filename = filename[:-(len(export_type)-1)]
             filechooser.destroy()
         else: 
             filechooser.destroy()
@@ -286,13 +320,13 @@ class UberwriterWindow(Window):
         startIter = self.TextBuffer.get_start_iter()
         endIter = self.TextBuffer.get_end_iter()
 
-        text = self.TextBuffer.get_text(startIter, endIter, False).decode("utf-8")
+        text = self.TextBuffer.get_text(startIter, endIter, False)
                 
         output_dir = os.path.abspath(os.path.join(filename, os.path.pardir))
         
         basename = os.path.basename(filename)
         
-        if export_type == "latex":
+        if export_type == "pdf":
             args = ['pandoc', '--from=markdown', "-o %s.pdf" % basename] 
         elif export_type == "rtf":
             args = ['pandoc', '--from=markdown', "-o %s.rtf" % basename]
@@ -312,7 +346,7 @@ class UberwriterWindow(Window):
         self.export("html")
 
     def export_as_pdf(self, widget, data=None):
-        filename = self.export("latex")
+        filename = self.export("pdf")
 
     def open_document(self, widget):
         if self.check_change() == False:
@@ -416,8 +450,6 @@ class UberwriterWindow(Window):
         #tabs.set_tab(0, Pango.TAB_LEFT, 4)
         #self.TextEditor.set_tab(tabs)
 
-        #self.TextEditor.modify_cursor(Gdk.Color(100,0,0), Gdk.Color(200,0,0))
-
         self.TextBuffer = self.TextEditor.get_buffer()
         self.TextBuffer.set_text('')
         
@@ -437,10 +469,14 @@ class UberwriterWindow(Window):
         self.grayfont = self.TextBuffer.create_tag('graytag', foreground="gray")
         self.blackfont = self.TextBuffer.create_tag('blacktag', foreground="black")
 
+        self.typewriter_pxabove = self.TextBuffer.create_tag('typewriter_pxabove')
+        self.typewriter_pxbelow = self.TextBuffer.create_tag('typewriter_pxbelow')
+
         self.underline = self.TextBuffer.create_tag(
             "underline", 
             underline=Pango.Underline.SINGLE
             )
+        
         self.underline.set_property('weight', Pango.Weight.BOLD)
         
         self.strikethrough = self.TextBuffer.create_tag(
@@ -457,10 +493,37 @@ class UberwriterWindow(Window):
             self.normal_indent, 
             self.TextBuffer.get_start_iter(),
             self.TextBuffer.get_end_iter()
-            )
+        )
 
 
         self.TextBuffer.connect('changed', self.text_changed)
+        
+        #self.TextEditor.connect('move-cursor', self.cursor_moved)
+
+        styleProvider = Gtk.CssProvider()
+        css = """
+        GtkTextView {
+            -GtkWidget-cursor-color: black;
+            -GtkWidget-cursor-aspect-ratio: 0.05;
+            -gtk-tab-size: 2;
+        }"""
+        styleProvider.load_from_data(css)
+        #css = Gtk.CssProvider() 
+        # css.load_from_data("""
+        #    .transparent { background-color: rgba(0, 0, 0, 0); }     
+        #    .shelf { background-image: url(‘shelf.png’); } """
+        #)
+
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(), styleProvider,     
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
+
+        #icon_view.get_style_context().add_class(‘transparent’) 
+        #window.get_style_context().add_class(‘shelf’)
+        #Gtk.CssProvider.load_from_data(css)
+
+        self.window_height = self.get_size()[1]
 
         self.TextEditor.set_buffer(self.TextBuffer)
         self.markup_buffer()
@@ -472,3 +535,4 @@ class UberwriterWindow(Window):
         # Clean up code for saving application state should be added here.
         self.window_close(widget)
         Gtk.main_quit()
+
