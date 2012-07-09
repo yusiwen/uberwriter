@@ -1,0 +1,8 @@
+Participant name: <your full name>
+Application name: <the name of your application>
+App PPA location: <the URL of your application's PPA 
+                  e.g. https://launchpad.net/~$LAUNCHPAD_ID/+archive/$PPA_NAME>
+
+By submitting this document, I acknowledge that I would like to take part in
+the Ubuntu App Showdown according to the rules defined on
+http://developer.ubuntu.com/showdown/rules
