@@ -19,7 +19,9 @@ Depends: ${misc:Depends},
  python-quickly.widgets,
  gir1.2-pango-1.0,
  gir1.2-launchpad-integration-3.0,
+ pandoc,
  yelp
+Suggests: texlive-luatex
 Description: UberWriter, beautiful distraction free writing
  With UberWriter you get only one thing: An empty textbox, that is to
  fill with your ideas. There are no settings, you don't have to choose a
