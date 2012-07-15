@@ -25,7 +25,7 @@ from gi.repository import Gtk, Gdk # pylint: disable=E0611
 from gi.repository import Pango # pylint: disable=E0611
 import re
 
-from quickly.widgets.text_editor import TextEditor
+from UberwriterTextEditor import TextEditor
 
 import logging
 logger = logging.getLogger('uberwriter')
@@ -51,7 +51,7 @@ class UberwriterWindow(Window):
     HEADINDICATOR = re.compile(r"^(#{1,6}) ", re.MULTILINE)
     HEADLINE = re.compile(r"^(#{1,6}[^\n]+)", re.MULTILINE)
 
-    HORIZONTALRULE = re.compile(r"^([\*\- ]{3,})", re.MULTILINE)
+    HORIZONTALRULE = re.compile(r"^([\*\- ]{3,}\n)", re.MULTILINE)
 
     def markup_buffer(self):
     	buf = self.TextBuffer
@@ -114,43 +114,170 @@ class UberwriterWindow(Window):
             self.TextBuffer.apply_tag(self.emph, startIter, endIter)
 
         if self.focusmode:
-            buf.apply_tag(self.grayfont, buf.get_start_iter(), buf.get_end_iter())
-            cursor = buf.get_mark("insert")
-            cursor_iter = buf.get_iter_at_mark(cursor)
-            end_sentence = cursor_iter.copy()
-            end_sentence.forward_sentence_end()
-            start_sentence = cursor_iter.copy()
-            start_sentence.backward_sentence_start()
-            self.TextBuffer.apply_tag(self.blackfont, start_sentence, end_sentence)
-            #mark = buf.create_mark('centermark', cursor_iter)
-            #cursor_iter.forward_visible_lines(15)
+            self.focusmode_highlight()
+
+
+    def focusmode_highlight(self):
+        self.TextBuffer.apply_tag(self.grayfont, 
+            self.TextBuffer.get_start_iter(), 
+            self.TextBuffer.get_end_iter())
+        
+        cursor = self.TextBuffer.get_mark("insert")
+        cursor_iter = self.TextBuffer.get_iter_at_mark(cursor)
+        
+        end_sentence = cursor_iter.copy()
+        end_sentence.forward_sentence_end()
+        
+        start_sentence = cursor_iter.copy()
+        start_sentence.backward_sentence_start()
+        
+        self.TextBuffer.apply_tag(self.blackfont, start_sentence, end_sentence)
+
+
+    def scrolled(self, widget):
+        if self.focusmode:
+            if self.textchange == False:
+                self.TextBuffer.apply_tag(
+                    self.blackfont, 
+                    self.TextBuffer.get_start_iter(), 
+                    self.TextBuffer.get_end_iter())
+            else: 
+                self.textchange = False
+
+
+
+    def after_modify_text(self, *arg):
+        if self.focusmode:
             self.typewriter()
-            #value  = self.TextEditor.scroll_to_iter(cursor_iter, 0.5, False, 0.5, 0.5)
-            #print value
+
+    def init_typewriter(self):
+
+        self.TextBuffer.disconnect(self.TextEditor.delete_event)
+        self.TextBuffer.disconnect(self.TextEditor.insert_event)
+
+        ci = self.TextBuffer.get_iter_at_mark(self.TextBuffer.get_mark('insert'))
+        co = ci.get_offset()
+
+        fflines = int(round(self.window_height/(4*20))) +  1
+        self.fflines = fflines
+        self.TextEditor.fflines = fflines
+
+        s = '\n'*fflines
+
+        start_iter =  self.TextBuffer.get_iter_at_offset(0)
+        self.TextBuffer.insert(start_iter, s)
+        
+        end_iter =  self.TextBuffer.get_iter_at_offset(-1)
+        self.TextBuffer.insert(end_iter, s)
+
+        ne_ci = self.TextBuffer.get_iter_at_offset(co + fflines)
+        self.TextBuffer.place_cursor(ne_ci)
+
+        self.TextEditor.insert_event = self.TextBuffer.connect("insert-text",self.TextEditor._on_insert)
+        self.TextEditor.delete_event = self.TextBuffer.connect("delete-range",self.TextEditor._on_delete)
 
     def typewriter(self):
+        cursor = self.TextBuffer.get_mark("insert")
+        cursor_iter = self.TextBuffer.get_iter_at_mark(cursor)
+        self.TextEditor.scroll_to_iter(cursor_iter, 0.0, True, 0.0, 0.5)
+
+    def remove_typewriter(self):
+        startIter = self.TextBuffer.get_start_iter()
+        endLineIter = startIter.copy()
+        endLineIter.forward_lines(self.fflines)
+        self.TextBuffer.delete(startIter, endLineIter)
+        startIter = self.TextBuffer.get_end_iter()
+        endLineIter = startIter.copy()
+        # Move to line before last line
+        endLineIter.backward_lines(self.fflines - 1)
+        # Move to last char in last line
+        endLineIter.backward_char()
+        self.TextBuffer.delete(startIter, endLineIter)
+        self.markup_buffer()
+
+
+    def get_text(self):
+        if self.focusmode == False:
+            start_iter = self.TextBuffer.get_start_iter()
+            end_iter = self.TextBuffer.get_end_iter()
+
+        else:
+            start_iter = self.TextBuffer.get_iter_at_line(self.fflines)
+            rbline =  self.TextBuffer.get_line_count() - self.fflines
+            end_iter = self.TextBuffer.get_iter_at_line(rbline)
+
+        return self.TextBuffer.get_text(start_iter, end_iter, False)
+
+    def mark_set(self, buffer, location, mark, data=None):
+        if self.focusmode and (mark.get_name() == 'insert' or
+            mark.get_name() == 'selection_bound'):
+            akt_lines = self.TextBuffer.get_line_count()
+            lb = self.fflines
+            rb = akt_lines - self.fflines
+            #print "a %d, lb %d, rb %d" % (akt_lines, lb, rb)
+            #lb = self.TextBuffer.get_iter_at_line(self.fflines)
+            #rbline =  self.TextBuffer.get_line_count() - self.fflines
+            #rb = self.TextBuffer.get_iter_at_line(
+            #   rbline)
+            #rb.backward_line()
+            
+
+            linecount = location.get_line()
+            #print "a %d, lb %d, rb %d, lc %d" % (akt_lines, lb, rb, linecount)
+
+            if linecount < lb:
+                move_to_line = self.TextBuffer.get_iter_at_line(lb)
+                self.TextBuffer.move_mark(mark, move_to_line)
+            elif linecount >= rb:
+                move_to_line = self.TextBuffer.get_iter_at_line(rb)
+                move_to_line.backward_char()
+                self.TextBuffer.move_mark(mark, move_to_line)
+
+    def after_mark_set(self, buffer, location, mark, data=None):
+        if self.focusmode and mark.get_name() == 'insert':
+            self.typewriter()
+
+
+    def delete_from_cursor(self, editor, typ, count, Data=None):
+        if not self.focusmode:
+            return
+        cursor = self.TextBuffer.get_mark("insert")
+        cursor_iter = self.TextBuffer.get_iter_at_mark(cursor)
+        if count < 0 and cursor_iter.starts_line():
+            lb = self.fflines
+            linecount = cursor_iter.get_line()
+            #print "lb %d, lc %d" % (lb, linecount)
+            if linecount <= lb:
+                self.TextEditor.emit_stop_by_name('delete-from-cursor')
+        elif count > 0 and cursor_iter.ends_line():
+            akt_lines = self.TextBuffer.get_line_count()
+            rb = akt_lines - self.fflines
+            linecount = cursor_iter.get_line() + 1
+            #print "rb %d, lc %d" % (rb, linecount)
+            if linecount >= rb:
+                self.TextEditor.emit_stop_by_name('delete-from-cursor')
+
+    def backspace(self, data=None):
+        if not self.focusmode:
+            return
+
+        cursor = self.TextBuffer.get_mark("insert")
+        cursor_iter = self.TextBuffer.get_iter_at_mark(cursor)
+        if cursor_iter.starts_line():
+            lb = self.fflines
+            linecount = cursor_iter.get_line()
+            print "lb %d, lc %d" % (lb, linecount)
+
+            if linecount <= lb:
+                self.TextEditor.emit_stop_by_name('backspace')
+
+
+    def cursor_moved(self, widget, a, b, data=None):
         pass
-        #print "calculating typewriter stuff"
-        #firstIter = self.TextBuffer.get_start_iter()
-        #secIter = firstIter.copy()
-        #secIter.forward_char()
-        #self.TextBuffer.apply_tag(self.typewriter_pxabove,
-        #    firstIter,
-        #    secIter)
 
-
-        #cursor = self.TextBuffer.get_mark("insert")
-        #cursor_iter = self.TextBuffer.get_iter_at_mark(cursor)
-
-        #fflines = round(self.window_height/(2*20))
-
-        #cursor_iter.forward_visible_lines(fflines)
-        #self.typewriter()
-        #value  = self.TextEditor.scroll_to_iter(cursor_iter, 0.5, False, 0.5, 0.5)
-        #print value
-
-    def cursor_moved(self, widget, data=None):
-        print "cursor moved"
+    def after_cursor_moved(self, widget, step, count, extend_selection, data=None):
+        if self.focusmode:
+            self.typewriter()
 
     def text_changed(self, widget, data=None):
         if self.did_change == False:
@@ -159,8 +286,14 @@ class UberwriterWindow(Window):
             self.set_title("* " + title)
 
         self.markup_buffer()
-        self.line_count.set_text(str(self.TextBuffer.get_line_count()))
-        self.char_count.set_text(str(self.TextBuffer.get_char_count()))
+
+        self.textchange = True
+
+        self.line_count.set_text(str(
+            self.TextBuffer.get_line_count() - 
+                (2 * self.fflines)))
+        self.char_count.set_text(str(self.TextBuffer.get_char_count() - 
+                (2 * self.fflines)))
 
     def toggle_fullscreen(self, widget, data=None):
         if widget.get_active():
@@ -188,10 +321,13 @@ class UberwriterWindow(Window):
 
     def set_focusmode(self, widget, data=None):
         if widget.get_active():
-            self.focusmode = True
+            self.init_typewriter()
+            self.focusmode_highlight()
+            self.focusmode = True            
         else:
+            self.remove_typewriter()
+            self.markup_buffer()
             self.focusmode = False
-        self.markup_buffer()
 
     def window_resize(self, widget, data=None):
         lm = (widget.get_size()[0] - 600) / 2
@@ -205,6 +341,9 @@ class UberwriterWindow(Window):
         self.typewriter_pxabove.set_property("pixels_above_lines", (y/2)-30)
         self.typewriter_pxbelow.set_property("pixels_below_lines", (y/2))
         self.window_height = y
+        if self.focusmode:
+            self.remove_typewriter()
+            self.init_typewriter()
 
     def window_close(self, widget, data=None):
         if self.check_change():
@@ -218,9 +357,7 @@ class UberwriterWindow(Window):
             print "saving"
             filename = self.filename
             f = codecs.open(filename, encoding="utf-8", mode='w')
-            startIter = self.TextBuffer.get_start_iter()
-            endIter = self.TextBuffer.get_end_iter()
-            f.write(self.TextBuffer.get_text(startIter, endIter, False).decode("utf-8"))
+            f.write(self.get_text().decode("utf-8") )
             f.close()
             if self.did_change:
                 self.did_change = False
@@ -244,12 +381,8 @@ class UberwriterWindow(Window):
                 if filename[-3:] != ".md":
                     filename = filename + ".md"
                 f = codecs.open(filename, encoding="utf-8", mode='w')
-                startIter = self.TextBuffer.get_start_iter()
-                endIter = self.TextBuffer.get_end_iter()
-                text = self.TextBuffer.get_text(startIter, endIter, False)
-                text = text.decode("utf-8")
-                print text
-                f.write(text)
+
+                f.write(self.get_text().decode("utf-8") )
                 f.close()
                 self.filename = filename
                 filechooser.destroy()
@@ -280,11 +413,7 @@ class UberwriterWindow(Window):
             if filename[-3:] != ".md":
                 filename = filename + ".md"
             f = codecs.open(filename, encoding="utf-8", mode='w')
-            startIter = self.TextBuffer.get_start_iter()
-            endIter = self.TextBuffer.get_end_iter()
-            text = self.TextBuffer.get_text(startIter, endIter, False)
-            text = text.decode("utf-8")
-            f.write(text)
+            f.write(self.get_text().decode("utf-8") )
             f.close()
             self.filename = filename
             filechooser.destroy()
@@ -317,10 +446,7 @@ class UberwriterWindow(Window):
             filechooser.destroy()
             return 
 
-        startIter = self.TextBuffer.get_start_iter()
-        endIter = self.TextBuffer.get_end_iter()
-
-        text = self.TextBuffer.get_text(startIter, endIter, False)
+        text = self.get_text()
                 
         output_dir = os.path.abspath(os.path.join(filename, os.path.pardir))
         
@@ -416,33 +542,33 @@ class UberwriterWindow(Window):
         self.did_change = False
         self.filename = None
 
-       # p = "~/.simpletexter/"
-       #p = os.path.expanduser(p)
-       #self.temp_dir = p     
-       #if not os.path.exists(p):
-       #    os.makedirs(p)
+        # p = "~/.simpletexter/"
+        #p = os.path.expanduser(p)
+        #self.temp_dir = p     
+        #if not os.path.exists(p):
+        #    os.makedirs(p)
 
         self.TextEditor = TextEditor()
 
         self.TextEditor.set_left_margin(100)
         self.TextEditor.set_left_margin(40)
 
-        #self.TextEditor.set_indent(100)
-
         self.TextEditor.set_wrap_mode(Gtk.WrapMode.WORD)
         self.TextEditor.show()
 
-        builder.get_object('scrolledwindow1').add(self.TextEditor)
+        self.ScrolledWindow = builder.get_object('scrolledwindow1')
 
-        print self.get_size()[0]
+        self.ScrolledWindow.add(self.TextEditor)
 
 		pangoFont = Pango.FontDescription("Ubuntu Mono 15")
 		self.TextEditor.modify_font(pangoFont)
+        
         self.TextEditor.set_margin_top(38)
         self.TextEditor.set_margin_bottom(16)
 
         self.TextEditor.set_pixels_above_lines(5)
         self.TextEditor.set_pixels_below_lines(5)
+        self.TextEditor.set_pixels_inside_wrap(10)
 
         #tabs = self.TextEditor.get_tabs()
         #tabs.resize(4)
@@ -466,8 +592,12 @@ class UberwriterWindow(Window):
 
         self.normal_indent = self.TextBuffer.create_tag('normal_indent', indent=100)
         
-        self.grayfont = self.TextBuffer.create_tag('graytag', foreground="gray")
-        self.blackfont = self.TextBuffer.create_tag('blacktag', foreground="black")
+        self.grayfont = self.TextBuffer.create_tag('graytag', 
+            foreground="gray")
+        self.blackfont = self.TextBuffer.create_tag('blacktag', 
+            foreground="#222")
+
+        self.typewriter_formatchar = u'\xFEFF'
 
         self.typewriter_pxabove = self.TextBuffer.create_tag('typewriter_pxabove')
         self.typewriter_pxbelow = self.TextBuffer.create_tag('typewriter_pxbelow')
@@ -495,29 +625,43 @@ class UberwriterWindow(Window):
             self.TextBuffer.get_end_iter()
         )
 
+        self.invisibleTag = self.TextBuffer.create_tag("invisible", 
+            invisible=True)
+        
+        self.ineditableTag = self.TextBuffer.create_tag("ineditable", 
+            editable=False)
+
+        self.start_mark = self.TextBuffer.create_mark("startmark", 
+            self.TextBuffer.get_start_iter(), 
+            True)
+
+        self.end_mark =  self.TextBuffer.create_mark("endmark", 
+            self.TextBuffer.get_end_iter(), 
+            False)
+       
 
         self.TextBuffer.connect('changed', self.text_changed)
         
-        #self.TextEditor.connect('move-cursor', self.cursor_moved)
+        self.TextEditor.connect('move-cursor', self.cursor_moved)
 
         styleProvider = Gtk.CssProvider()
+
         css = """
         GtkTextView {
             -GtkWidget-cursor-color: black;
             -GtkWidget-cursor-aspect-ratio: 0.05;
             -gtk-tab-size: 2;
+            color: #222;
         }"""
+
         styleProvider.load_from_data(css)
-        #css = Gtk.CssProvider() 
-        # css.load_from_data("""
-        #    .transparent { background-color: rgba(0, 0, 0, 0); }     
-        #    .shelf { background-image: url(‘shelf.png’); } """
-        #)
 
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), styleProvider,     
             Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
+
+        self.fflines = 0
 
         #icon_view.get_style_context().add_class(‘transparent’) 
         #window.get_style_context().add_class(‘shelf’)
@@ -527,6 +671,26 @@ class UberwriterWindow(Window):
 
         self.TextEditor.set_buffer(self.TextBuffer)
         self.markup_buffer()
+
+        # Scrolling -> Dark or not?
+        self.textchange = False
+
+        self.TextBuffer.connect('mark-set', self.mark_set)
+        
+        self.TextEditor.drag_dest_unset()
+
+        # Events to preserve margin. (To be deleted.)
+        self.TextEditor.connect('delete-from-cursor', self.delete_from_cursor)
+        self.TextEditor.connect('backspace', self.backspace)
+
+        self.v_adj = self.TextEditor.get_vadjustment()
+
+        self.v_adj.connect('value-changed', self.scrolled)
+
+        # Events for Typewriter mode
+        self.TextBuffer.connect_after('mark-set', self.after_mark_set)
+        self.TextBuffer.connect_after('changed', self.after_modify_text)
+        #self.TextEditor.connect_after('move-cursor', self.after_cursor_moved)
 
         self.connect("configure-event", self.window_resize)
 
