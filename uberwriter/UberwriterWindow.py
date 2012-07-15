@@ -32,7 +32,6 @@ logger = logging.getLogger('uberwriter')
 
 from uberwriter_lib import Window
 from uberwriter.AboutUberwriterDialog import AboutUberwriterDialog
-from uberwriter.PreferencesUberwriterDialog import PreferencesUberwriterDialog
 
 
 # gtk_text_view_forward_display_line_end () !! !
@@ -540,7 +539,6 @@ class UberwriterWindow(Window):
         super(UberwriterWindow, self).finish_initializing(builder)
 
         self.AboutDialog = AboutUberwriterDialog
-        self.PreferencesDialog = PreferencesUberwriterDialog
 
         # Code for other initialization actions should be added here.
 

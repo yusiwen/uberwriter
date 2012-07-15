@@ -1,8 +1,8 @@
 [Desktop Entry]
-_Name=UberWriter
-_Comment=UberWriter application
+_Name=Uberwriter
+_Comment=Uberwriter application
 Categories=GNOME;Utility;
 Exec=uberwriter
-Icon=/usr/share/uberwriter/media/uberwriter.svg
+Icon=uberwriter
 Terminal=false
 Type=Application
