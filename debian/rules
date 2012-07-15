@@ -7,7 +7,7 @@ else
 endif
 
 override_dh_auto_install:
-	dh_auto_install -- --install-scripts=/opt/extras.ubuntu.com/uberwriter/bin                 --install-data=/opt/extras.ubuntu.com/uberwriter                 --install-lib=/opt/extras.ubuntu.com/uberwriter
+	dh_auto_install -- --install-scripts=/opt/extras.ubuntu.com/uberwriter                 --install-data=/opt/extras.ubuntu.com/uberwriter                 --install-lib=/opt/extras.ubuntu.com/uberwriter
 
 override_dh_python2:
 	dh_python2 /opt/extras.ubuntu.com/uberwriter

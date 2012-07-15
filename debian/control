@@ -1,7 +1,7 @@
 Source: uberwriter
 Section: python
 Priority: extra
-Build-Depends: debhelper (>= 8),
+Build-Depends: debhelper (>= 6),
  python (>= 2.6.6-3~),
  python-distutils-extra (>= 2.10)
 Maintainer: Wolf Vollprecht <w.vollprecht@gmail.com>
