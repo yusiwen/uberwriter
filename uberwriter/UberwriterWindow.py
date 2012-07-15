@@ -25,7 +25,7 @@ from gi.repository import Gtk, Gdk # pylint: disable=E0611
 from gi.repository import Pango # pylint: disable=E0611
 import re
 
-from UberwriterTextEditor import TextEditor
+from .UberwriterTextEditor import TextEditor
 
 import logging
 logger = logging.getLogger('uberwriter')
