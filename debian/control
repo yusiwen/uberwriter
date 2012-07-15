@@ -24,7 +24,6 @@ Description: UberWriter, beautiful distraction free writing
  fill with your ideas. There are no settings, you don't have to choose a
  font, it is only for writing. You can use markdown for all your markup
  needs. PDF, RTF and HTML are generated with pandoc. You find more
- information about the markdown syntax at their homepage:
- http://johnmacfarlane.net/pandoc/README.html To use PDF export consider
- installing the optional LaTeX package (texlive-luatex) from the software
- center.
+ information about the markdown syntax at their homepage. To use PDF
+ export consider installing the optional LaTeX package (texlive-luatex)
+ from the software center.
