@@ -87,7 +87,7 @@ class InstallAndUpdateDataDirectory(DistUtilsExtra.auto.install_auto):
 
 DistUtilsExtra.auto.setup(
     name='uberwriter',
-    version='12.07',
+    version='12.07.1',
     license='GPL-3',
     author='Wolf',
     author_email='w.vollprecht@googlemail.com',
