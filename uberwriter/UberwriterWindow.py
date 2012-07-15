@@ -193,8 +193,6 @@ class UberwriterWindow(Window):
         # Move to last char in last line
         endLineIter.backward_char()
         self.TextBuffer.delete(startIter, endLineIter)
-        self.markup_buffer()
-
 
     def get_text(self):
         if self.focusmode == False:
@@ -300,6 +298,7 @@ class UberwriterWindow(Window):
             self.fullscreen()
         else:
             self.unfullscreen()
+        self.TextEditor.grab_focus()
 
     def delete_text(self, widget):
         pass
@@ -323,11 +322,14 @@ class UberwriterWindow(Window):
         if widget.get_active():
             self.init_typewriter()
             self.focusmode_highlight()
-            self.focusmode = True            
+            self.focusmode = True
+            self.TextEditor.grab_focus()            
+            self.typewriter()        
         else:
             self.remove_typewriter()
-            self.markup_buffer()
             self.focusmode = False
+            self.markup_buffer()
+            self.TextEditor.grab_focus()            
 
     def window_resize(self, widget, data=None):
         lm = (widget.get_size()[0] - 600) / 2
@@ -523,6 +525,16 @@ class UberwriterWindow(Window):
             self.filename = None
             self.TextBuffer.set_text('')
 
+    def menu_activate_focusmode(self, widget):
+        self.focusmode_button.emit('activate')
+
+    def menu_activate_fullscreen(self, widget):
+        self.fullscreen_button.emit('activate')
+
+    # Not added as menu button as of now. Standard is typewriter active.
+    def toggle_typewriter(self, widget, data=None):
+        self.typewriter_active = widget.get_active()
+
     def finish_initializing(self, builder): # pylint: disable=E1002
         """Set up the main window"""
         super(UberwriterWindow, self).finish_initializing(builder)
@@ -538,6 +550,9 @@ class UberwriterWindow(Window):
 
         self.line_count = builder.get_object('line_count')
         self.char_count = builder.get_object('char_count')
+
+        self.fullscreen_button = builder.get_object('togglebutton1')
+        self.focusmode_button = builder.get_object('focus_toggle')
 
         self.did_change = False
         self.filename = None

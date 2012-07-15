@@ -1,5 +1,5 @@
 ### BEGIN LICENSE
-# Copyright (C) 2010 Rick Spencer rick.spencer@canonical.com
+# Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>
 # This program is free software: you can redistribute it and/or modify it 
 # under the terms of the GNU General Public License version 3, as published 
 # by the Free Software Foundation.
@@ -230,9 +230,6 @@ class TextEditor( Gtk.TextView ):
         """
 
         self.get_buffer().paste_clipboard(self.clipboard,None,True)
-
-    def scroll_mark_onscreen(self, buffer):
-        print "ahasd"
 
     def undo(self, widget=None, data=None):
         """undo: revert (undo) the last action.
