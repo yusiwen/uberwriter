@@ -94,7 +94,8 @@ DistUtilsExtra.auto.setup(
     description='UberWriter, beautiful distraction free writing',
     long_description='With UberWriter you get only one thing: An empty textbox, that is to fill with your ideas. There are no settings, you don\'t have to choose a font, it is only for writing.\
  You can use markdown for all your markup needs.\
- To use PDF, HTML and RTF export consider installing Pandoc from the software center.',
+ PDF, RTF and HTML are generated with pandoc. You find more information about the markdown syntax at their homepage: http://johnmacfarlane.net/pandoc/README.html\
+ To use PDF export consider installing the optional LaTeX package (texlive-luatex) from the software center.',
     url='https://launchpad.net/uberwriter',
     cmdclass={'install': InstallAndUpdateDataDirectory}
     )

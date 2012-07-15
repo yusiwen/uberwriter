@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-10 01:58+0200\n"
+"POT-Creation-Date: 2012-07-15 02:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,46 @@ msgstr ""
 msgid "_Example entry:"
 msgstr ""
 
+#: ../data/ui/UberwriterWindow.ui.h:2
+msgid "_File"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:3
+msgid "Export as RTF"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:4
+msgid "_Edit"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:5
+msgid "_View"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:6
+msgid "_Help"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:7
+msgid "Contents"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:8
+msgid "Focus Mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:9
+msgid "Fullscreen"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:10
+msgid "Characters: "
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:11
+msgid "Lines: "
+msgstr ""
+
 #: ../data/ui/AboutUberwriterDialog.ui.h:1
 msgid ""
 "# Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>\n"
@@ -52,42 +92,6 @@ msgstr ""
 
 #: ../data/ui/AboutUberwriterDialog.ui.h:14
 msgid "Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:2
-msgid "_File"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:3
-msgid "Export as RTF"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:4
-msgid "_Edit"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:5
-msgid "_Help"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:6
-msgid "Contents"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:7
-msgid "Focus Mode"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:8
-msgid "Fullscreen"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:9
-msgid "Characters: "
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:10
-msgid "Lines: "
 msgstr ""
 
 #: ../uberwriter/__init__.py:34

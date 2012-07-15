@@ -1,7 +1,8 @@
 Source: uberwriter
 Section: python
 Priority: extra
-Build-Depends: debhelper (>= 8), libglib2.0-bin, python (>= 2.6.6-3~),
+Build-Depends: debhelper (>= 8),
+ python (>= 2.6.6-3~),
  python-distutils-extra (>= 2.10)
 Maintainer: Wolf Vollprecht <w.vollprecht@gmail.com>
 Standards-Version: 3.9.3
@@ -22,5 +23,8 @@ Description: UberWriter, beautiful distraction free writing
  With UberWriter you get only one thing: An empty textbox, that is to
  fill with your ideas. There are no settings, you don't have to choose a
  font, it is only for writing. You can use markdown for all your markup
- needs. To use PDF, HTML and RTF export consider installing Pandoc from
- the software center.
+ needs. PDF, RTF and HTML are generated with pandoc. You find more
+ information about the markdown syntax at their homepage:
+ http://johnmacfarlane.net/pandoc/README.html To use PDF export consider
+ installing the optional LaTeX package (texlive-luatex) from the software
+ center.

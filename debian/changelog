@@ -1,3 +1,9 @@
+uberwriter (12.07.3ubuntu1) precise; urgency=low
+
+  * 
+
+ -- wolf <wolf@wolf-laptop>  Sun, 15 Jul 2012 02:45:40 +0200
+
 uberwriter (12.07.3) precise; urgency=low
 
   * Added Dependencies for Pandoc & Latex
