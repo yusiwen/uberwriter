@@ -3,6 +3,6 @@ _Name=Uberwriter
 _Comment=Uberwriter application
 Categories=GNOME;Utility;
 Exec=uberwriter
-Icon=uberwriter
+Icon=/usr/share/uberwriter/media/uberwriter.svg
 Terminal=false
 Type=Application

@@ -332,16 +332,15 @@ class UberwriterWindow(Window):
 
     def window_resize(self, widget, data=None):
         lm = (widget.get_size()[0] - 600) / 2
+        
         self.TextEditor.set_left_margin(lm)
         self.TextEditor.set_right_margin(lm)
+
         for i in range(0,6):
             name = "indent_left" + str(i)
             self.leftmargin[i].set_property("left-margin", (lm-10) - 10*(i+1))
             self.leftmargin[i].set_property("indent", - 10*(i+1) - 10)
-        y = widget.get_size()[1]
-        self.typewriter_pxabove.set_property("pixels_above_lines", (y/2)-30)
-        self.typewriter_pxbelow.set_property("pixels_below_lines", (y/2))
-        self.window_height = y
+
         if self.focusmode:
             self.remove_typewriter()
             self.init_typewriter()
@@ -610,11 +609,6 @@ class UberwriterWindow(Window):
         self.blackfont = self.TextBuffer.create_tag('blacktag', 
             foreground="#222")
 
-        self.typewriter_formatchar = u'\xFEFF'
-
-        self.typewriter_pxabove = self.TextBuffer.create_tag('typewriter_pxabove')
-        self.typewriter_pxbelow = self.TextBuffer.create_tag('typewriter_pxbelow')
-
         self.underline = self.TextBuffer.create_tag(
             "underline", 
             underline=Pango.Underline.SINGLE
@@ -703,7 +697,7 @@ class UberwriterWindow(Window):
         # Events for Typewriter mode
         self.TextBuffer.connect_after('mark-set', self.after_mark_set)
         self.TextBuffer.connect_after('changed', self.after_modify_text)
-        #self.TextEditor.connect_after('move-cursor', self.after_cursor_moved)
+        self.TextEditor.connect_after('move-cursor', self.after_cursor_moved)
 
         self.connect("configure-event", self.window_resize)
 

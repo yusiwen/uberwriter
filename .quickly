@@ -2,5 +2,4 @@ project = uberwriter
 version = 12.04
 template = ubuntu-application
 bzrbranch = lp:~w-vollprecht/uberwriter/quickly_trunk
-ppa = ppa
 lp_id = uberwriter
