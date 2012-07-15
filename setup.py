@@ -87,15 +87,15 @@ class InstallAndUpdateDataDirectory(DistUtilsExtra.auto.install_auto):
 
 DistUtilsExtra.auto.setup(
     name='uberwriter',
-    version='12.07.9',
+    version='12.07.10',
     license='GPL-3',
     author='Wolf Vollprecht',
     author_email='w.vollprecht@gmail.com',
     description='UberWriter, beautiful distraction free writing',
     long_description='With UberWriter you get only one thing: An empty textbox, that is to fill with your ideas. There are no settings, you don\'t have to choose a font, it is only for writing.\
- You can use markdown for all your markup needs.\
- PDF, RTF and HTML are generated with pandoc. You find more information about the markdown syntax at their homepage.\
- For PDF generation it is also required that you choose to install the texlive-luatex package.',
+You can use markdown for all your markup needs.\
+PDF, RTF and HTML are generated with pandoc.\
+For PDF generation it is also required that you choose to install the texlive-luatex package.',
     url='https://launchpad.net/uberwriter',
     cmdclass={'install': InstallAndUpdateDataDirectory}
     )
