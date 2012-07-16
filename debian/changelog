@@ -1,3 +1,10 @@
+uberwriter (12.07.48-public1) precise; urgency=low
+
+  [ Wolf ]
+  * Sharing to PPA version bump.
+
+ -- Wolf <w.vollprecht@googlemail.com>  Sun, 15 Jul 2012 13:22:34 +0200
+
 uberwriter (12.07.17-public1) precise; urgency=low
 
   [ Wolf ]
@@ -5,13 +12,13 @@ uberwriter (12.07.17-public1) precise; urgency=low
 
   [ wolf ]
 
- -- wolf <wolf@wolf-laptop>  Sun, 15 Jul 2012 13:22:34 +0200
+ -- Wolf <w.vollprecht@googlemail.com>  Sun, 15 Jul 2012 13:22:34 +0200
 
 uberwriter (12.07.10-public1ubuntu1) precise; urgency=low
 
   * 
 
- -- wolf <wolf@wolf-laptop>  Sun, 15 Jul 2012 03:20:37 +0200
+ -- Wolf <w.vollprecht@googlemail.com>  Sun, 15 Jul 2012 03:20:37 +0200
 
 uberwriter (12.07.10-public1) precise; urgency=low
 
@@ -23,7 +30,7 @@ uberwriter (12.07.3ubuntu1) precise; urgency=low
 
   * 
 
- -- wolf <wolf@wolf-laptop>  Sun, 15 Jul 2012 02:50:23 +0200
+ -- Wolf <w.vollprecht@googlemail.com>  Sun, 15 Jul 2012 02:50:23 +0200
 
 uberwriter (12.07.3) precise; urgency=low
 
@@ -62,7 +69,7 @@ uberwriter (12.07.1) precise; urgency=low
 
   [ wolf ]
 
- -- wolf <wolf@wolf-laptop>  Tue, 10 Jul 2012 01:58:06 +0200
+ -- Wolf <w.vollprecht@googlemail.com> Tue, 10 Jul 2012 01:58:06 +0200
 
 uberwriter (12.07) precise; urgency=low
 
@@ -80,4 +87,4 @@ uberwriter (0.1) precise; urgency=low
 
   * Initial release.
 
- -- wolf <wolf@wolf-laptop>  Mon, 09 Jul 2012 13:54:01 +0200
+ -- Wolf <w.vollprecht@googlemail.com>  Mon, 09 Jul 2012 13:54:01 +0200
