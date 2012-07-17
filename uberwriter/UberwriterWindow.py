@@ -136,14 +136,17 @@ class UberwriterWindow(Window):
     def scrolled(self, widget):
         if self.focusmode:
             if self.textchange == False:
-                self.TextBuffer.apply_tag(
-                    self.blackfont, 
-                    self.TextBuffer.get_start_iter(), 
-                    self.TextBuffer.get_end_iter())
+                if self.scroll_count >= 1:
+                    self.TextBuffer.apply_tag(
+                        self.blackfont, 
+                        self.TextBuffer.get_start_iter(), 
+                        self.TextBuffer.get_end_iter())
+                else:
+                    self.scroll_count += 1
             else: 
+                self.scroll_count = 0
+                self.typewriter()
                 self.textchange = False
-
-
 
     def after_modify_text(self, *arg):
         if self.focusmode:
@@ -157,7 +160,7 @@ class UberwriterWindow(Window):
         ci = self.TextBuffer.get_iter_at_mark(self.TextBuffer.get_mark('insert'))
         co = ci.get_offset()
 
-        fflines = int(round(self.window_height/(4*20))) +  1
+        fflines = int(round((self.window_height-55)/(2*30)))
         self.fflines = fflines
         self.TextEditor.fflines = fflines
 
@@ -172,8 +175,13 @@ class UberwriterWindow(Window):
         ne_ci = self.TextBuffer.get_iter_at_offset(co + fflines)
         self.TextBuffer.place_cursor(ne_ci)
 
+        # Scroll it to the center
+        self.TextEditor.scroll_to_mark(self.TextBuffer.get_mark('insert'), 0.0, True, 0.0, 0.5)
+
         self.TextEditor.insert_event = self.TextBuffer.connect("insert-text",self.TextEditor._on_insert)
         self.TextEditor.delete_event = self.TextBuffer.connect("delete-range",self.TextEditor._on_delete)
+
+        self.typewriter_initiated = True
 
     def typewriter(self):
         cursor = self.TextBuffer.get_mark("insert")
@@ -187,11 +195,16 @@ class UberwriterWindow(Window):
         self.TextBuffer.delete(startIter, endLineIter)
         startIter = self.TextBuffer.get_end_iter()
         endLineIter = startIter.copy()
+        
         # Move to line before last line
         endLineIter.backward_lines(self.fflines - 1)
+        
         # Move to last char in last line
         endLineIter.backward_char()
         self.TextBuffer.delete(startIter, endLineIter)
+
+        self.fflines = 0
+        self.TextEditor.fflines = 0
 
     def get_text(self):
         if self.focusmode == False:
@@ -322,8 +335,7 @@ class UberwriterWindow(Window):
             self.init_typewriter()
             self.focusmode_highlight()
             self.focusmode = True
-            self.TextEditor.grab_focus()            
-            self.typewriter()        
+            self.TextEditor.grab_focus()
         else:
             self.remove_typewriter()
             self.focusmode = False
@@ -331,10 +343,15 @@ class UberwriterWindow(Window):
             self.TextEditor.grab_focus()            
 
     def window_resize(self, widget, data=None):
+        # To calc padding top / bottom
+        self.window_height = widget.get_size()[1]
+
+        # Calculate left / right margin
         lm = (widget.get_size()[0] - 600) / 2
         
         self.TextEditor.set_left_margin(lm)
         self.TextEditor.set_right_margin(lm)
+
 
         for i in range(0,6):
             name = "indent_left" + str(i)
@@ -582,12 +599,6 @@ class UberwriterWindow(Window):
         self.TextEditor.set_pixels_below_lines(5)
         self.TextEditor.set_pixels_inside_wrap(10)
 
-        #tabs = self.TextEditor.get_tabs()
-        #tabs.resize(4)
-        #tabs = Pango.TabArray()
-        #tabs.set_tab(0, Pango.TAB_LEFT, 4)
-        #self.TextEditor.set_tab(tabs)
-
         self.TextBuffer = self.TextEditor.get_buffer()
         self.TextBuffer.set_text('')
         
@@ -598,6 +609,10 @@ class UberwriterWindow(Window):
             self.leftmargin[i].set_property("left-margin", 90 - 10*(i+1))
             self.leftmargin[i].set_property("indent", - 10*(i+1) - 10)
             #self.leftmargin[i].set_property("background", "gray")
+
+        # Init Window height for top/bottom padding
+
+        self.window_height = self.get_size()[1]
 
 
         self.emph = self.TextBuffer.create_tag("emph", weight=Pango.Weight.BOLD)
@@ -655,7 +670,7 @@ class UberwriterWindow(Window):
 
         css = """
         GtkTextView {
-            -GtkWidget-cursor-color: black;
+            -GtkWidget-cursor-color: #FA5B0F;
             -GtkWidget-cursor-aspect-ratio: 0.05;
             -gtk-tab-size: 2;
             color: #222;
@@ -674,13 +689,13 @@ class UberwriterWindow(Window):
         #window.get_style_context().add_class(‘shelf’)
         #Gtk.CssProvider.load_from_data(css)
 
-        self.window_height = self.get_size()[1]
-
         self.TextEditor.set_buffer(self.TextBuffer)
         self.markup_buffer()
 
         # Scrolling -> Dark or not?
         self.textchange = False
+        self.scroll_count = 0
+
 
         self.TextBuffer.connect('mark-set', self.mark_set)
         
@@ -690,14 +705,16 @@ class UberwriterWindow(Window):
         self.TextEditor.connect('delete-from-cursor', self.delete_from_cursor)
         self.TextEditor.connect('backspace', self.backspace)
 
-        self.v_adj = self.TextEditor.get_vadjustment()
+        self.vadjustment = self.TextEditor.get_vadjustment()
 
-        self.v_adj.connect('value-changed', self.scrolled)
 
         # Events for Typewriter mode
         self.TextBuffer.connect_after('mark-set', self.after_mark_set)
         self.TextBuffer.connect_after('changed', self.after_modify_text)
         self.TextEditor.connect_after('move-cursor', self.after_cursor_moved)
+        self.TextEditor.connect_after('insert-at-cursor', self.after_modify_text)
+
+        self.vadjustment.connect('value-changed', self.scrolled)
 
         self.connect("configure-event", self.window_resize)
 
