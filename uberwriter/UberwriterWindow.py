@@ -30,6 +30,12 @@ from .UberwriterTextEditor import TextEditor
 import logging
 logger = logging.getLogger('uberwriter')
 
+# Spellcheck
+
+import locale
+from uberwriter_lib.gtkspellcheck import SpellChecker
+
+
 from uberwriter_lib import Window
 from uberwriter.AboutUberwriterDialog import AboutUberwriterDialog
 
@@ -41,8 +47,8 @@ class UberwriterWindow(Window):
 
     __gtype_name__ = "UberwriterWindow"
 
-    EMPHASIS = re.compile(r"\*\w(.+?)\*")
-    UNDERLINE = re.compile(r"\*\*\w(.+?)\*\*")
+    ITALIC = re.compile(r"\*\w(.+?)\*")
+    EMPH = re.compile(r"\*\*\w(.+?)\*\*")
     #STRIKETHROUGH = re.compile(r"-[^ ].+?-")
     
     LIST = re.compile(r"^[\-\*\+] ", re.MULTILINE)
@@ -52,24 +58,40 @@ class UberwriterWindow(Window):
 
     HORIZONTALRULE = re.compile(r"^([\*\- ]{3,}\n)", re.MULTILINE)
 
-    def markup_buffer(self):
-    	buf = self.TextBuffer
-    	text = buf.get_slice(buf.get_start_iter(), buf.get_end_iter(), False).decode("utf-8")
+    def markup_buffer(self, mode=0):
+        buf = self.TextBuffer
+
+        # Modes:
+        # 0 -> start to end
+        # 1 -> around the cursor
+        # 2 -> n.d.
+
+        if mode == 0:
+            context_start = buf.get_start_iter()
+            context_end = buf.get_end_iter()
+            context_offset = 0
+        elif mode == 1:
+            pass
+
+    	text = buf.get_slice(context_start, context_end, False).decode("utf-8")
         text = unicode(text)
 
-        buf.remove_all_tags(buf.get_start_iter(), buf.get_end_iter())
+        #buf._all_tags(buf.get_start_iter(), buf.get_end_iter())
 
-        matches = re.finditer(self.EMPHASIS, text)
+        self.TextBuffer.remove_tag(self.emph, context_start, context_end)
+
+        matches = re.finditer(self.ITALIC, text)
     	for match in matches: 
             startIter = buf.get_iter_at_offset(match.start())
             endIter = buf.get_iter_at_offset(match.end())
-            self.TextBuffer.apply_tag(self.emph, startIter, endIter)
-
-        matches = re.finditer(self.UNDERLINE, text)
+            self.TextBuffer.apply_tag(self.italic, startIter, endIter)
+        
+        self.TextBuffer.remove_tag(self.emph, context_start, context_end)
+        matches = re.finditer(self.EMPH, text)
         for match in matches:
             startIter = buf.get_iter_at_offset(match.start())
             endIter = buf.get_iter_at_offset(match.end())
-            self.TextBuffer.apply_tag(self.underline, startIter, endIter)
+            self.TextBuffer.apply_tag(self.emph, startIter, endIter)
 
         #matches = re.finditer(self.STRIKETHROUGH, text)
         #for match in matches:
@@ -77,13 +99,16 @@ class UberwriterWindow(Window):
         #    endIter = buf.get_iter_at_offset(match.end())
         #    self.TextBuffer.apply_tag(self.strikethrough, startIter, endIter)
 
+        for margin in self.leftmargin:
+            self.TextBuffer.remove_tag(margin, context_start, context_end)
+
 
         matches = re.finditer(self.LIST, text) 
         for match in matches:
             startIter = buf.get_iter_at_offset(match.start())
             endIter = buf.get_iter_at_offset(match.end())
             self.TextBuffer.apply_tag(self.leftmargin[0], startIter, endIter)
-       
+   
         matches = re.finditer(self.NUMERICLIST, text)
         for match in matches:
             startIter = buf.get_iter_at_offset(match.start())
@@ -101,6 +126,8 @@ class UberwriterWindow(Window):
             self.TextBuffer.apply_tag(margin, startIter, endIter)
 
         matches = re.finditer(self.HORIZONTALRULE, text)
+        self.TextBuffer.remove_tag(self.centertext, context_start, context_end)
+
         for match in matches:
             startIter = buf.get_iter_at_offset(match.start())
             endIter = buf.get_iter_at_offset(match.end())
@@ -121,6 +148,10 @@ class UberwriterWindow(Window):
             self.TextBuffer.get_start_iter(), 
             self.TextBuffer.get_end_iter())
         
+        self.TextBuffer.remove_tag(self.blackfont,
+            self.TextBuffer.get_start_iter(),
+            self.TextBuffer.get_end_iter())
+
         cursor = self.TextBuffer.get_mark("insert")
         cursor_iter = self.TextBuffer.get_iter_at_mark(cursor)
         
@@ -336,11 +367,21 @@ class UberwriterWindow(Window):
             self.focusmode_highlight()
             self.focusmode = True
             self.TextEditor.grab_focus()
+            self.SpellChecker.disable()
         else:
             self.remove_typewriter()
             self.focusmode = False
+            self.TextBuffer.remove_tag(self.grayfont, 
+                self.TextBuffer.get_start_iter(),
+                self.TextBuffer.get_end_iter())
+            self.TextBuffer.remove_tag(self.blackfont, 
+                self.TextBuffer.get_start_iter(),
+                self.TextBuffer.get_end_iter())
+
             self.markup_buffer()
-            self.TextEditor.grab_focus()            
+            self.TextEditor.grab_focus()
+
+            self.SpellChecker.enable()            
 
     def window_resize(self, widget, data=None):
         # To calc padding top / bottom
@@ -516,7 +557,7 @@ class UberwriterWindow(Window):
             filechooser.destroy()
 
     def check_change(self):
-        if self.did_change:
+        if self.did_change and len(self.get_text()):
             dialog = Gtk.MessageDialog(self, 0,
                 Gtk.MessageType.WARNING, 
                 Gtk.ButtonsType.OK_CANCEL,
@@ -583,6 +624,7 @@ class UberwriterWindow(Window):
         self.TextEditor.set_left_margin(40)
 
         self.TextEditor.set_wrap_mode(Gtk.WrapMode.WORD)
+
         self.TextEditor.show()
 
         self.ScrolledWindow = builder.get_object('scrolledwindow1')
@@ -599,10 +641,15 @@ class UberwriterWindow(Window):
         self.TextEditor.set_pixels_below_lines(5)
         self.TextEditor.set_pixels_inside_wrap(10)
 
+        tab_array = Pango.TabArray.new(2, False)
+        self.TextEditor.set_tabs(tab_array)
+
+
         self.TextBuffer = self.TextEditor.get_buffer()
         self.TextBuffer.set_text('')
         
         self.leftmargin = []
+        
         for i in range(0,6):
             name = "indent_left" + str(i)
             self.leftmargin.append(self.TextBuffer.create_tag(name))
@@ -614,8 +661,12 @@ class UberwriterWindow(Window):
 
         self.window_height = self.get_size()[1]
 
+        self.italic = self.TextBuffer.create_tag("italic", 
+            style=Pango.Style.ITALIC)
 
-        self.emph = self.TextBuffer.create_tag("emph", weight=Pango.Weight.BOLD)
+        self.emph = self.TextBuffer.create_tag("emph", 
+            weight=Pango.Weight.BOLD,
+            style =Pango.Style.NORMAL)
 
         self.normal_indent = self.TextBuffer.create_tag('normal_indent', indent=100)
         
@@ -715,6 +766,10 @@ class UberwriterWindow(Window):
         self.TextEditor.connect_after('insert-at-cursor', self.after_modify_text)
 
         self.vadjustment.connect('value-changed', self.scrolled)
+
+        # Setting up spellcheck
+        self.SpellChecker = SpellChecker(self.TextEditor, locale.getdefaultlocale()[0])
+
 
         self.connect("configure-event", self.window_resize)
 

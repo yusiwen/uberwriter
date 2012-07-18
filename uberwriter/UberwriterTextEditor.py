@@ -195,7 +195,7 @@ class TextEditor( Gtk.TextView ):
         start_iter = self.get_buffer().get_iter_at_offset(0)
         end_iter =  self.get_buffer().get_iter_at_offset(-1)
         text = self.get_buffer().get_text(start_iter,end_iter, False)
-        self.get_buffer().remove_all_tags(start_iter, end_iter)
+        self.get_buffer().remove_tag_by_name('highlight', start_iter, end_iter)
         for s in self._highlight_strings:
             hits = [match.start() for match in re.finditer(re.escape(s), text)]
             for hit in hits:

@@ -1,3 +1,21 @@
+uberwriter (12.07.57-public1) precise; urgency=low
+
+  [ Wolf ]
+  * Various Bugfixes
+  * Added a spellchecker
+  
+ -- Wolf <w.vollprecht@googlemail.com>  Sun, 15 Jul 2012 13:22:34 +0200
+
+
+uberwriter (12.07.56-public1) precise; urgency=low
+
+  [ Wolf ]
+  * Various Bugfixes
+  * New orange cursor
+  * No more jumping when switching to focus / typewriter mode
+
+ -- Wolf <w.vollprecht@googlemail.com>  Sun, 15 Jul 2012 13:22:34 +0200
+
 uberwriter (12.07.48-public1) precise; urgency=low
 
   [ Wolf ]
