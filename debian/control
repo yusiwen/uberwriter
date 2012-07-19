@@ -1,7 +1,8 @@
 Source: uberwriter
 Section: python
 Priority: extra
-Build-Depends: debhelper (>= 6),
+Build-Depends:  libglib2.0-bin,
+ debhelper (>= 6),
  python (>= 2.6.6-3~),
  python-distutils-extra (>= 2.10)
 Maintainer: Wolf Vollprecht <w.vollprecht@gmail.com>
