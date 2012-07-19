@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-15 13:22+0200\n"
+"POT-Creation-Date: 2012-07-19 02:48+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../uberwriter.desktop.in.h:1
-msgid "Uberwriter"
+#: ../uberwriter/__init__.py:34
+msgid "Show debug messages (-vv debugs uberwriter_lib also)"
+msgstr ""
+
+#: ../uberwriter.desktop.in.h:1 ../data/ui/UberwriterWindow.ui.h:1
+msgid "UberWriter"
 msgstr ""
 
 #: ../uberwriter.desktop.in.h:2
-msgid "Uberwriter application"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:1
-msgid "UberWriter"
+msgid "UberWriter application"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:2
@@ -90,6 +90,22 @@ msgstr ""
 msgid "Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>"
 msgstr ""
 
-#: ../uberwriter/__init__.py:34
-msgid "Show debug messages (-vv debugs uberwriter_lib also)"
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:380
+msgid "(no suggestions)"
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:396
+msgid "Add \"{word}\" to Dictionary"
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:399
+msgid "Ignore All"
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:411
+msgid "Languages"
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:419
+msgid "Suggestions"
 msgstr ""

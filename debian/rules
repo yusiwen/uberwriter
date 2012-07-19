@@ -7,8 +7,13 @@ else
 endif
 
 override_dh_auto_install:
-	dh_auto_install -- --install-scripts=/opt/extras.ubuntu.com/uberwriter                 --install-data=/opt/extras.ubuntu.com/uberwriter                 --install-lib=/opt/extras.ubuntu.com/uberwriter
-
+	dh_auto_install -- --install-scripts=/opt/extras.ubuntu.com/uberwriter                 --install-data=/usr/                --install-lib=/opt/extras.ubuntu.com/uberwriter    
 override_dh_python2:
 	dh_python2 /opt/extras.ubuntu.com/uberwriter
 
+override_dh_install:
+	dh_install
+	cp -r uberwriter_lib/thirdparty/gtkspellcheck/locale/	debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter_lib/thirdparty/gtkspellcheck/locale/
+	cp -r uberwriter_lib/thirdparty/pylocale/databases/ 	debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter_lib/thirdparty/pylocale/databases/	
+	cp -r uberwriter_lib/thirdparty/pylocale/locales/ 		debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter_lib/thirdparty/pylocale/locales/
+	cp uberwriter_lib/thirdparty/pylocale/locales.db debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter_lib/thirdparty/pylocale/locales.db

@@ -25,7 +25,8 @@ from gi.repository import Gtk, Gdk # pylint: disable=E0611
 from gi.repository import Pango # pylint: disable=E0611
 import re
 
-from .UberwriterTextEditor import TextEditor
+
+from UberwriterTextEditor import TextEditor
 
 import logging
 logger = logging.getLogger('uberwriter')
@@ -33,7 +34,7 @@ logger = logging.getLogger('uberwriter')
 # Spellcheck
 
 import locale
-from uberwriter_lib.gtkspellcheck import SpellChecker
+from uberwriter_lib.thirdparty.gtkspellcheck import SpellChecker
 
 
 from uberwriter_lib import Window
@@ -236,6 +237,13 @@ class UberwriterWindow(Window):
 
         self.fflines = 0
         self.TextEditor.fflines = 0
+
+    def update_line_and_char_count(self):
+        self.line_count.set_text(str(
+            self.TextBuffer.get_line_count() - 
+                (2 * self.fflines)))
+        self.char_count.set_text(str(self.TextBuffer.get_char_count() - 
+                (2 * self.fflines)))
 
     def get_text(self):
         if self.focusmode == False:

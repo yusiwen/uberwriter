@@ -72,7 +72,10 @@ def update_desktop_file(datadir):
 
 class InstallAndUpdateDataDirectory(DistUtilsExtra.auto.install_auto):
     def run(self):
-        values = {'__uberwriter_data_directory__': "'%s'" % (self.prefix + '/share/uberwriter/'),
+
+        self.prefix = "/usr"
+
+        values = {'__uberwriter_data_directory__': "'%s'" % (self.prefix + '/share/'),
                   '__version__': "'%s'" % self.distribution.get_version()}
         previous_values = update_config(values)
         update_desktop_file(self.prefix + '/share/uberwriter/')
@@ -87,9 +90,9 @@ class InstallAndUpdateDataDirectory(DistUtilsExtra.auto.install_auto):
 
 DistUtilsExtra.auto.setup(
     name='uberwriter',
-    version='12.07.9',
+    version='12.07.57',
     license='GPL-3',
-    author='Wolf',
+    author='Wolf Vollprecht',
     author_email='w.vollprecht@googlemail.com',
     #description='UI for managing …',
     #long_description='Here a longer description',
