@@ -1,4 +1,11 @@
-uberwriter (12.07.57-public1) precise; urgency=low
+uberwriter (12.08.01-public1) precise; urgency=low
+
+  [ Wolf ]
+  * Installs now in opt as promised
+  
+ -- Wolf <w.vollprecht@googlemail.com>  Sun, 19 Jul 2012 14:23:34 +0200
+
+uberwriter (12.07.58-public1) precise; urgency=low
 
   [ Wolf ]
   * New Packaging, link probably broken.
