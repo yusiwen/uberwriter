@@ -326,7 +326,6 @@ class TextEditor( Gtk.TextView ):
         text. Do not call directly.
 
         """
-        
         self._highlight()
         text = self.get_buffer().get_text(start_iter,end_iter, False)    
         offset = start_iter.get_offset() - self.fflines    

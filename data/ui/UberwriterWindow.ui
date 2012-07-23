@@ -7,15 +7,15 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
   </object>
+  <object class="GtkImage" id="image2">
+    <property name="visible">True</property>
+    <property name="can_focus">False</property>
+    <property name="stock">gtk-help</property>
+  </object>
   <object class="GtkImage" id="image1">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="yalign">0.49000000953674316</property>
-    <property name="stock">gtk-help</property>
-  </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
     <property name="stock">gtk-help</property>
   </object>
   <object class="GtkImage" id="image3">
@@ -39,82 +39,10 @@
     <property name="xalign">0.50999999046325684</property>
     <property name="stock">gtk-missing-image</property>
   </object>
-  <object class="GtkMenu" id="menu3">
+  <object class="GtkImage" id="image7">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
-    <child>
-      <object class="GtkImageMenuItem" id="mnu_cut1">
-        <property name="label">gtk-cut</property>
-        <property name="use_action_appearance">False</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <accelerator key="x" signal="activate" modifiers="GDK_CONTROL_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImageMenuItem" id="mnu_copy1">
-        <property name="label">gtk-copy</property>
-        <property name="use_action_appearance">False</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <accelerator key="c" signal="activate" modifiers="GDK_CONTROL_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImageMenuItem" id="mnu_paste1">
-        <property name="label">gtk-paste</property>
-        <property name="use_action_appearance">False</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <accelerator key="v" signal="activate" modifiers="GDK_CONTROL_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImageMenuItem" id="mnu_delete1">
-        <property name="label">gtk-delete</property>
-        <property name="use_action_appearance">False</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <accelerator key="Delete" signal="activate"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkSeparatorMenuItem" id="separatormenuitem4">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImageMenuItem" id="mnu_undo1">
-        <property name="label">gtk-undo</property>
-        <property name="use_action_appearance">False</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="halign">start</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <accelerator key="z" signal="activate" modifiers="GDK_CONTROL_MASK"/>
-      </object>
-    </child>
-    <child>
-      <object class="GtkImageMenuItem" id="mnu_redo1">
-        <property name="label">gtk-redo</property>
-        <property name="use_action_appearance">False</property>
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="use_underline">True</property>
-        <property name="use_stock">True</property>
-        <accelerator key="y" signal="activate" modifiers="GDK_CONTROL_MASK"/>
-      </object>
-    </child>
+    <property name="pixbuf">crosshair.png</property>
   </object>
   <object class="UberwriterWindow" id="uberwriter_window">
     <property name="can_focus">False</property>
@@ -256,6 +184,26 @@
               </object>
             </child>
             <child>
+              <object class="GtkMenuItem" id="recent-files">
+                <property name="use_action_appearance">False</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="label" translatable="yes">_Recent Files</property>
+                <property name="use_underline">True</property>
+                <child type="submenu">
+                  <object class="GtkRecentChooserMenu" id="recentchoosermenu1">
+                    <property name="use_action_appearance">False</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="limit">15</property>
+                    <property name="show_not_found">False</property>
+                    <property name="use_action_appearance">False</property>
+                    <signal name="item-activated" handler="open_recent" swapped="no"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
               <object class="GtkMenuItem" id="mnu_edit">
                 <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
@@ -330,7 +278,36 @@
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <accelerator key="y" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <accelerator key="z" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="redo" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="separatormenuitem7">
+                        <property name="use_action_appearance">False</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="mnu-bold">
+                        <property name="label">gtk-bold</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <accelerator key="b" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <signal name="activate" handler="set_bold" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImageMenuItem" id="mnu-italic">
+                        <property name="label">gtk-italic</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="can_focus">False</property>
+                        <property name="use_underline">True</property>
+                        <property name="use_stock">True</property>
+                        <accelerator key="i" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <signal name="activate" handler="set_italic" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -441,7 +418,6 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="shadow_type">in</property>
             <child>
               <placeholder/>
             </child>
@@ -458,6 +434,8 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="valign">end</property>
+            <property name="margin_left">5</property>
+            <property name="margin_bottom">5</property>
             <property name="spacing">5</property>
             <child>
               <object class="GtkToggleButton" id="focus_toggle">
@@ -468,11 +446,15 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_action_appearance">False</property>
+                <property name="image">image7</property>
+                <property name="relief">none</property>
+                <property name="focus_on_click">False</property>
                 <signal name="toggled" handler="set_focusmode" swapped="no"/>
               </object>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">True</property>
+                <property name="padding">3</property>
                 <property name="position">0</property>
               </packing>
             </child>
@@ -484,6 +466,8 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_action_appearance">False</property>
+                <property name="relief">none</property>
+                <property name="focus_on_click">False</property>
                 <signal name="toggled" handler="toggle_fullscreen" swapped="no"/>
               </object>
               <packing>
