@@ -394,8 +394,13 @@ class UberwriterWindow(Window):
     def toggle_fullscreen(self, widget, data=None):
         if widget.get_active():
             self.fullscreen()
+            widget.set_image(self.fullscreen_active)
+            widget.get_image().show()
         else:
             self.unfullscreen()
+            widget.set_image(self.fullscreen_inactive)
+            widget.get_image().show()
+
         self.TextEditor.grab_focus()
 
     def delete_text(self, widget):
@@ -435,6 +440,8 @@ class UberwriterWindow(Window):
             self.focusmode = True
             self.TextEditor.grab_focus()
             self.SpellChecker.disable()
+            self.focusmode_button.set_image(self.crosshair_active)
+            self.focusmode_button.get_image().show()
         else:
             self.remove_typewriter()
             self.focusmode = False
@@ -449,6 +456,8 @@ class UberwriterWindow(Window):
             self.TextEditor.grab_focus()
             self.update_line_and_char_count()
             self.SpellChecker.enable()            
+            self.focusmode_button.set_image(self.crosshair_inactive)
+            self.focusmode_button.get_image().show()
 
     def window_resize(self, widget, data=None):
         # To calc padding top / bottom
@@ -692,6 +701,25 @@ class UberwriterWindow(Window):
         self.fullscreen_button = builder.get_object('togglebutton1')
         self.focusmode_button = builder.get_object('focus_toggle')
 
+        self.crosshair_inactive = Gtk.Image.new_from_file(
+                helpers.get_media_path('crh.png')
+            )
+        self.crosshair_active = Gtk.Image.new_from_file(
+                helpers.get_media_path('crh_a.png')
+            )
+
+        self.fullscreen_inactive = Gtk.Image.new_from_file(
+                helpers.get_media_path('fs.png')
+            )
+        self.fullscreen_active = Gtk.Image.new_from_file(
+                helpers.get_media_path('fs_a.png')
+            )
+
+        self.focusmode_button.set_image(self.crosshair_inactive)
+        self.focusmode_button.get_image().show()
+        self.fullscreen_button.set_image(self.fullscreen_inactive)
+        self.fullscreen_button.get_image().show()
+
         self.did_change = False
         self.filename = None
 
@@ -720,7 +748,7 @@ class UberwriterWindow(Window):
 
         self.ScrolledWindow.add(self.TextEditor)
 
-		pangoFont = Pango.FontDescription("Ubuntu Mono 15")
+		pangoFont = Pango.FontDescription("Ubuntu Mono 14px")
 		self.TextEditor.modify_font(pangoFont)
         
         self.TextEditor.set_margin_top(38)
@@ -854,23 +882,46 @@ class UberwriterWindow(Window):
             -gtk-tab-size: 2;
             color: #222;
         }
-        GtkToggleButton {
+        .button {
             color: #666;
             padding: 2px 5px;
         }
-        GtkToggleButton:hover {
+        .button:hover, .button:active:hover {
             color: #333;
+            background-color: #EEE;
+            background-image: none;
+            -unico-border-gradient: none;
+            -unico-glow-radius: 0;
+            -unico-inner-stroke-gradient: none;
+            -unico-glow-color: #FFF;
         }
-
-        GtkToggleButton:active {
+        .button {
+            border-style: none;
+            -unico-border-gradient: none;
+            -GtkButton-images: true;
+            transition: 0s ease-in-out;
+        }
+        .button:active {
             color: #333;
             padding: 2px 5px;            
             box-shadow: none;
             background-color: #EEE;
             background-image: none;
+            -unico-focus-outer-stroke-color: @transparent;
+
+            -unico-border-gradient: none;
+            -unico-glow-radius: 0;
+            -unico-inner-stroke-gradient: none;
         }
 
-
+        * {
+            -GtkButton-child-displacement-y: 0px;
+            -GtkButton-child-displacement-x: 0;            
+            -GtkButton-default-border: 0;
+            -GtkButton-image-spacing: 5px;
+            -GtkButton-interior-focus: false;
+            -GtkButton-inner-border: 0; 
+        }
         """
 
         styleProvider.load_from_data(css)
@@ -879,6 +930,8 @@ class UberwriterWindow(Window):
             Gdk.Screen.get_default(), styleProvider,     
             Gtk.STYLE_PROVIDER_PRIORITY_USER
         )
+
+
 
         self.fflines = 0
 
