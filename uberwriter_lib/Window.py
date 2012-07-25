@@ -122,6 +122,7 @@ class Window(Gtk.Window):
     def on_destroy(self, widget, data=None):
         """Called when the UberwriterWindow is closed."""
         # Clean up code for saving application state should be added here.
+
         Gtk.main_quit()
 
     def on_preferences_changed(self, settings, key, data=None):

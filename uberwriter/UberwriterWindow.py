@@ -24,9 +24,11 @@ gettext.textdomain('uberwriter')
 
 from gi.repository import Gtk, Gdk # pylint: disable=E0611
 from gi.repository import Pango # pylint: disable=E0611
+
 import re
 
 
+from MarkupBuffer import MarkupBuffer
 from UberwriterTextEditor import TextEditor
 
 import logging
@@ -50,168 +52,12 @@ class UberwriterWindow(Window):
 
     __gtype_name__ = "UberwriterWindow"
 
-    ITALIC = re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ")
-    EMPH = re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ")
-    ITALICEMPH = re.compile(r"\*{3}\w(.+?)\*{3}| [_]{3}\w(.+?)[_]{3} ")
-    BLOCKQUOTE = re.compile(r"^[\>]{1,} ", re.MULTILINE)
-    STRIKETHROUGH = re.compile(r"~~[^ ].+?~~")
-    
-    LIST = re.compile(r"^[\-\*\+] ", re.MULTILINE)
-    NUMERICLIST = re.compile(r"^((\d|[a-z]|\#)+[\.\)]) ", re.MULTILINE)
-    INDENTEDLIST = re.compile(r"^(\t{1,6})((\d|[a-z]|\#)+[\.\)]|[\-\*\+]) ", re.MULTILINE)
-
-    HEADINDICATOR = re.compile(r"^(#{1,6}) ", re.MULTILINE)
-    HEADLINE = re.compile(r"^(#{1,6} [^\n]+)", re.MULTILINE)
-
-    MATH = re.compile(r"\${1,2}[^ ](.+?)[^ ]\${1,2}")
-
-    HORIZONTALRULE = re.compile(r"(\n\n[\*\- ]{3,}\n)", re.MULTILINE)
-
-    def markup_buffer(self, mode=0):
-        buf = self.TextBuffer
-
-        # Modes:
-        # 0 -> start to endw
-        # 1 -> around the cursor
-        # 2 -> n.d.
-
-        if mode == 0:
-            context_start = buf.get_start_iter()
-            context_end = buf.get_end_iter()
-            context_offset = 0
-        elif mode == 1:
-            cursor_mark = buf.get_insert()
-            context_start = buf.get_iter_at_mark(cursor_mark)
-            context_start.backward_lines(2)
-            context_end = buf.get_iter_at_mark(cursor_mark)
-            context_end.forward_lines(2)
-            context_offset = context_start.get_offset()
-
-    	text = buf.get_slice(context_start, context_end, False).decode("utf-8")
-        text = unicode(text)
-
-        #buf._all_tags(buf.get_start_iter(), buf.get_end_iter())
-
-        self.TextBuffer.remove_tag(self.italic, context_start, context_end)
-
-        matches = re.finditer(self.ITALIC, text)
-    	for match in matches: 
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            self.TextBuffer.apply_tag(self.italic, startIter, endIter)
-        
-        self.TextBuffer.remove_tag(self.emph, context_start, context_end)
-
-        matches = re.finditer(self.EMPH, text)
-        for match in matches:
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            self.TextBuffer.apply_tag(self.emph, startIter, endIter)
-
-        self.TextBuffer.remove_tag(self.strikethrough, context_start, context_end)
-
-        matches = re.finditer(self.STRIKETHROUGH, text)
-        for match in matches:
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            self.TextBuffer.apply_tag(self.strikethrough, startIter, endIter)
-
-        self.TextBuffer.remove_tag(self.green_text, context_start, context_end)
-
-        matches = re.finditer(self.MATH, text) 
-        for match in matches:
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            self.TextBuffer.apply_tag(self.green_text, startIter, endIter)
-
-        for margin in self.rev_leftmargin:
-            self.TextBuffer.remove_tag(margin, context_start, context_end)
-
-        matches = re.finditer(self.LIST, text) 
-        for match in matches:
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            self.TextBuffer.apply_tag(self.rev_leftmargin[0], startIter, endIter)
-   
-        matches = re.finditer(self.NUMERICLIST, text)
-        for match in matches:
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            index = len(match.group(1)) - 1
-            margin = self.rev_leftmargin[index]
-            self.TextBuffer.apply_tag(margin, startIter, endIter)
-
-        matches = re.finditer(self.BLOCKQUOTE, text) 
-        for match in matches:
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            self.TextBuffer.apply_tag(self.leftmargin[0], startIter, endIter)
-
-        for leftindent in self.leftindent:
-            self.TextBuffer.remove_tag(leftindent, context_start, context_end)
-
-        matches = re.finditer(self.INDENTEDLIST, text)
-        for match in matches:
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            index = (len(match.group(1)) - 1)*2 + len(match.group(2))
-            print index
-            self.TextBuffer.apply_tag(self.leftindent[index], startIter, endIter)
-
-        matches = re.finditer(self.HEADINDICATOR, text) 
-        for match in matches:
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            index = len(match.group(1)) - 1
-            margin = self.rev_leftmargin[index]
-            self.TextBuffer.apply_tag(margin, startIter, endIter)
-
-        matches = re.finditer(self.HORIZONTALRULE, text)
-        self.TextBuffer.remove_tag(self.centertext, context_start, context_end)
-
-        for match in matches:
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            startIter.forward_char()
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            self.TextBuffer.apply_tag(self.centertext, startIter, endIter)
-
-        matches = re.finditer(self.HEADLINE, text) 
-        for match in matches:
-            startIter = buf.get_iter_at_offset(context_offset + match.start())
-            endIter = buf.get_iter_at_offset(context_offset + match.end())
-            self.TextBuffer.apply_tag(self.emph, startIter, endIter)
-
-        if self.focusmode:
-            self.focusmode_highlight()
-
-
-    def focusmode_highlight(self):
-        self.TextBuffer.apply_tag(self.grayfont, 
-            self.TextBuffer.get_start_iter(), 
-            self.TextBuffer.get_end_iter())
-        
-        self.TextBuffer.remove_tag(self.blackfont,
-            self.TextBuffer.get_start_iter(),
-            self.TextBuffer.get_end_iter())
-
-        cursor = self.TextBuffer.get_mark("insert")
-        cursor_iter = self.TextBuffer.get_iter_at_mark(cursor)
-        
-        end_sentence = cursor_iter.copy()
-        end_sentence.forward_sentence_end()
-        
-        start_sentence = cursor_iter.copy()
-        start_sentence.backward_sentence_start()
-        
-        self.TextBuffer.apply_tag(self.blackfont, start_sentence, end_sentence)
-
-
     def scrolled(self, widget):
         if self.focusmode:
             if self.textchange == False:
                 if self.scroll_count >= 1:
                     self.TextBuffer.apply_tag(
-                        self.blackfont, 
+                        self.M.blackfont, 
                         self.TextBuffer.get_start_iter(), 
                         self.TextBuffer.get_end_iter())
                 else:
@@ -226,11 +72,11 @@ class UberwriterWindow(Window):
             self.typewriter()
 
     def after_insert_at_cursor(self, *arg):
-        print "insert at cursor"
         if self.focusmode:
             self.typewriter()
-        self.markup_buffer()
 
+    def paste_done(self, *args):
+        self.M.markup_buffer(0)
 
     def init_typewriter(self):
 
@@ -381,7 +227,7 @@ class UberwriterWindow(Window):
             title = self.get_title()
             self.set_title("* " + title)
 
-        self.markup_buffer(1)
+        self.M.markup_buffer(1)
 
         self.textchange = True
 
@@ -396,11 +242,16 @@ class UberwriterWindow(Window):
             self.fullscreen()
             widget.set_image(self.fullscreen_active)
             widget.get_image().show()
+            key, mod = Gtk.accelerator_parse("Escape")
+            self.fullscreen_button.add_accelerator("activate", 
+            self.accel_group, key, mod, Gtk.AccelFlags.VISIBLE)
         else:
             self.unfullscreen()
             widget.set_image(self.fullscreen_inactive)
             widget.get_image().show()
-
+            key, mod = Gtk.accelerator_parse("Escape")
+            self.fullscreen_button.remove_accelerator(
+                self.accel_group, key, mod)
         self.TextEditor.grab_focus()
 
     def delete_text(self, widget):
@@ -436,7 +287,7 @@ class UberwriterWindow(Window):
     def set_focusmode(self, widget, data=None):
         if widget.get_active():
             self.init_typewriter()
-            self.focusmode_highlight()
+            self.M.focusmode_highlight()
             self.focusmode = True
             self.TextEditor.grab_focus()
             self.SpellChecker.disable()
@@ -445,14 +296,14 @@ class UberwriterWindow(Window):
         else:
             self.remove_typewriter()
             self.focusmode = False
-            self.TextBuffer.remove_tag(self.grayfont, 
+            self.TextBuffer.remove_tag(self.M.grayfont, 
                 self.TextBuffer.get_start_iter(),
                 self.TextBuffer.get_end_iter())
-            self.TextBuffer.remove_tag(self.blackfont, 
+            self.TextBuffer.remove_tag(self.M.blackfont, 
                 self.TextBuffer.get_start_iter(),
                 self.TextBuffer.get_end_iter())
 
-            self.markup_buffer()
+            self.M.markup_buffer(1)
             self.TextEditor.grab_focus()
             self.update_line_and_char_count()
             self.SpellChecker.enable()            
@@ -465,20 +316,11 @@ class UberwriterWindow(Window):
 
         # Calculate left / right margin
         lm = (widget.get_size()[0] - 600) / 2
-        
+            
         self.TextEditor.set_left_margin(lm)
         self.TextEditor.set_right_margin(lm)
 
-
-        for i in range(0,6):
-            name = "rev_indent_left" + str(i)
-            self.rev_leftmargin[i].set_property("left-margin", (lm-10) - 10*(i+1))
-            self.rev_leftmargin[i].set_property("indent", - 10*(i+1) - 10)
-
-        for i in range(0,6):
-            self.leftmargin[i].set_property("left-margin", (lm-10) + 10 + 10 * (i+1))
-            self.leftmargin[i].set_property("indent", - 10*(i+1) - 10)
-
+        self.M.recalculate(lm)
 
         if self.focusmode:
             self.remove_typewriter()
@@ -621,7 +463,9 @@ class UberwriterWindow(Window):
         filename = self.export("pdf")
 
     def open_document(self, widget):
-        if self.check_change() == False:
+        cc = self.check_change()
+        print cc
+        if cc == True:
             return
         filechooser = Gtk.FileChooserDialog(
             "Open a .md-File",
@@ -637,7 +481,7 @@ class UberwriterWindow(Window):
             f = codecs.open(filename, encoding="utf-8", mode='r')
             self.TextBuffer.set_text(f.read())
             f.close()
-            self.markup_buffer()
+            self.M.markup_buffer()
             self.filename = filename
             filechooser.destroy()
 
@@ -650,7 +494,7 @@ class UberwriterWindow(Window):
 
     def check_change(self):
         if self.did_change and len(self.get_text()):
-            dialog = Gtk.MessageDialog(self, 0,
+            dialog = Gtk.MessageDialog(self, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
                 Gtk.MessageType.WARNING, 
                 Gtk.ButtonsType.YES_NO,
                 "Do you want to save your changes?"
@@ -659,8 +503,8 @@ class UberwriterWindow(Window):
             if response == Gtk.ResponseType.YES:
                 dialog.destroy()
                 title = self.get_title()
-                self.set_title(title[2:])
-                return True
+                self.save_document(None)
+                return False
             else:
                 dialog.destroy()
                 return False
@@ -691,6 +535,8 @@ class UberwriterWindow(Window):
 
         # Code for other initialization actions should be added here.
 
+        self.set_name('UberwriterWindow')
+
         #self.set_decorated(False)
 
         self.focusmode = False
@@ -698,9 +544,12 @@ class UberwriterWindow(Window):
         self.line_count = builder.get_object('line_count')
         self.char_count = builder.get_object('char_count')
 
-        self.fullscreen_button = builder.get_object('togglebutton1')
+        self.fullscreen_button = builder.get_object('fullscreen_toggle')
         self.focusmode_button = builder.get_object('focus_toggle')
-
+        self.fullscreen_button.set_name('fullscreen_toggle')
+        self.focusmode_button.set_name('focus_toggle')
+        
+        
         self.crosshair_inactive = Gtk.Image.new_from_file(
                 helpers.get_media_path('crh.png')
             )
@@ -720,6 +569,10 @@ class UberwriterWindow(Window):
         self.fullscreen_button.set_image(self.fullscreen_inactive)
         self.fullscreen_button.get_image().show()
 
+        self.accel_group = Gtk.AccelGroup()
+        self.add_accel_group(self.accel_group)
+
+
         self.did_change = False
         self.filename = None
 
@@ -737,8 +590,6 @@ class UberwriterWindow(Window):
         base_leftmargin = 100
         self.TextEditor.set_left_margin(base_leftmargin)
         self.TextEditor.set_left_margin(40)
-
-
 
         self.TextEditor.set_wrap_mode(Gtk.WrapMode.WORD)
 
@@ -765,93 +616,12 @@ class UberwriterWindow(Window):
 
         self.TextBuffer = self.TextEditor.get_buffer()
         self.TextBuffer.set_text('')
-        
-        self.rev_leftmargin = []
-        
-        for i in range(0,6):
-            name = "rev_marg_indent_left" + str(i)
-            self.rev_leftmargin.append(self.TextBuffer.create_tag(name))
-            self.rev_leftmargin[i].set_property("left-margin", 90 - 10*(i+1))
-            self.rev_leftmargin[i].set_property("indent", - 10*(i+1) - 10)
-            #self.leftmargin[i].set_property("background", "gray")
 
-        self.leftmargin = []
-
-        for i in range(0,6):
-            name = "marg_indent_left" + str(i)
-            self.leftmargin.append(self.TextBuffer.create_tag(name))
-            self.leftmargin[i].set_property("left-margin", base_leftmargin + 10 + 10 * (i+1))
-            self.leftmargin[i].set_property("indent", - 10*(i+1) - 10)
-
-        self.leftindent = []
-
-        for i in range(0,15):
-            name = "indent_left" + str(i)
-            self.leftindent.append(self.TextBuffer.create_tag(name))
-            self.leftindent[i].set_property("indent", - 10*(i+1) - 20)
-
+        self.M = MarkupBuffer(self, self.TextBuffer, base_leftmargin)
 
         # Init Window height for top/bottom padding
 
         self.window_height = self.get_size()[1]
-
-        self.italic = self.TextBuffer.create_tag("italic", 
-            style=Pango.Style.ITALIC)
-
-        self.emph = self.TextBuffer.create_tag("emph", 
-            weight=Pango.Weight.BOLD,
-            style =Pango.Style.NORMAL)
-
-        self.normal_indent = self.TextBuffer.create_tag('normal_indent', indent=100)
-        
-        self.grayfont = self.TextBuffer.create_tag('graytag', 
-            foreground="gray")
-        self.blackfont = self.TextBuffer.create_tag('blacktag', 
-            foreground="#222")
-
-        self.underline = self.TextBuffer.create_tag(
-            "underline", 
-            underline=Pango.Underline.SINGLE
-            )
-        
-        self.underline.set_property('weight', Pango.Weight.BOLD)
-        
-        self.strikethrough = self.TextBuffer.create_tag(
-            "strikethrough", 
-            strikethrough=True
-            )
-
-        self.centertext = self.TextBuffer.create_tag(
-            "centertext", 
-            justification=Gtk.Justification.CENTER
-        )
-
-        self.green_text = self.TextBuffer.create_tag(
-            "greentext",
-            foreground="#00364C"
-        )
-
-
-        self.TextBuffer.apply_tag(
-            self.normal_indent, 
-            self.TextBuffer.get_start_iter(),
-            self.TextBuffer.get_end_iter()
-        )
-
-        self.invisibleTag = self.TextBuffer.create_tag("invisible", 
-            invisible=True)
-        
-        self.ineditableTag = self.TextBuffer.create_tag("ineditable", 
-            editable=False)
-
-        self.start_mark = self.TextBuffer.create_mark("startmark", 
-            self.TextBuffer.get_start_iter(), 
-            True)
-
-        self.end_mark =  self.TextBuffer.create_mark("endmark", 
-            self.TextBuffer.get_end_iter(), 
-            False)
-       
 
         self.TextBuffer.connect('changed', self.text_changed)
         
@@ -868,63 +638,11 @@ class UberwriterWindow(Window):
 
         styleProvider = Gtk.CssProvider()
 
-        css = """
-        GtkWindow {
-            background: #FFF;
-        }
-        UberwriterWindow {
-            background: #FFF;
-        }
-        GtkTextView {
-            border: none;
-            -GtkWidget-cursor-color: #FA5B0F;
-            -GtkWidget-cursor-aspect-ratio: 0.05;
-            -gtk-tab-size: 2;
-            color: #222;
-        }
-        .button {
-            color: #666;
-            padding: 2px 5px;
-        }
-        .button:hover, .button:active:hover {
-            color: #333;
-            background-color: #EEE;
-            background-image: none;
-            -unico-border-gradient: none;
-            -unico-glow-radius: 0;
-            -unico-inner-stroke-gradient: none;
-            -unico-glow-color: #FFF;
-        }
-        .button {
-            border-style: none;
-            -unico-border-gradient: none;
-            -GtkButton-images: true;
-            transition: 0s ease-in-out;
-        }
-        .button:active {
-            color: #333;
-            padding: 2px 5px;            
-            box-shadow: none;
-            background-color: #EEE;
-            background-image: none;
-            -unico-focus-outer-stroke-color: @transparent;
+        css = open(helpers.get_media_path('style.css'), 'r')
+        css_data = css.read()
+        css.close()
 
-            -unico-border-gradient: none;
-            -unico-glow-radius: 0;
-            -unico-inner-stroke-gradient: none;
-        }
-
-        * {
-            -GtkButton-child-displacement-y: 0px;
-            -GtkButton-child-displacement-x: 0;            
-            -GtkButton-default-border: 0;
-            -GtkButton-image-spacing: 5px;
-            -GtkButton-interior-focus: false;
-            -GtkButton-inner-border: 0; 
-        }
-        """
-
-        styleProvider.load_from_data(css)
+        styleProvider.load_from_data(css_data)
 
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), styleProvider,     
@@ -932,20 +650,14 @@ class UberwriterWindow(Window):
         )
 
 
-
+        # Still needed.
         self.fflines = 0
 
-        #icon_view.get_style_context().add_class(‘transparent’) 
-        #window.get_style_context().add_class(‘shelf’)
-        #Gtk.CssProvider.load_from_data(css)
-
-        self.TextEditor.set_buffer(self.TextBuffer)
-        self.markup_buffer()
+        self.M.markup_buffer()
 
         # Scrolling -> Dark or not?
         self.textchange = False
         self.scroll_count = 0
-
 
         self.TextBuffer.connect('mark-set', self.mark_set)
         
@@ -954,6 +666,8 @@ class UberwriterWindow(Window):
         # Events to preserve margin. (To be deleted.)
         self.TextEditor.connect('delete-from-cursor', self.delete_from_cursor)
         self.TextEditor.connect('backspace', self.backspace)
+
+        self.TextBuffer.connect('paste-done', self.paste_done)
 
         self.vadjustment = self.TextEditor.get_vadjustment()
 
@@ -970,9 +684,9 @@ class UberwriterWindow(Window):
 
         # Window resize
         self.connect("configure-event", self.window_resize)
-        
-        # Window is about to close
-        # self.connect("destroy-event", self.on_window_delete)
+    
+    def on_delete_called(self, widget, data=None):
+        print "asdasdasd"
 
     def on_destroy(self, widget, data=None):
         """Called when the TexteditorWindow is closed."""
