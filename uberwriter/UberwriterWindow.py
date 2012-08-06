@@ -132,12 +132,22 @@ class UberwriterWindow(Window):
         self.fflines = 0
         self.TextEditor.fflines = 0
 
+    WORDCOUNT = re.compile(r"\W+", re.UNICODE)
     def update_line_and_char_count(self):
         self.line_count.set_text(str(
             self.TextBuffer.get_line_count() - 
                 (2 * self.fflines)))
         self.char_count.set_text(str(self.TextBuffer.get_char_count() - 
                 (2 * self.fflines)))
+
+        #text = self.TextBuffer.get_text(self.TextBuffer.get_start_iter(),
+        #    self.TextBuffer.get_end_iter(), False).decode("utf-8")
+        #text = unicode(text)
+        #words = re.split(self.WORDCOUNT, text)
+        #length = len(words) - 1
+
+        # TODO add a textfield!
+
     def get_text(self):
         if self.focusmode == False:
             start_iter = self.TextBuffer.get_start_iter()
@@ -228,14 +238,9 @@ class UberwriterWindow(Window):
             self.set_title("* " + title)
 
         self.M.markup_buffer(1)
-
         self.textchange = True
 
-        self.line_count.set_text(str(
-            self.TextBuffer.get_line_count() - 
-                (2 * self.fflines)))
-        self.char_count.set_text(str(self.TextBuffer.get_char_count() - 
-                (2 * self.fflines)))
+        self.update_line_and_char_count()
 
     def toggle_fullscreen(self, widget, data=None):
         if widget.get_active():
@@ -290,7 +295,8 @@ class UberwriterWindow(Window):
             self.M.focusmode_highlight()
             self.focusmode = True
             self.TextEditor.grab_focus()
-            self.SpellChecker.disable()
+
+            self.SpellChecker._misspelled.set_property('underline', 0)
             self.focusmode_button.set_image(self.crosshair_active)
             self.focusmode_button.get_image().show()
         else:
@@ -306,7 +312,7 @@ class UberwriterWindow(Window):
             self.M.markup_buffer(1)
             self.TextEditor.grab_focus()
             self.update_line_and_char_count()
-            self.SpellChecker.enable()            
+            self.SpellChecker._misspelled.set_property('underline', 4)
             self.focusmode_button.set_image(self.crosshair_inactive)
             self.focusmode_button.get_image().show()
 
@@ -467,6 +473,8 @@ class UberwriterWindow(Window):
         print cc
         if cc == True:
             return
+        filefilter = Gtk.FileFilter.new()
+        filefilter.add_mime_type('text/x-markdown')
         filechooser = Gtk.FileChooserDialog(
             "Open a .md-File",
             self,
@@ -680,7 +688,7 @@ class UberwriterWindow(Window):
         self.vadjustment.connect('value-changed', self.scrolled)
 
         # Setting up spellcheck
-        self.SpellChecker = SpellChecker(self.TextEditor, locale.getdefaultlocale()[0])
+        self.SpellChecker = SpellChecker(self.TextEditor, locale.getdefaultlocale()[0], collapse=False)
 
         # Window resize
         self.connect("configure-event", self.window_resize)

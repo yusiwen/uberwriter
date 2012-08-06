@@ -5,24 +5,6 @@ from gi.repository import Pango # pylint: disable=E0611
 
 class MarkupBuffer():
  
-    ITALIC = re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ")
-    EMPH = re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ")
-    ITALICEMPH = re.compile(r"\*{3}\w(.+?)\*{3}| [_]{3}\w(.+?)[_]{3} ")
-    BLOCKQUOTE = re.compile(r"^([\>]+ )", re.MULTILINE)
-    STRIKETHROUGH = re.compile(r"~~[^ ].+?~~")
-    
-    LIST = re.compile(r"^[\-\*\+] ", re.MULTILINE)
-    NUMERICLIST = re.compile(r"^((\d|[a-z]|\#)+[\.\)]) ", re.MULTILINE)
-    INDENTEDLIST = re.compile(r"^(\t{1,6})((\d|[a-z]|\#)+[\.\)]|[\-\*\+]) ", re.MULTILINE)
-
-    HEADINDICATOR = re.compile(r"^(#{1,6}) ", re.MULTILINE)
-    HEADLINE = re.compile(r"^(#{1,6} [^\n]+)", re.MULTILINE)
-
-    MATH = re.compile(r"\${1,2}[^ ](.+?)[^ ]\${1,2}")
-
-    HORIZONTALRULE = re.compile(r"(\n\n[\*\- ]{3,}\n)", re.MULTILINE)
-
-
     def __init__(self, Parent, TextBuffer, base_leftmargin):
     	self.parent = Parent
     	self.TextBuffer = TextBuffer
@@ -95,12 +77,42 @@ class MarkupBuffer():
             self.leftindent.append(self.TextBuffer.create_tag(name))
             self.leftindent[i].set_property("indent", - 10*(i+1) - 20)
 
+        self.table_env = self.TextBuffer.create_tag('table_env')
+        self.table_env.set_property('wrap-mode', Gtk.WrapMode.NONE)
+
+
+    # *asdasd* // _asdasd asd asd_ 
+    ITALIC = re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ")
+    
+    # **as das** // __asdasdasd asd ad a__
+    EMPH = re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ")
+    
+    #ITALICEMPH = re.compile(r"\*{3}\w(.+?)\*{3}| [_]{3}\w(.+?)[_]{3} ")
+    
+
+    BLOCKQUOTE = re.compile(r"^([\>]+ )", re.MULTILINE)
+    
+    STRIKETHROUGH = re.compile(r"~~[^ `~\n].+?~~")
+    
+    LIST = re.compile(r"^[\-\*\+] ", re.MULTILINE)
+    NUMERICLIST = re.compile(r"^((\d|[a-z]|\#)+[\.\)]) ", re.MULTILINE)
+    INDENTEDLIST = re.compile(r"^(\t{1,6})((\d|[a-z]|\#)+[\.\)]|[\-\*\+]) ", re.MULTILINE)
+
+    HEADINDICATOR = re.compile(r"^(#{1,6}) ", re.MULTILINE)
+    HEADLINE = re.compile(r"^(#{1,6} [^\n]+)", re.MULTILINE)
+
+    MATH = re.compile(r"\${1,2}[^` ](.+?)[^`\\ ]\${1,2}")
+
+    HORIZONTALRULE = re.compile(r"(\n\n[\*\- ]{3,}\n)", re.MULTILINE)
+
+    TABLE = re.compile(r"^:table:\n(.+?)\n:endtable:", re.DOTALL)
+
 
     def markup_buffer(self, mode=0):
         buf = self.TextBuffer
 
         # Modes:
-        # 0 -> start to endw
+        # 0 -> start to end
         # 1 -> around the cursor
         # 2 -> n.d.
 
@@ -118,8 +130,6 @@ class MarkupBuffer():
 
     	text = buf.get_slice(context_start, context_end, False).decode("utf-8")
         text = unicode(text)
-
-        #buf._all_tags(buf.get_start_iter(), buf.get_end_iter())
 
         self.TextBuffer.remove_tag(self.italic, context_start, context_end)
 
@@ -167,15 +177,17 @@ class MarkupBuffer():
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             index = len(match.group(1)) - 1
-            margin = self.rev_leftmargin[index]
-            self.TextBuffer.apply_tag(margin, startIter, endIter)
+            if index < len(self.rev_leftmargin):
+                margin = self.rev_leftmargin[index]
+                self.TextBuffer.apply_tag(margin, startIter, endIter)
 
         matches = re.finditer(self.BLOCKQUOTE, text) 
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             index = len(match.group(1)) - 2
-            self.TextBuffer.apply_tag(self.leftmargin[index], startIter, endIter)
+            if index < len(self.leftmargin):
+                self.TextBuffer.apply_tag(self.leftmargin[index], startIter, endIter)
 
         for leftindent in self.leftindent:
             self.TextBuffer.remove_tag(leftindent, context_start, context_end)
@@ -185,23 +197,24 @@ class MarkupBuffer():
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             index = (len(match.group(1)) - 1)*2 + len(match.group(2))
-            print index
-            self.TextBuffer.apply_tag(self.leftindent[index], startIter, endIter)
+            if index < len(self.leftindent):
+                self.TextBuffer.apply_tag(self.leftindent[index], startIter, endIter)
 
         matches = re.finditer(self.HEADINDICATOR, text) 
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             index = len(match.group(1)) - 1
-            margin = self.rev_leftmargin[index]
-            self.TextBuffer.apply_tag(margin, startIter, endIter)
+            if index < len(self.rev_leftmargin):
+                margin = self.rev_leftmargin[index]
+                self.TextBuffer.apply_tag(margin, startIter, endIter)
 
         matches = re.finditer(self.HORIZONTALRULE, text)
         self.TextBuffer.remove_tag(self.centertext, context_start, context_end)
 
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
-            startIter.forward_char()
+            startIter.forward_chars(2)
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             self.TextBuffer.apply_tag(self.centertext, startIter, endIter)
 
@@ -210,6 +223,14 @@ class MarkupBuffer():
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             self.TextBuffer.apply_tag(self.emph, startIter, endIter)
+        
+
+        matches = re.finditer(self.TABLE, text) 
+        for match in matches:
+            startIter = buf.get_iter_at_offset(context_offset + match.start())
+            endIter = buf.get_iter_at_offset(context_offset + match.end())
+            self.TextBuffer.apply_tag(self.table_env, startIter, endIter)
+
 
         if self.parent.focusmode:
             self.focusmode_highlight()

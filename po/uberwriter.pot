@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-19 15:07+0200\n"
+"POT-Creation-Date: 2012-07-26 02:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,58 +17,17 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../uberwriter/__init__.py:34
-msgid "Show debug messages (-vv debugs uberwriter_lib also)"
-msgstr ""
-
+#. # Was - 10 ...
 #: ../uberwriter.desktop.in.h:1 ../data/ui/UberwriterWindow.ui.h:1
+#: ../h/data/ui/UberwriterWindow.ui.h:1 ../h/uberwriter.desktop.in.h:1
 msgid "UberWriter"
 msgstr ""
 
-#: ../uberwriter.desktop.in.h:2
+#: ../uberwriter.desktop.in.h:2 ../h/uberwriter.desktop.in.h:2
 msgid "UberWriter application"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:2
-msgid "_File"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:3
-msgid "Export as RTF"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:4
-msgid "_Edit"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:5
-msgid "_View"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:6
-msgid "_Help"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:7
-msgid "Contents"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:8
-msgid "Focus Mode"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:9
-msgid "Fullscreen"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:10
-msgid "Characters: "
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:11
-msgid "Lines: "
-msgstr ""
-
+#: ../h/data/ui/AboutUberwriterDialog.ui.h:1
 #: ../data/ui/AboutUberwriterDialog.ui.h:1
 msgid ""
 "# Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>\n"
@@ -86,8 +45,73 @@ msgid ""
 "# with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
 msgstr ""
 
+#: ../h/data/ui/AboutUberwriterDialog.ui.h:14
 #: ../data/ui/AboutUberwriterDialog.ui.h:14
 msgid "Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:2 ../h/data/ui/UberwriterWindow.ui.h:2
+msgid "_File"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:3 ../h/data/ui/UberwriterWindow.ui.h:3
+msgid "Export as RTF"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:4 ../h/data/ui/UberwriterWindow.ui.h:4
+msgid "_Recent Files"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:5 ../h/data/ui/UberwriterWindow.ui.h:5
+msgid "_Edit"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:6 ../h/data/ui/UberwriterWindow.ui.h:6
+msgid "_View"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:7 ../h/data/ui/UberwriterWindow.ui.h:7
+msgid "_Help"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:8 ../h/data/ui/UberwriterWindow.ui.h:8
+msgid "Contents"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:9 ../h/data/ui/UberwriterWindow.ui.h:9
+msgid "Focus Mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:10
+msgid "Go into focus mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:11 ../h/data/ui/UberwriterWindow.ui.h:10
+msgid "Fullscreen"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:12
+msgid "Go into fullscreen mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:13 ../h/data/ui/UberwriterWindow.ui.h:11
+msgid "Characters: "
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:14
+msgid "0"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:15 ../h/data/ui/UberwriterWindow.ui.h:12
+msgid "Lines: "
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:16
+msgid "1"
+msgstr ""
+
+#: ../uberwriter/__init__.py:34 ../h/uberwriter/__init__.py:34
+msgid "Show debug messages (-vv debugs uberwriter_lib also)"
 msgstr ""
 
 #: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:380

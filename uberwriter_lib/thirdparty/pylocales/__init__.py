@@ -1,7 +1,6 @@
 # -*- coding:utf-8 -*-
 #
 # Copyright (C) 2012, Maximilian Köhl <linuxmaxi@googlemail.com>
-# Copyright (C) 2012, Carlos Jenkins <carlos@jenkins.co.cr>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,21 +23,21 @@ else:
     u = lambda x: x.decode('utf-8')
 
 # Metadata
-__version__ = '3.0a'
-__project__ = 'Python GTK Spellcheck'
-__short_name__ = 'pygtkspellcheck'
+__version__ = '1.1'
+__project__ = 'PyLocales'
+__short_name__ = 'pylocales'
 __authors__ = u('Maximilian Köhl & Carlos Jenkins')
 __emails__ = u('linuxmaxi@googlemail.com & carlos@jenkins.co.cr')
-__website__ = 'http://koehlma.github.com/projects/pygtkspellcheck.html'
-__download_url__ = 'https://github.com/koehlma/pygtkspellcheck/tarball/master'
+__website__ = 'http://pygtkspellcheck.readthedocs.org/'
 __source__ = 'https://github.com/koehlma/pygtkspellcheck/'
 __vcs__ = 'git://github.com/koehlma/pygtkspellcheck.git'
 __copyright__ = u('2012, Maximilian Köhl & Carlos Jenkins')
-__desc_short__ = 'A simple but quite powerful Python spell checking library for GtkTextViews based on Enchant.'
-__desc_long__ = ('It supports both Gtk\'s Python bindings, PyGObject and'
-                 'PyGtk, and for both Python 2 and 3 with automatic switching'
-                 'and binding autodetection. For automatic translation of the'
-                 'user interface it can use GEdit\'s translation files.')
+__desc_short__ = 'Query the ISO 639/3166 database about a country or a language.'
+__desc_long__ = ('Query the ISO 639/3166 database about a country or a'
+                 'language. The locales database contains ISO 639 languages'
+                 'definitions and ISO 3166 countries definitions. This package'
+                 'provides translation for countries and languages names if'
+                 'iso-codes package is installed (Ubuntu/Debian).')
 
 __metadata__ = {'__version__' : __version__,
                 '__project__' : __project__,
@@ -46,12 +45,11 @@ __metadata__ = {'__version__' : __version__,
                 '__authors__' : __authors__,
                 '__emails__' : __emails__,
                 '__website__' : __website__,
-                '__download_url__' : __download_url__,
                 '__source__' : __source__,
                 '__vcs__' : __vcs__,
                 '__copyright__' : __copyright__,
                 '__desc_short__' : __desc_short__,
                 '__desc_long__' : __desc_long__}
 
-# import SpellChecker class
-from .spellcheck import SpellChecker
+# Should only import Public Objects
+from .locales import *
