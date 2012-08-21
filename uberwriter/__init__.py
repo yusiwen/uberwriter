@@ -44,7 +44,3 @@ def main():
     window = UberwriterWindow.UberwriterWindow()
     window.show()
     Gtk.main()
-
-def before_delete(widget, data=None):
-    print "asda"
-    return False

@@ -37,8 +37,10 @@ logger = logging.getLogger('uberwriter')
 # Spellcheck
 
 import locale
-from uberwriter_lib.thirdparty.gtkspellcheck import SpellChecker
-
+try:
+    from gtkspellcheck import SpellChecker
+except ImportError:
+    from uberwriter_lib.thirdparty.gtkspellcheck import SpellChecker
 
 from uberwriter_lib import Window
 from uberwriter_lib import helpers
@@ -132,20 +134,20 @@ class UberwriterWindow(Window):
         self.fflines = 0
         self.TextEditor.fflines = 0
 
-    WORDCOUNT = re.compile(r"\W+", re.UNICODE)
+    WORDCOUNT = re.compile(r"[\s#*\+\-]+", re.UNICODE)
     def update_line_and_char_count(self):
-        self.line_count.set_text(str(
-            self.TextBuffer.get_line_count() - 
-                (2 * self.fflines)))
+        #self.line_count.set_text(str(
+        #    self.TextBuffer.get_line_count() - 
+        #        (2 * self.fflines)))
         self.char_count.set_text(str(self.TextBuffer.get_char_count() - 
                 (2 * self.fflines)))
 
-        #text = self.TextBuffer.get_text(self.TextBuffer.get_start_iter(),
-        #    self.TextBuffer.get_end_iter(), False).decode("utf-8")
-        #text = unicode(text)
-        #words = re.split(self.WORDCOUNT, text)
-        #length = len(words) - 1
-
+        text = self.TextBuffer.get_text(self.TextBuffer.get_start_iter(),
+            self.TextBuffer.get_end_iter(), False).decode("utf-8")
+        text = unicode(text)
+        words = re.split(self.WORDCOUNT, text)
+        length = len(words) - 1
+        self.line_count.set_text(str(length))
         # TODO add a textfield!
 
     def get_text(self):
@@ -295,8 +297,10 @@ class UberwriterWindow(Window):
             self.M.focusmode_highlight()
             self.focusmode = True
             self.TextEditor.grab_focus()
-
-            self.SpellChecker._misspelled.set_property('underline', 0)
+            
+            if self.spellcheck != False:
+                self.SpellChecker._misspelled.set_property('underline', 0)
+            
             self.focusmode_button.set_image(self.crosshair_active)
             self.focusmode_button.get_image().show()
         else:
@@ -312,7 +316,10 @@ class UberwriterWindow(Window):
             self.M.markup_buffer(1)
             self.TextEditor.grab_focus()
             self.update_line_and_char_count()
-            self.SpellChecker._misspelled.set_property('underline', 4)
+            
+            if self.spellcheck != False:
+                self.SpellChecker._misspelled.set_property('underline', 4)
+
             self.focusmode_button.set_image(self.crosshair_inactive)
             self.focusmode_button.get_image().show()
 
@@ -333,9 +340,6 @@ class UberwriterWindow(Window):
             self.init_typewriter()
 
     def window_close(self, widget, data=None):
-        if self.check_change():
-            self.save_document(widget)
-            return True
         return True
 
 
@@ -688,14 +692,27 @@ class UberwriterWindow(Window):
         self.vadjustment.connect('value-changed', self.scrolled)
 
         # Setting up spellcheck
-        self.SpellChecker = SpellChecker(self.TextEditor, locale.getdefaultlocale()[0], collapse=False)
+        try:
+            self.SpellChecker = SpellChecker(self.TextEditor, locale.getdefaultlocale()[0], collapse=False)
+            self.spellcheck = True
+        except:
+            self.spellcheck = False;
 
         # Window resize
         self.connect("configure-event", self.window_resize)
-    
-    def on_delete_called(self, widget, data=None):
-        print "asdasdasd"
 
+        # Window destroyed??
+
+        self.connect("delete-event", self.on_delete_called)
+
+
+    def on_delete_called(self, widget, data=None):
+        if self.check_change():
+            self.save_document(widget)
+            ## Handle cancel event
+            return False
+        return False
+ 
     def on_destroy(self, widget, data=None):
         """Called when the TexteditorWindow is closed."""
         # Clean up code for saving application state should be added here.

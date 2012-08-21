@@ -272,8 +272,8 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <accelerator key="z" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                         <accelerator key="y" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <accelerator key="z" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="redo" swapped="no"/>
                       </object>
                     </child>
@@ -517,7 +517,7 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="yes">Lines: </property>
+                    <property name="label" translatable="yes">Words:</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>

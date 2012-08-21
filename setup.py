@@ -77,12 +77,17 @@ class InstallAndUpdateDataDirectory(DistUtilsExtra.auto.install_auto):
 DistUtilsExtra.auto.setup(
     name='uberwriter',
     version='0.1',
-    #license='GPL-3',
-    #author='Your Name',
-    #author_email='email@ubuntu.com',
-    #description='UI for managing …',
-    #long_description='Here a longer description',
-    #url='https://launchpad.net/uberwriter',
-    cmdclass={'install': InstallAndUpdateDataDirectory}
+    license='GPL-3',
+    author='Wolf Vollprecht',
+    author_email='w.vollprecht@gmail.com',
+    description='A beautiful, simple and distraction free markdown editor.',
+    long_description="""UberWriter, beautiful distraction free writing
+ With UberWriter you get only one thing: An empty textbox, that is to
+ fill with your ideas. There are no settings, you don't have to choose a
+ font, it is only for writing.You can use markdown for all your markup
+ needs. PDF, RTF and HTML are generated with pandoc. For PDF generation it
+ is also required that you choose to install the texlive-luatex package.""",
+    url='https://launchpad.com/uberwriter',
+    cmdclass={'install': InstallAndUpdateDataDirectory},
+    package_data={'pylocales' : ['locales.db']}
     )
-
