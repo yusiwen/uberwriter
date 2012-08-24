@@ -70,3 +70,13 @@ li ol, li ul{
 .author::after {
 	content: ' ,';
 }
+.figure {
+	display: inline-block;
+}
+img {
+	max-width: 600px;
+}
+.caption {
+	text-align: center;
+	background: #F6F6F6;
+}

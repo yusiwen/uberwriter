@@ -21,6 +21,7 @@ import codecs
 from gettext import gettext as _
 gettext.textdomain('uberwriter')
 
+import mimetypes
 
 from gi.repository import Gtk, Gdk # pylint: disable=E0611
 from gi.repository import Pango # pylint: disable=E0611
@@ -462,7 +463,6 @@ class UberwriterWindow(Window):
         elif export_type == "html":
             css = helpers.get_media_file('uberwriter.css')
             args.append("-c%s" % css)
-            args.append("-t html5")
             args.append("-o%s.html" % basename)
             args.append("--mathjax")
 
@@ -565,6 +565,62 @@ class UberwriterWindow(Window):
         else:
             self.SpellChecker.disable()
 
+
+    def on_drag_data_received(self, widget, drag_context, x, y, 
+                              data, info, time):
+        """Handle drag and drop events"""
+
+        if info == 1:
+            # uri target
+            uris = data.get_uris()
+            for uri in uris: 
+                mime = mimetypes.guess_type(uri)
+
+                if mime[0] is not None and mime[0].startswith('image'):
+                    text = "![Insert image title here](%s)" % uri
+                    ll = 2
+                    lr = 23
+                else:
+                    text = "[Insert link title here](%s)" % uri
+                    ll = 1
+                    lr = 22
+
+                self.TextBuffer.insert_at_cursor(text)
+                insert_mark = self.TextBuffer.get_insert()
+                selection_bound = self.TextBuffer.get_selection_bound()
+                cursor_iter = self.TextBuffer.get_iter_at_mark(insert_mark)
+                cursor_iter.backward_chars(len(text) - ll)
+                self.TextBuffer.move_mark(insert_mark, cursor_iter)
+                cursor_iter.forward_chars(lr)
+                self.TextBuffer.move_mark(selection_bound, cursor_iter)
+        
+        elif info == 2:
+            # Text target
+            self.TextBuffer.insert_at_cursor(data.get_text())
+
+        self.present()
+
+    def dark_mode_toggled(self, widget, data=None):
+        if widget.get_active():
+            # Dark Mode is on
+            css = open(helpers.get_media_path('style_dark.css'), 'r')
+            css_data = css.read()
+            css.close()
+            self.style_provider.load_from_data(css_data)
+
+        else: 
+            # Dark mode off
+            css = open(helpers.get_media_path('style.css'), 'r')
+            css_data = css.read()
+            css.close()
+
+            self.style_provider.load_from_data(css_data)
+
+        Gtk.StyleContext.add_provider_for_screen(
+            Gdk.Screen.get_default(), self.style_provider,     
+            Gtk.STYLE_PROVIDER_PRIORITY_USER
+        )
+
     def finish_initializing(self, builder): # pylint: disable=E1002
         """Set up the main window"""
         super(UberwriterWindow, self).finish_initializing(builder)
@@ -578,6 +634,14 @@ class UberwriterWindow(Window):
         self.title_end = "  –  UberWriter"
         self.set_title("New File" + self.title_end)
 
+        # Drag and drop
+        self.drag_dest_set(Gtk.DestDefaults.ALL, [], Gdk.DragAction.COPY)
+        
+        self.target_list = Gtk.TargetList.new([])
+        self.target_list.add_uri_targets(1)
+        self.target_list.add_text_targets(2)
+
+        self.drag_dest_set_target_list(self.target_list)
 
         self.focusmode = False
 
@@ -680,16 +744,16 @@ class UberwriterWindow(Window):
 
         self.builder.get_object('recent-files').set_submenu(recent_files_menu)
         self.builder.get_object('recent-files').hide()
-        styleProvider = Gtk.CssProvider()
+        self.style_provider = Gtk.CssProvider()
 
         css = open(helpers.get_media_path('style.css'), 'r')
         css_data = css.read()
         css.close()
 
-        styleProvider.load_from_data(css_data)
+        self.style_provider.load_from_data(css_data)
 
         Gtk.StyleContext.add_provider_for_screen(
-            Gdk.Screen.get_default(), styleProvider,     
+            Gdk.Screen.get_default(), self.style_provider,     
             Gtk.STYLE_PROVIDER_PRIORITY_USER
         )
 
