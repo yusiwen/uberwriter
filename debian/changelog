@@ -1,3 +1,13 @@
+uberwriter (12.08.24-publicbeta) precise; urgency=low
+
+  [ Wolf ]
+  * Various bugfixes
+  * Auto Spellcheck now settable
+  * Filename in window title
+  * ODT instead of RTF export
+  
+ -- Wolf <w.vollprecht@googlemail.com>  Sun, 26 Jul 2012 02:36:23 +0200
+
 uberwriter (12.08.04-public1) precise; urgency=low
 
   [ Wolf ]

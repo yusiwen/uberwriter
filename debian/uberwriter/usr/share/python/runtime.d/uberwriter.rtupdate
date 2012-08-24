@@ -1,0 +1,6 @@
+#! /bin/sh
+set -e
+if [ "$1" = rtupdate ]; then
+	pyclean -p uberwriter /opt/extras.ubuntu.com/uberwriter
+	pycompile -p uberwriter -V 2.7 /opt/extras.ubuntu.com/uberwriter
+fi

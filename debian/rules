@@ -14,10 +14,7 @@ override_dh_python2:
 
 override_dh_install:
 	dh_install
-	cp -r uberwriter_lib/thirdparty/gtkspellcheck/locale/	debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter_lib/thirdparty/gtkspellcheck/locale/
-	cp -r uberwriter_lib/thirdparty/pylocale/databases/ 	debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter_lib/thirdparty/pylocale/databases/	
-	cp -r uberwriter_lib/thirdparty/pylocale/locales/ 		debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter_lib/thirdparty/pylocale/locales/
-	cp uberwriter_lib/thirdparty/pylocale/locales.db 		debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter_lib/thirdparty/pylocale/locales.db
+	cp uberwriter_lib/thirdparty/pylocales/locales.db 		debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter_lib/thirdparty/pylocales/locales.db
 	
 	mkdir -p debian/uberwriter/opt/extras.ubuntu.com/uberwriter/bin
 	if [ -x debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter/uberwriter ]; then mv debian/uberwriter/opt/extras.ubuntu.com/uberwriter/uberwriter/uberwriter debian/uberwriter/opt/extras.ubuntu.com/uberwriter/bin; fi

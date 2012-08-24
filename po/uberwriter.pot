@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-26 02:38+0200\n"
+"POT-Creation-Date: 2012-08-24 02:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,17 +17,134 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#. # Was - 10 ...
 #: ../uberwriter.desktop.in.h:1 ../data/ui/UberwriterWindow.ui.h:1
-#: ../h/data/ui/UberwriterWindow.ui.h:1 ../h/uberwriter.desktop.in.h:1
 msgid "UberWriter"
 msgstr ""
 
-#: ../uberwriter.desktop.in.h:2 ../h/uberwriter.desktop.in.h:2
-msgid "UberWriter application"
+#: ../uberwriter.desktop.in.h:2
+msgid "UberWriter, a simple and distraction free Markdown Editor"
 msgstr ""
 
-#: ../h/data/ui/AboutUberwriterDialog.ui.h:1
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:437
+msgid "(no suggestions)"
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:458
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:461
+msgid "Add \"{word}\" to Dictionary"
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:465
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:467
+msgid "Ignore All"
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:482
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:484
+msgid "Languages"
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:495
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:498
+msgid "Suggestions"
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:86
+msgid "Extract path is not a directory."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:138
+msgid "'{0}' declared in registry but not found within the extension."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:141
+msgid "Error while processing extension {0}."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:144
+msgid "Extension '{0}' has no dictionary registry."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:146
+msgid "Extension '{0}' is not a valid zip file."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:160
+msgid "Unable to move extension, file with same name exists within move_path."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:162
+msgid "Unable to move extension, move_path is not a directory."
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:2
+msgid "_File"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:3
+msgid "Export as ODT"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:4
+msgid "_Recent Files"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:5
+msgid "_Edit"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:6
+msgid "_View"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:7
+msgid "Auto _Spellcheck"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:8
+msgid "_Help"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:9
+msgid "Contents"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:10
+msgid "Focus Mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:11
+msgid "Go into focus mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:12
+msgid "Fullscreen"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:13
+msgid "Go into fullscreen mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:14
+msgid "Characters: "
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:15
+msgid "0"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:16
+msgid "Words:"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:17
+msgid "1"
+msgstr ""
+
+#: ../uberwriter/__init__.py:34
+msgid "Show debug messages (-vv debugs uberwriter_lib also)"
+msgstr ""
+
 #: ../data/ui/AboutUberwriterDialog.ui.h:1
 msgid ""
 "# Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>\n"
@@ -45,91 +162,6 @@ msgid ""
 "# with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
 msgstr ""
 
-#: ../h/data/ui/AboutUberwriterDialog.ui.h:14
 #: ../data/ui/AboutUberwriterDialog.ui.h:14
 msgid "Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:2 ../h/data/ui/UberwriterWindow.ui.h:2
-msgid "_File"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:3 ../h/data/ui/UberwriterWindow.ui.h:3
-msgid "Export as RTF"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:4 ../h/data/ui/UberwriterWindow.ui.h:4
-msgid "_Recent Files"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:5 ../h/data/ui/UberwriterWindow.ui.h:5
-msgid "_Edit"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:6 ../h/data/ui/UberwriterWindow.ui.h:6
-msgid "_View"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:7 ../h/data/ui/UberwriterWindow.ui.h:7
-msgid "_Help"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:8 ../h/data/ui/UberwriterWindow.ui.h:8
-msgid "Contents"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:9 ../h/data/ui/UberwriterWindow.ui.h:9
-msgid "Focus Mode"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:10
-msgid "Go into focus mode"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:11 ../h/data/ui/UberwriterWindow.ui.h:10
-msgid "Fullscreen"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:12
-msgid "Go into fullscreen mode"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:13 ../h/data/ui/UberwriterWindow.ui.h:11
-msgid "Characters: "
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:14
-msgid "0"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:15 ../h/data/ui/UberwriterWindow.ui.h:12
-msgid "Lines: "
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:16
-msgid "1"
-msgstr ""
-
-#: ../uberwriter/__init__.py:34 ../h/uberwriter/__init__.py:34
-msgid "Show debug messages (-vv debugs uberwriter_lib also)"
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:380
-msgid "(no suggestions)"
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:396
-msgid "Add \"{word}\" to Dictionary"
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:399
-msgid "Ignore All"
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:411
-msgid "Languages"
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/__init__.py:419
-msgid "Suggestions"
 msgstr ""
