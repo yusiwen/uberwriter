@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-24 02:15+0200\n"
+"POT-Creation-Date: 2012-08-25 15:07+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,46 +98,54 @@ msgid "_View"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:7
-msgid "Auto _Spellcheck"
+msgid "Light text on  a dark background"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:8
-msgid "_Help"
+msgid "Dark Mode"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:9
-msgid "Contents"
+msgid "Auto _Spellcheck"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:10
-msgid "Focus Mode"
+msgid "_Help"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:11
-msgid "Go into focus mode"
+msgid "Contents"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:12
-msgid "Fullscreen"
+msgid "Focus Mode"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:13
-msgid "Go into fullscreen mode"
+msgid "Go into focus mode"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:14
-msgid "Characters: "
+msgid "Fullscreen"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:15
-msgid "0"
+msgid "Go into fullscreen mode"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:16
-msgid "Words:"
+msgid "Characters: "
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:17
+msgid "0"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:18
+msgid "Words:"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:19
 msgid "1"
 msgstr ""
 

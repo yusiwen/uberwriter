@@ -2,7 +2,8 @@
 Name=UberWriter
 Comment=UberWriter, a simple and distraction free Markdown Editor
 Categories=GNOME;Office;
-Exec=/opt/extras.ubuntu.com/uberwriter/bin/uberwriter
+Exec=/opt/extras.ubuntu.com/uberwriter/bin/uberwriter %U
 Icon=/opt/extras.ubuntu.com/uberwriter/share/uberwriter/media/uberwriter.svg
 Terminal=false
 Type=Application
+MimeType=text/x-markdown;text/plain;

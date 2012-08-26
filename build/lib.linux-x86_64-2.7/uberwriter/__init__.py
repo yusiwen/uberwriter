@@ -36,11 +36,20 @@ def parse_options():
 
     set_up_logging(options)
 
+    print args
+
+    return options, args
+
 def main():
     'constructor for your class instances'
-    parse_options()
+    (options, args) = parse_options()
 
     # Run the application.    
-    window = UberwriterWindow.UberwriterWindow()
+    if args:
+        for arg in args:
+            window = UberwriterWindow.UberwriterWindow()
+            window.load_file(arg)
+    else:
+        window = UberwriterWindow.UberwriterWindow()
     window.show()
     Gtk.main()

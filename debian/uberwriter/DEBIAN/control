@@ -1,8 +1,8 @@
 Package: uberwriter
-Version: 12.08.24-publicbeta
+Version: 12.08.25-publicbeta2
 Architecture: all
 Maintainer: Wolf Vollprecht <w.vollprecht@gmail.com>
-Installed-Size: 421
+Installed-Size: 426
 Depends: python (>= 2.7.1-0ubuntu2), python2.7, gir1.2-glib-2.0, gir1.2-gtk-3.0, gir1.2-pango-1.0, gir1.2-launchpad-integration-3.0, pandoc, python-enchant, yelp
 Suggests: texlive-luatex
 Section: python
