@@ -49,6 +49,6 @@ GtkTextView:selected {
     background-image: none;
 }
 
-#UberwriterWindow GtkLabel {
+#status_bar_box GtkLabel {
     color: #666;
 }

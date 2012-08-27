@@ -161,17 +161,17 @@ class UberwriterWindow(Window):
 
         text = self.get_text().decode("utf-8")
         text = unicode(text)
-        words = re.split(self.WORDCOUNT, text)
-        length = len(words)
-        # Last word a "space"
-        if len(words[-1]) == 0:
-            length = length - 1
-        # First word a "space" (happens in focus mode...)
-        if len(words[0]) == 0:
-            length = length - 1
-        if length == -1: 
-            length = 0
-        self.word_count.set_text(str(length))
+        #words = re.split(self.WORDCOUNT, text)
+        #length = len(words)
+        ## Last word a "space"
+        #if len(words[-1]) == 0:
+        #    length = length - 1
+        ## First word a "space" (happens in focus mode...)
+        #if len(words[0]) == 0:
+        #    length = length - 1
+        #if length == -1: 
+        #    length = 0
+        #self.word_count.set_text(str(length))
 
         # TODO rename line_count to word_count
 
@@ -689,9 +689,6 @@ class UberwriterWindow(Window):
             print "Cancel clicked"
             filechooser.destroy()
 
-    def open_recent(self, widget, data=None):
-        pass
-
     def check_change(self):
         if self.did_change and len(self.get_text()):
             dialog = Gtk.MessageDialog(self,
@@ -744,11 +741,28 @@ class UberwriterWindow(Window):
         self.typewriter_active = widget.get_active()
 
     def toggle_spellcheck(self, widget, data=None):
-        if widget.get_active():
-            self.SpellChecker.enable()
-        else:
-            self.SpellChecker.disable()
-
+        if self.spellcheck:
+            if widget.get_active():
+                self.SpellChecker.enable()
+            else:
+                self.SpellChecker.disable()
+        elif widget.get_active(): 
+            try:
+                self.SpellChecker = SpellChecker(self.TextEditor, locale.getdefaultlocale()[0], collapse=False)
+                self.spellcheck = True
+            except:
+                self.SpellChecker = None
+                self.spellcheck = False
+                dialog = Gtk.MessageDialog(self,
+                    Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                    Gtk.MessageType.INFO,
+                    None, 
+                    "You can not enable the Spell Checker."
+                )
+                dialog.format_secondary_text("Please install 'hunspell' or 'aspell' dictionarys from the software center.")
+                response = dialog.run()
+                return
+        return
 
     def on_drag_data_received(self, widget, drag_context, x, y, 
                               data, info, time):
@@ -815,14 +829,19 @@ class UberwriterWindow(Window):
     def load_file(self, filename = None):
         """Open File from command line"""
         if filename:
+            if filename.startswith('file://'):
+                filename = filename[7:]
+                print filename
             self.filename = filename
-            print "Open file on start: %s" % filename
-            try:
+            try:                
                 f = codecs.open(filename, encoding="utf-8", mode='r')
                 self.TextBuffer.set_text(f.read())
                 f.close()
                 self.M.markup_buffer(0)
                 self.set_title(os.path.basename(filename) + self.title_end)
+                self.TextEditor.undos = []
+                self.TextEditor.redos = []
+            
             except:
                 print "Error Reading File"
             self.did_change = False
@@ -835,11 +854,6 @@ class UberwriterWindow(Window):
         sp.set_extend(cairo.EXTEND_REPEAT)
         context.set_source(sp)
         context.paint()
-
-    def on_open_recent(self, widget, data = None):
-        item = self.recent_files_menu.get_current_item()
-        print "Name:", item.get_display_name()
-        print "File URI: ", item.get_uri()
 
     def open_launchpad_translation(self, widget, data = None):
         webbrowser.open("https://translations.launchpad.net/uberwriter")
@@ -857,7 +871,34 @@ class UberwriterWindow(Window):
 
             advexp.destroy()
 
-    spellcheck = False
+    def open_recent(self, widget, data=None):
+        if data:
+            if self.check_change() == Gtk.ResponseType.CANCEL:
+                return
+            else:
+                self.load_file(data)
+
+    def generate_recent_files_menu(self, parent_menu):
+        # Recent file filter
+        self.recent_manager = Gtk.RecentManager.get_default()
+
+        self.recent_files_menu = Gtk.RecentChooserMenu.new_for_manager(self.recent_manager)
+        self.recent_files_menu.set_sort_type(Gtk.RecentSortType.MRU)
+        
+        recent_filter = Gtk.RecentFilter.new()
+        recent_filter.add_mime_type('text/x-markdown')
+        self.recent_files_menu.set_filter(recent_filter)
+        menu = Gtk.Menu.new()
+
+        for entry in self.recent_files_menu.get_items():
+            if entry.exists():
+                item = Gtk.MenuItem.new_with_label(entry.get_display_name())
+                item.connect('activate', self.open_recent, entry.get_uri())
+                menu.append(item)
+                item.show()
+        menu.show()
+        parent_menu.set_submenu(menu)
+        parent_menu.show()        
 
     def finish_initializing(self, builder): # pylint: disable=E1002
         """Set up the main window"""
@@ -920,8 +961,9 @@ class UberwriterWindow(Window):
         #self.fullscreen_button.set_image(self.fullscreen_inactive)
         #self.fullscreen_button.get_image().show()
 
-        self.status_bar = builder.get_object('box1')
-        self.status_bar.get_style_context().add_class('invisible')
+        self.status_bar = builder.get_object('status_bar_box')
+        self.status_bar.set_name('status_bar_box')
+
 
         self.accel_group = Gtk.AccelGroup()
         self.add_accel_group(self.accel_group)
@@ -982,25 +1024,8 @@ class UberwriterWindow(Window):
         # Init file name with None
         self.filename = None
 
-        # Recent file filter
-        self.recent_manager = Gtk.RecentManager.get_default()
-
-        self.recent_files_menu = Gtk.RecentChooserMenu.new_for_manager(self.recent_manager)
-        self.recent_files_menu.set_sort_type(Gtk.RecentSortType.MRU)
-        
-        recent_filter = Gtk.RecentFilter.new()
-        recent_filter.add_mime_type('text/x-markdown')
-        self.recent_files_menu.set_filter(recent_filter)
-        for item in self.recent_files_menu.get_items():
-            print item.get_uri()
-
-        self.recent_files_menu.set_property('show-numbers', False)
-        self.recent_files_menu.set_property('show-icons', False)
-        self.recent_files_menu.connect('item-activated', self.on_open_recent)
-        #self.recent_files_menu.show()
-        
-        self.builder.get_object('recent').set_submenu(self.recent_files_menu)
-        self.builder.get_object('recent').hide()
+        self.generate_recent_files_menu(self.builder.get_object('recent'))
+        #self.builder.get_object('recent').hide()
 
         self.style_provider = Gtk.CssProvider()
 
@@ -1048,11 +1073,14 @@ class UberwriterWindow(Window):
         # Setting up spellcheck
         try:
             self.SpellChecker = SpellChecker(self.TextEditor, locale.getdefaultlocale()[0], collapse=False)
-            self.SpellChecker.append_filter([r'[#]+'], SpellChecker.FILTER_WORD)
             self.spellcheck = True
         except:
             self.SpellChecker = None
-            self.spellcheck = False;
+            self.spellcheck = False
+            builder.get_object("disable_spellcheck").set_active(False)
+
+        if self.spellcheck:
+            self.SpellChecker.append_filter('[#]+', SpellChecker.FILTER_WORD)
 
 
         # Open file from commandline
@@ -1066,14 +1094,19 @@ class UberwriterWindow(Window):
         # Window destroyed??
 
         self.connect("delete-event", self.on_delete_called)
-
-
+        #self.connect("motion-notify-event", self.motion)
+        #self.i = 0
+    
     def on_delete_called(self, widget, data=None):
         """Called when the TexteditorWindow is closed."""        
         if self.check_change() == Gtk.ResponseType.CANCEL:
             return True
         return False
  
+    def motion(self, widget, data=None):
+        print "Momow %i" % self.i
+        self.i = self.i + 1
+
     def on_destroy(self, widget, data=None):
         """Called when the TexteditorWindow is closed."""
         # Clean up code for saving application state should be added here.

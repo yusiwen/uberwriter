@@ -249,9 +249,6 @@ class MarkupBuffer():
         if self.parent.focusmode:
             self.focusmode_highlight()
 
-        if self.parent.spellcheck and mode == 1:
-            self.parent.SpellChecker.check_range(context_start, context_end)
-
     def focusmode_highlight(self):
         self.TextBuffer.apply_tag(self.grayfont, 
             self.TextBuffer.get_start_iter(), 
