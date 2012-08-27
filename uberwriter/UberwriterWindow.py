@@ -49,6 +49,7 @@ except ImportError:
 from uberwriter_lib import Window
 from uberwriter_lib import helpers
 from uberwriter.AboutUberwriterDialog import AboutUberwriterDialog
+from uberwriter.UberwriterAdvancedExportDialog import UberwriterAdvancedExportDialog
 
 
 # gtk_text_view_forward_display_line_end () !! !
@@ -420,8 +421,9 @@ class UberwriterWindow(Window):
             #self.focusmode_button.set_image(self.crosshair_active)
             #self.focusmode_button.get_image().show()
             
-            self.status_bar.get_style_context().remove_class('visible')
-            self.status_bar.get_style_context().add_class('invisible')
+            #self.status_bar.get_style_context().remove_class('invisible')
+            #self.status_bar.get_style_context().add_class('visible')
+
         else:
             self.remove_typewriter()
             self.focusmode = False
@@ -473,8 +475,14 @@ class UberwriterWindow(Window):
                 self.did_change = False
                 title = self.get_title()
                 self.set_title(title[2:])
+            return Gtk.ResponseType.OK
 
         else:
+            
+            filefilter = Gtk.FileFilter.new()
+            filefilter.add_mime_type('text/x-markdown')
+            filefilter.add_mime_type('text/plain')
+            filefilter.set_name('MarkDown (.md)')
             filechooser = Gtk.FileChooserDialog(
                 "Save your File",
                 self,
@@ -482,14 +490,17 @@ class UberwriterWindow(Window):
                 (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
                  Gtk.STOCK_SAVE, Gtk.ResponseType.OK)
                 )
+
             filechooser.set_do_overwrite_confirmation(True)
+            filechooser.add_filter(filefilter)
             response = filechooser.run()
             if response == Gtk.ResponseType.OK:
-                print "Open clicked"
-                print "File selected: " + filechooser.get_filename()
                 filename = filechooser.get_filename()
+                
                 if filename[-3:] != ".md":
                     filename = filename + ".md"
+                    self.recent_manager.add_item("file:/ " + filename)
+
                 f = codecs.open(filename, encoding="utf-8", mode='w')
 
                 f.write(self.get_text().decode("utf-8") )
@@ -498,16 +509,16 @@ class UberwriterWindow(Window):
                 self.filename = filename
                 self.set_title(os.path.basename(filename) + self.title_end)
                 
-                filechooser.destroy()
-
-                self.recent_manager.add_item(filename)
-
+                
+                #for item in self.recent_manager.get_items():
+                #   print item.get_display_name() + " App: " + item.last_application()
                 self.did_change = False
+                filechooser.destroy()
+                return response
 
             elif response == Gtk.ResponseType.CANCEL:
-                print "Cancel clicked"
                 filechooser.destroy()
-
+                return response
     def save_document_as(self, widget, data=None):
         filechooser = Gtk.FileChooserDialog(
             "Save your File",
@@ -524,7 +535,9 @@ class UberwriterWindow(Window):
 
             filename = filechooser.get_filename()
             if filename[-3:] != ".md":
+                self.recent_manager.remove_item("file:/" + filename)
                 filename = filename + ".md"
+                self.recent_manager.add_item("file:/ " + filename)
 
             f = codecs.open(filename, encoding="utf-8", mode='w')
             f.write(self.get_text().decode("utf-8") )
@@ -616,12 +629,13 @@ class UberwriterWindow(Window):
         cb.store()
 
     def open_document(self, widget):
-        cc = self.check_change()
-        print cc
-        if cc == True:
+        if self.check_change() == Gtk.ResponseType.CANCEL:
             return
+
         filefilter = Gtk.FileFilter.new()
         filefilter.add_mime_type('text/x-markdown')
+        filefilter.add_mime_type('text/plain')
+
         filechooser = Gtk.FileChooserDialog(
             "Open a .md-File",
             self,
@@ -629,6 +643,7 @@ class UberwriterWindow(Window):
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK)
             )
+        filechooser.add_filter(filefilter)
         response = filechooser.run()
         if response == Gtk.ResponseType.OK:
             print "File selected: " + filechooser.get_filename()
@@ -645,28 +660,44 @@ class UberwriterWindow(Window):
 
     def check_change(self):
         if self.did_change and len(self.get_text()):
-            dialog = Gtk.MessageDialog(self, Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
-                Gtk.MessageType.WARNING, 
-                Gtk.ButtonsType.YES_NO,
-                "Do you want to save your changes?"
+            dialog = Gtk.MessageDialog(self,
+                Gtk.DialogFlags.MODAL | Gtk.DialogFlags.DESTROY_WITH_PARENT,
+                Gtk.MessageType.WARNING,
+                None, 
+                "You have not saved your changes."
                 )
+            dialog.add_button("Close without Saving", Gtk.ResponseType.NO)
+            dialog.add_button("Cancel", Gtk.ResponseType.CANCEL)
+            dialog.add_button("Save now", Gtk.ResponseType.YES).grab_focus()
+            dialog.set_title('Unsaved changes')
+            dialog.set_default_size(200, 150)
             response = dialog.run()
             if response == Gtk.ResponseType.YES:
-                dialog.destroy()
                 title = self.get_title()
-                self.save_document(None)
-                return False
-            else:
+                if self.save_document(widget = None) == Gtk.ResponseType.CANCEL:
+                    dialog.destroy()
+                    return self.check_change()
+                else:                    
+                    dialog.destroy()
+                    return response
+            elif response == Gtk.ResponseType.CANCEL:
                 dialog.destroy()
-                return False
+                return response
+            elif response == Gtk.ResponseType.NO:
+                dialog.destroy()
+                return response
 
     def new_document(self, widget):
-        if self.check_change() == False:
+        if self.check_change() == Gtk.ResponseType.CANCEL:
             return
-        else:      
+        else:
+            self.TextBuffer.set_text('')
+            self.TextEditor.undos = []
+            self.TextEditor.redos = []
+
             self.did_change = False
             self.filename = None
-            self.TextBuffer.set_text('')
+            self.set_title("New File" + self.title_end)
 
     def menu_activate_focusmode(self, widget):
         self.focusmode_button.emit('activate')
@@ -727,7 +758,7 @@ class UberwriterWindow(Window):
             css.close()
             self.style_provider.load_from_data(css_data)
             self.background_image = helpers.get_media_path('bg_dark.png')
-
+            self.M.dark_mode(True)
 
         else: 
             # Dark mode off
@@ -737,6 +768,7 @@ class UberwriterWindow(Window):
 
             self.style_provider.load_from_data(css_data)
             self.background_image = helpers.get_media_path('bg_light.png')
+            self.M.dark_mode(False)
 
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), self.style_provider,     
@@ -772,17 +804,34 @@ class UberwriterWindow(Window):
         context.set_source(sp)
         context.paint()
 
-    def open_launchpad_translation(self, widget, data=None):
+    def on_open_recent(self, widget, data = None):
+        item = self.recent_files_menu.get_current_item()
+        print "Name:", item.get_display_name()
+        print "File URI: ", item.get_uri()
+
+    def open_launchpad_translation(self, widget, data = None):
         webbrowser.open("https://translations.launchpad.net/uberwriter")
 
-    def open_launchpad_help(self, widget, data=None):
+    def open_launchpad_help(self, widget, data = None):
         webbrowser.open("https://answers.launchpad.net/uberwriter")
+
+    def open_advanced_export(self, widget, data=None):
+        if self.UberwriterAdvancedExportDialog is not None:
+            advexp = self.UberwriterAdvancedExportDialog() # pylint: disable=
+
+            response = advexp.run()
+            if response == 1:
+                advexp.advanced_export(self.get_text())
+
+            advexp.destroy()
+
 
     def finish_initializing(self, builder): # pylint: disable=E1002
         """Set up the main window"""
         super(UberwriterWindow, self).finish_initializing(builder)
 
         self.AboutDialog = AboutUberwriterDialog
+        self.UberwriterAdvancedExportDialog = UberwriterAdvancedExportDialog
 
         # Code for other initialization actions should be added here.
         
@@ -835,7 +884,7 @@ class UberwriterWindow(Window):
         #self.fullscreen_button.get_image().show()
 
         self.status_bar = builder.get_object('box1')
-        self.status_bar.get_style_context().add_class('visible')
+        self.status_bar.get_style_context().add_class('invisible')
 
         self.accel_group = Gtk.AccelGroup()
         self.add_accel_group(self.accel_group)
@@ -899,16 +948,22 @@ class UberwriterWindow(Window):
         # Recent file filter
         self.recent_manager = Gtk.RecentManager.get_default()
 
-        recent_files_menu = Gtk.RecentChooserMenu.new_for_manager(self.recent_manager)
+        self.recent_files_menu = Gtk.RecentChooserMenu.new_for_manager(self.recent_manager)
+        self.recent_files_menu.set_sort_type(Gtk.RecentSortType.MRU)
+        
         recent_filter = Gtk.RecentFilter.new()
         recent_filter.add_mime_type('text/x-markdown')
-        recent_files_menu.set_filter(recent_filter)
+        self.recent_files_menu.set_filter(recent_filter)
+        for item in self.recent_files_menu.get_items():
+            print item.get_uri()
 
-        recent_files_menu.set_property('show-numbers', True)
-        recent_files_menu.show()
+        self.recent_files_menu.set_property('show-numbers', False)
+        self.recent_files_menu.set_property('show-icons', False)
+        self.recent_files_menu.connect('item-activated', self.on_open_recent)
+        self.recent_files_menu.show()
+        
+        self.builder.get_object('recent').set_submenu(self.recent_files_menu)
 
-        self.builder.get_object('recent-files').set_submenu(recent_files_menu)
-        #self.builder.get_object('recent-files').hide()
         self.style_provider = Gtk.CssProvider()
 
         css = open(helpers.get_media_path('style.css'), 'r')
@@ -973,13 +1028,10 @@ class UberwriterWindow(Window):
         self.connect("delete-event", self.on_delete_called)
 
 
-
-
     def on_delete_called(self, widget, data=None):
-        if self.check_change():
-            self.save_document(widget)
-            ## Handle cancel event
-            return False
+        """Called when the TexteditorWindow is closed."""        
+        if self.check_change() == Gtk.ResponseType.CANCEL:
+            return True
         return False
  
     def on_destroy(self, widget, data=None):

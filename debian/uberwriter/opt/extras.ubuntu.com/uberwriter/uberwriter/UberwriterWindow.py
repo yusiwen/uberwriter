@@ -18,6 +18,7 @@ import gettext
 import subprocess
 import os
 import codecs
+import webbrowser
 from gettext import gettext as _
 gettext.textdomain('uberwriter')
 
@@ -25,6 +26,8 @@ import mimetypes
 
 from gi.repository import Gtk, Gdk # pylint: disable=E0611
 from gi.repository import Pango # pylint: disable=E0611
+
+import cairo
 
 import re
 
@@ -279,17 +282,130 @@ class UberwriterWindow(Window):
     def redo(self, widget, data=None):
         self.TextEditor.redo()
 
-    def set_italic(self, widget, data=None):
+    def apply_format(self, wrap = "*"):
+        if self.TextBuffer.get_has_selection():
+            ## Find current highlighting
+
+            (start, end) = self.TextBuffer.get_selection_bounds()
+            moved = False
+            if ( 
+                start.get_offset() >= len(wrap) and 
+                end.get_offset() <= self.TextBuffer.get_char_count() - len(wrap)
+                ):
+                moved = True
+                ext_start = start.copy()
+                ext_start.backward_chars(len(wrap))
+                ext_end = end.copy()
+                ext_end.forward_chars(len(wrap))
+                text = self.TextBuffer.get_text(ext_start, ext_end, True).decode("utf-8")
+            else:
+                text = self.TextBuffer.get_text(start, end, True).decode("utf-8")
+            
+            if moved and text.startswith(wrap) and text.endswith(wrap):
+                text = text[len(wrap):-len(wrap)]
+                new_text = text
+                self.TextBuffer.delete(ext_start, ext_end)
+                move_back = 0
+            else:
+                if moved:
+                    text = text[len(wrap):-len(wrap)]
+                new_text = text.lstrip().rstrip()
+                text = text.replace(new_text, wrap + new_text + wrap)
+
+                self.TextBuffer.delete(start, end)
+                move_back = len(wrap)
+            
+            self.TextBuffer.insert_at_cursor(text)
+            text_length = len(new_text)
+
+        else:
+            helptext = ""
+            if wrap == "*":
+                helptext = "emphasized text"
+            elif wrap == "**":
+                helptext = "strong text"
+
+            self.TextBuffer.insert_at_cursor(wrap + helptext + wrap)
+            text_length = len(helptext)
+            move_back = len(wrap)
+
         cursor_mark = self.TextBuffer.get_insert()
         cursor_iter = self.TextBuffer.get_iter_at_mark(cursor_mark)
-        if cursor_iter.starts_word():
-            ii = cursor_iter.copy()
-            ii.backward_word_starts()
-            self.TextBuffer.insert(ii, '*')
-            ii.forward_word_starts()
-            self.TextBuffer.insert(ii, '*')
+        cursor_iter.backward_chars(move_back)
+        self.TextBuffer.move_mark_by_name('selection_bound', cursor_iter)
+        cursor_iter.backward_chars(text_length)
+        self.TextBuffer.move_mark_by_name('insert', cursor_iter)
+
+
+
+    def set_italic(self, widget, data=None):
+        """Ctrl + I"""
+        self.apply_format("*")
+
     def set_bold(self, widget, data=None):
+        """Ctrl + B"""
+        self.apply_format("**")
+
+    def insert_horizontal_rule(self, widget, data=None):
+        """Ctrl + R"""
+        self.TextBuffer.insert_at_cursor("\n\n-------\n\n")
+        self.TextEditor.scroll_mark_onscreen(self.TextBuffer.get_insert())
+
+    def insert_unordered_list_item(self, widget, data=None):
+        """Ctrl + U"""
+        helptext = "List item"
+        text_length = len(helptext)
+        move_back = 0
+        if self.TextBuffer.get_has_selection():
+            (start, end) = self.TextBuffer.get_selection_bounds()
+            if start.starts_line():
+                text = self.TextBuffer.get_text(start, end, False)
+                if text.startswith(("- ", "* ", "+ ")):
+                    delete_end = start.forward_chars(2)
+                    self.TextBuffer.delete(start, delete_end)
+                else:
+                    self.TextBuffer.insert(start, "- ")
+        else:
+            move_back = 0
+            cursor_mark = self.TextBuffer.get_insert()
+            cursor_iter = self.TextBuffer.get_iter_at_mark(cursor_mark)
+            print "UOL"
+            start_ext = cursor_iter.copy()
+            start_ext.backward_lines(3)
+            text = self.TextBuffer.get_text(cursor_iter, start_ext, False).decode("utf-8")
+            lines = text.splitlines()
+            print lines
+            for line in reversed(lines):
+                if len(line) and line.startswith(("- ", "* ", "+ ")):
+                    if cursor_iter.starts_line():
+                        self.TextBuffer.insert_at_cursor(line[:2] + helptext)
+                    else:
+                        self.TextBuffer.insert_at_cursor("\n" + line[:2] + helptext)
+                    break
+                else:
+                    if len(lines[-1]) == 0 and len(lines[-2]) == 0:
+                        self.TextBuffer.insert_at_cursor("- " + helptext)
+                    elif len(lines[-1]) == 0:
+                        if cursor_iter.starts_line():
+                            self.TextBuffer.insert_at_cursor("- " + helptext)
+                        else:
+                            self.TextBuffer.insert_at_cursor("\n- " + helptext)
+                    else:
+                        self.TextBuffer.insert_at_cursor("\n\n- " + helptext)
+                    break
+
+        cursor_mark = self.TextBuffer.get_insert()
+        cursor_iter = self.TextBuffer.get_iter_at_mark(cursor_mark)
+        cursor_iter.backward_chars(move_back)
+        self.TextBuffer.move_mark_by_name('selection_bound', cursor_iter)
+        cursor_iter.backward_chars(text_length)
+        self.TextBuffer.move_mark_by_name('insert', cursor_iter)
+        self.TextEditor.scroll_mark_onscreen(self.TextBuffer.get_insert())
+
+    def insert_ordered_list(self, widget, data=None):
+        """CTRL + O"""
         pass
+
 
     def set_focusmode(self, widget, data=None):
         if widget.get_active():
@@ -301,8 +417,11 @@ class UberwriterWindow(Window):
             if self.spellcheck != False:
                 self.SpellChecker._misspelled.set_property('underline', 0)
             
-            self.focusmode_button.set_image(self.crosshair_active)
-            self.focusmode_button.get_image().show()
+            #self.focusmode_button.set_image(self.crosshair_active)
+            #self.focusmode_button.get_image().show()
+            
+            self.status_bar.get_style_context().remove_class('visible')
+            self.status_bar.get_style_context().add_class('invisible')
         else:
             self.remove_typewriter()
             self.focusmode = False
@@ -320,8 +439,8 @@ class UberwriterWindow(Window):
             if self.spellcheck != False:
                 self.SpellChecker._misspelled.set_property('underline', 4)
 
-            self.focusmode_button.set_image(self.crosshair_inactive)
-            self.focusmode_button.get_image().show()
+            #self.focusmode_button.set_image(self.crosshair_inactive)
+            #self.focusmode_button.get_image().show()
 
     def window_resize(self, widget, data=None):
         # To calc padding top / bottom
@@ -484,11 +603,16 @@ class UberwriterWindow(Window):
         # TODO connect to item in Menubar, and make new pandoc template for 
         # only HTML, no headers etc.
         
-        args = ['pandoc', '--from=markdown', '--smart', '-t html']
-        p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, cwd=output_dir)
-
-        cb = Gtk.Clipboard.get()
-        cb.set_text('test')
+        args = ['pandoc', '--from=markdown', '--smart', '-thtml']
+        p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+        
+        text = self.get_text()
+        output = p.communicate(text)[0]
+        
+        print output
+        
+        cb = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
+        cb.set_text(output, -1)
         cb.store()
 
     def open_document(self, widget):
@@ -602,6 +726,8 @@ class UberwriterWindow(Window):
             css_data = css.read()
             css.close()
             self.style_provider.load_from_data(css_data)
+            self.background_image = helpers.get_media_path('bg_dark.png')
+
 
         else: 
             # Dark mode off
@@ -610,11 +736,16 @@ class UberwriterWindow(Window):
             css.close()
 
             self.style_provider.load_from_data(css_data)
+            self.background_image = helpers.get_media_path('bg_light.png')
 
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), self.style_provider,     
             Gtk.STYLE_PROVIDER_PRIORITY_USER
         )
+
+        (w, h) = self.get_size()
+        print w
+        self.resize(w+1, h+1)
 
     def load_file(self, filename = None):
         """Open File from command line"""
@@ -633,6 +764,20 @@ class UberwriterWindow(Window):
         else:
             print "No File arg"
 
+    def draw_bg(self, widget, context):
+        #print "shizzle"
+        surface = cairo.ImageSurface.create_from_png(self.background_image)
+        sp = cairo.SurfacePattern(surface)
+        sp.set_extend(cairo.EXTEND_REPEAT)
+        context.set_source(sp)
+        context.paint()
+
+    def open_launchpad_translation(self, widget, data=None):
+        webbrowser.open("https://translations.launchpad.net/uberwriter")
+
+    def open_launchpad_help(self, widget, data=None):
+        webbrowser.open("https://answers.launchpad.net/uberwriter")
+
     def finish_initializing(self, builder): # pylint: disable=E1002
         """Set up the main window"""
         super(UberwriterWindow, self).finish_initializing(builder)
@@ -640,6 +785,10 @@ class UberwriterWindow(Window):
         self.AboutDialog = AboutUberwriterDialog
 
         # Code for other initialization actions should be added here.
+        
+        # Draw background
+        self.background_image = helpers.get_media_path('bg_light.png')
+        self.connect('draw', self.draw_bg)
 
         self.set_name('UberwriterWindow')
 
@@ -666,24 +815,27 @@ class UberwriterWindow(Window):
         self.focusmode_button.set_name('focus_toggle')
         
         
-        self.crosshair_inactive = Gtk.Image.new_from_file(
-                helpers.get_media_path('crh.png')
-            )
-        self.crosshair_active = Gtk.Image.new_from_file(
-                helpers.get_media_path('crh_a.png')
-            )
+        #self.crosshair_inactive = Gtk.Image.new_from_file(
+        #        helpers.get_media_path('crh.png')
+        #    )
+        #self.crosshair_active = Gtk.Image.new_from_file(
+        #        helpers.get_media_path('crh_a.png')
+        #    )
 
-        self.fullscreen_inactive = Gtk.Image.new_from_file(
-                helpers.get_media_path('fs.png')
-            )
-        self.fullscreen_active = Gtk.Image.new_from_file(
-                helpers.get_media_path('fs_a.png')
-            )
+        #self.fullscreen_inactive = Gtk.Image.new_from_file(
+        #        helpers.get_media_path('fs.png')
+        #    )
+        #self.fullscreen_active = Gtk.Image.new_from_file(
+        #        helpers.get_media_path('fs_a.png')
+        #    )
 
-        self.focusmode_button.set_image(self.crosshair_inactive)
-        self.focusmode_button.get_image().show()
-        self.fullscreen_button.set_image(self.fullscreen_inactive)
-        self.fullscreen_button.get_image().show()
+        #self.focusmode_button.set_image(self.crosshair_inactive)
+        #self.focusmode_button.get_image().show()
+        #self.fullscreen_button.set_image(self.fullscreen_inactive)
+        #self.fullscreen_button.get_image().show()
+
+        self.status_bar = builder.get_object('box1')
+        self.status_bar.get_style_context().add_class('visible')
 
         self.accel_group = Gtk.AccelGroup()
         self.add_accel_group(self.accel_group)
@@ -715,7 +867,7 @@ class UberwriterWindow(Window):
 
 		pangoFont = Pango.FontDescription("Ubuntu Mono 14px")
 		self.TextEditor.modify_font(pangoFont)
-        
+
         self.TextEditor.set_margin_top(38)
         self.TextEditor.set_margin_bottom(16)
 
@@ -740,6 +892,9 @@ class UberwriterWindow(Window):
         self.TextBuffer.connect('changed', self.text_changed)
         
         self.TextEditor.connect('move-cursor', self.cursor_moved)
+
+        # Init file name with None
+        self.filename = None
 
         # Recent file filter
         self.recent_manager = Gtk.RecentManager.get_default()

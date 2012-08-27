@@ -17,6 +17,10 @@ class MarkupBuffer():
         self.emph = self.TextBuffer.create_tag("emph", 
             weight=Pango.Weight.BOLD,
             style =Pango.Style.NORMAL)
+        
+        self.bolditalic = self.TextBuffer.create_tag("bolditalic", 
+            weight=Pango.Weight.BOLD,
+            style =Pango.Style.ITALIC)
 
         self.normal_indent = self.TextBuffer.create_tag('normal_indent', indent=100)
         
@@ -27,6 +31,7 @@ class MarkupBuffer():
 
         self.grayfont = self.TextBuffer.create_tag('graytag', 
             foreground="gray")
+
         self.blackfont = self.TextBuffer.create_tag('blacktag', 
             foreground="#222")
 
@@ -82,12 +87,12 @@ class MarkupBuffer():
 
 
     # *asdasd* // _asdasd asd asd_ 
-    ITALIC = re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ")
+    ITALIC = re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ", re.UNICODE)
     
     # **as das** // __asdasdasd asd ad a__
-    EMPH = re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ")
+    STRONG = re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ", re.UNICODE)
     
-    #ITALICEMPH = re.compile(r"\*{3}\w(.+?)\*{3}| [_]{3}\w(.+?)[_]{3} ")
+    ITALICEMPH = re.compile(r"\*{3}\w(.+?)\*{3}| [_]{3}\w(.+?)[_]{3} ")
     
 
     BLOCKQUOTE = re.compile(r"^([\>]+ )", re.MULTILINE)
@@ -103,7 +108,7 @@ class MarkupBuffer():
 
     MATH = re.compile(r"\${1,2}[^` ](.+?)[^`\\ ]\${1,2}")
 
-    HORIZONTALRULE = re.compile(r"(\n\n[\*\- ]{3,}\n)", re.MULTILINE)
+    HORIZONTALRULE = re.compile(r"(\n\n[\*\-]{3,}\n)")
 
     TABLE = re.compile(r"^:table:\n(.+?)\n:endtable:", re.DOTALL)
 
@@ -123,7 +128,7 @@ class MarkupBuffer():
         elif mode == 1:
             cursor_mark = buf.get_insert()
             context_start = buf.get_iter_at_mark(cursor_mark)
-            context_start.backward_lines(2)
+            context_start.backward_lines(3)
             context_end = buf.get_iter_at_mark(cursor_mark)
             context_end.forward_lines(2)
             context_offset = context_start.get_offset()
@@ -141,11 +146,18 @@ class MarkupBuffer():
         
         self.TextBuffer.remove_tag(self.emph, context_start, context_end)
 
-        matches = re.finditer(self.EMPH, text)
+        matches = re.finditer(self.STRONG, text)
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             self.TextBuffer.apply_tag(self.emph, startIter, endIter)
+
+        matches = re.finditer(self.ITALICEMPH, text)
+        for match in matches:
+            startIter = buf.get_iter_at_offset(context_offset + match.start())
+            endIter = buf.get_iter_at_offset(context_offset + match.end())
+            self.TextBuffer.apply_tag(self.bolditalic, startIter, endIter)
+
 
         self.TextBuffer.remove_tag(self.strikethrough, context_start, context_end)
 
@@ -210,9 +222,12 @@ class MarkupBuffer():
                 self.TextBuffer.apply_tag(margin, startIter, endIter)
 
         matches = re.finditer(self.HORIZONTALRULE, text)
-        self.TextBuffer.remove_tag(self.centertext, context_start, context_end)
+        rulecontext = context_start.copy()
+        rulecontext.forward_lines(3)
+        self.TextBuffer.remove_tag(self.centertext, rulecontext, context_end)
 
         for match in matches:
+            print "hr"
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             startIter.forward_chars(2)
             endIter = buf.get_iter_at_offset(context_offset + match.end())

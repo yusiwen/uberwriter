@@ -36,6 +36,12 @@
     <property name="xalign">0.50999999046325684</property>
     <property name="stock">gtk-missing-image</property>
   </object>
+  <object class="GtkRecentFilter" id="recentfilter1">
+    <mime-types>
+      <mime-type>text/plain</mime-type>
+      <mime-type>text/x-markdown</mime-type>
+    </mime-types>
+  </object>
   <object class="UberwriterWindow" id="uberwriter_window">
     <property name="app_paintable">True</property>
     <property name="can_focus">False</property>
@@ -84,6 +90,15 @@
                         <property name="use_stock">True</property>
                         <accelerator key="o" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="open_document" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="recent">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Open Recent File</property>
+                        <property name="use_underline">True</property>
                       </object>
                     </child>
                     <child>
@@ -156,6 +171,23 @@
                       </object>
                     </child>
                     <child>
+                      <object class="GtkMenuItem" id="advanced_export">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Advanced Export...</property>
+                        <property name="use_underline">True</property>
+                        <signal name="activate" handler="open_advanced_export" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparatorMenuItem" id="seperatoritem10">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                      </object>
+                    </child>
+                    <child>
                       <object class="GtkMenuItem" id="copy-html-to-clipboard">
                         <property name="use_action_appearance">False</property>
                         <property name="visible">True</property>
@@ -184,15 +216,6 @@
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkMenuItem" id="recent-files">
-                <property name="use_action_appearance">False</property>
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">_Recent Files</property>
-                <property name="use_underline">True</property>
               </object>
             </child>
             <child>
@@ -269,8 +292,8 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <accelerator key="y" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <accelerator key="z" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
+                        <accelerator key="y" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="redo" swapped="no"/>
                       </object>
                     </child>
@@ -309,8 +332,8 @@
                         <property name="can_focus">False</property>
                         <property name="image">image6</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <accelerator key="F11" signal="activate"/>
+                        <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="menu_activate_fullscreen" swapped="no"/>
                       </object>
                     </child>

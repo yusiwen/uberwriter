@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-25 15:07+0200\n"
+"POT-Creation-Date: 2012-08-26 16:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,6 +16,98 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:1
+msgid "Export"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:2
+msgid "LaTeX"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:3
+msgid "HTML"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:4
+msgid "ConTeXt"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:5
+msgid "DocBook"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:6
+msgid "Groff man"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:7
+msgid "RTF"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:8
+msgid "OpenDocument XML"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:9
+msgid "Texinfo"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:10
+msgid "Textile"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:11
+msgid "Org-mode"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:12
+msgid "Asciidoc"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:13
+msgid "MediaWiki"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:14
+msgid "Table of Contents"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:15
+msgid "Highlight syntax"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:16
+msgid "Highlight style  "
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:17
+msgid "pygment (default)"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:18
+msgid "kate"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:19
+msgid "monochrome"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:20
+msgid "espresso"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:21
+msgid "zenburn"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:22
+msgid "haddock"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExport.ui.h:23
+msgid "tango"
+msgstr ""
 
 #: ../uberwriter.desktop.in.h:1 ../data/ui/UberwriterWindow.ui.h:1
 msgid "UberWriter"
@@ -86,66 +178,90 @@ msgid "Export as ODT"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:4
-msgid "_Recent Files"
+msgid "Copy raw HTML to clipboard"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:5
-msgid "_Edit"
+msgid "_Recent Files"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:6
-msgid "_View"
+msgid "_Edit"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:7
-msgid "Light text on  a dark background"
+msgid "_View"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:8
-msgid "Dark Mode"
+msgid "Light text on  a dark background"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:9
-msgid "Auto _Spellcheck"
+msgid "Dark Mode"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:10
-msgid "_Help"
+msgid "Auto _Spellcheck"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:11
-msgid "Contents"
+msgid "_Format"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:12
-msgid "Focus Mode"
+msgid "Unordered List Item"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:13
-msgid "Go into focus mode"
+msgid "Horizontal Rule"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:14
-msgid "Fullscreen"
+msgid "_Help"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:15
-msgid "Go into fullscreen mode"
+msgid "Contents"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:16
-msgid "Characters: "
+msgid "Get Help Online..."
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:17
-msgid "0"
+msgid "Translate This Application..."
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:18
-msgid "Words:"
+msgid "Focus Mode"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:19
+msgid "Go into focus mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:20
+msgid "Fullscreen"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:21
+msgid "Go into fullscreen mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:22
+msgid "Characters: "
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:23
+msgid "0"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:24
+msgid "Words:"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:25
 msgid "1"
 msgstr ""
 

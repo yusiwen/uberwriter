@@ -269,7 +269,8 @@ class MarkupBuffer():
         start_sentence = cursor_iter.copy()
         start_sentence.backward_sentence_start()
         
-        self.TextBuffer.apply_tag(self.blackfont, start_sentence, end_sentence)
+        self.TextBuffer.apply_tag(self.blackfont, 
+            start_sentence, end_sentence)
 
     def recalculate(self, lm):
     	for i in range(0,6):
@@ -280,3 +281,13 @@ class MarkupBuffer():
     	for i in range(0,6):
     	    self.leftmargin[i].set_property("left-margin", (lm-10) + 10 + 10 * (i+1))
     	    self.leftmargin[i].set_property("indent", - 9*(i+1) - 10) ## Was - 10 ...
+
+    def dark_mode(self, active = False):
+        if active:
+            self.green_text.set_property("foreground", "#FA5B0F")
+            self.grayfont.set_property("foreground", "#666")
+            self.blackfont.set_property("foreground", "#CCC")
+        else: 
+            self.green_text.set_property("foreground", "#00364C")
+            self.grayfont.set_property("foreground", "gray")
+            self.blackfont.set_property("foreground", "#222")

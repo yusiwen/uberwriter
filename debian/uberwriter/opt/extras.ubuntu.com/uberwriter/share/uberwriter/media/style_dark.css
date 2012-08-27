@@ -5,7 +5,7 @@ GtkTextView {
     border: none;
     -GtkWidget-cursor-color: #FA5B0F;
     -GtkWidget-cursor-aspect-ratio: 0.05;
-    background-color: #333;
+    background-color: transparent;
     color: #F3F3F3;
 }
 #fullscreen_toggle:hover, 

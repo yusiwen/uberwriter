@@ -1,5 +1,6 @@
 #UberwriterWindow {
     background: #FFF;
+    color: #CCC;
 }
 GtkTextView {
     border: none;
@@ -48,13 +49,6 @@ GtkTextView:selected {
     background-image: none;
 }
 
-GtkLabel {
-    transition: 300ms ease-in-out;
-}
-
-.visible GtkLabel{
-    color: #333;
-}
-.invisible GtkLabel {
-    color: rgba(255, 255, 255, 0);
+#UberwriterWindow GtkLabel {
+    color: #666;
 }
