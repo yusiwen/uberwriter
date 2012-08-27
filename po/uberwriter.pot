@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-26 16:08+0200\n"
+"POT-Creation-Date: 2012-08-27 11:09+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,8 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:1
+#: ../data/ui/UberwriterAdvancedExport.ui.h:1 ../data/ui/ExportDialog.ui.h:1
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:1
 msgid "Export"
 msgstr ""
 
@@ -69,15 +70,18 @@ msgstr ""
 msgid "MediaWiki"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:14
+#: ../data/ui/UberwriterAdvancedExport.ui.h:14 ../data/ui/ExportDialog.ui.h:5
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:5
 msgid "Table of Contents"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:15
+#: ../data/ui/UberwriterAdvancedExport.ui.h:15 ../data/ui/ExportDialog.ui.h:11
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:11
 msgid "Highlight syntax"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:16
+#: ../data/ui/UberwriterAdvancedExport.ui.h:16 ../data/ui/ExportDialog.ui.h:12
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:12
 msgid "Highlight style  "
 msgstr ""
 
@@ -85,27 +89,33 @@ msgstr ""
 msgid "pygment (default)"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:18
+#: ../data/ui/UberwriterAdvancedExport.ui.h:18 ../data/ui/ExportDialog.ui.h:14
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:14
 msgid "kate"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:19
+#: ../data/ui/UberwriterAdvancedExport.ui.h:19 ../data/ui/ExportDialog.ui.h:15
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:15
 msgid "monochrome"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:20
+#: ../data/ui/UberwriterAdvancedExport.ui.h:20 ../data/ui/ExportDialog.ui.h:16
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:16
 msgid "espresso"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:21
+#: ../data/ui/UberwriterAdvancedExport.ui.h:21 ../data/ui/ExportDialog.ui.h:17
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:17
 msgid "zenburn"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:22
+#: ../data/ui/UberwriterAdvancedExport.ui.h:22 ../data/ui/ExportDialog.ui.h:18
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:18
 msgid "haddock"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:23
+#: ../data/ui/UberwriterAdvancedExport.ui.h:23 ../data/ui/ExportDialog.ui.h:19
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:19
 msgid "tango"
 msgstr ""
 
@@ -115,6 +125,86 @@ msgstr ""
 
 #: ../uberwriter.desktop.in.h:2
 msgid "UberWriter, a simple and distraction free Markdown Editor"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:2
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:2
+msgid "Smart"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:3
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:3
+msgid "Pandoc can automatically make \"--\" to a long dash and more"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:4
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:4
+msgid "Normalize"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:6
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:6
+msgid "Standalone"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:7
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:7
+msgid "Number Sections"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:8
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:8
+msgid "Strict Markdown"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:9
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:9
+msgid "Slideshow incremental bullets"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:10
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:10
+msgid "<b>General Options</b>"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:13
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:13
+msgid "pygments"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:20
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:20
+msgid "<b>Syntax highlighting</b> (HTML, LaTeX)"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:21
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:21
+msgid "Self Contained"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:22
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:22
+msgid "HTML 5"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:23
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:23
+msgid "CSS File"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:24
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:24
+msgid "<b>HTML Options</b>"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:25
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:25
+msgid "<b>Bibliography File</b>"
+msgstr ""
+
+#: ../data/ui/ExportDialog.ui.h:26
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:26
+msgid "Commandline Reference"
 msgstr ""
 
 #: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:437
@@ -174,94 +264,98 @@ msgid "_File"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:3
-msgid "Export as ODT"
+msgid "Open Recent File"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:4
-msgid "Copy raw HTML to clipboard"
+msgid "Export as ODT"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:5
-msgid "_Recent Files"
+msgid "Advanced Export..."
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:6
-msgid "_Edit"
+msgid "Copy raw HTML to clipboard"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:7
-msgid "_View"
+msgid "_Edit"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:8
-msgid "Light text on  a dark background"
+msgid "_View"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:9
-msgid "Dark Mode"
+msgid "Light text on  a dark background"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:10
-msgid "Auto _Spellcheck"
+msgid "Dark Mode"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:11
-msgid "_Format"
+msgid "Auto _Spellcheck"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:12
-msgid "Unordered List Item"
+msgid "_Format"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:13
-msgid "Horizontal Rule"
+msgid "Unordered List Item"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:14
-msgid "_Help"
+msgid "Horizontal Rule"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:15
-msgid "Contents"
+msgid "_Help"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:16
-msgid "Get Help Online..."
+msgid "Contents"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:17
-msgid "Translate This Application..."
+msgid "Get Help Online..."
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:18
-msgid "Focus Mode"
+msgid "Translate This Application..."
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:19
-msgid "Go into focus mode"
+msgid "Focus Mode"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:20
-msgid "Fullscreen"
+msgid "Go into focus mode"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:21
-msgid "Go into fullscreen mode"
+msgid "Fullscreen"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:22
-msgid "Characters: "
+msgid "Go into fullscreen mode"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:23
-msgid "0"
+msgid "Characters: "
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:24
-msgid "Words:"
+msgid "0"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:25
+msgid "Words:"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:26
 msgid "1"
 msgstr ""
 
