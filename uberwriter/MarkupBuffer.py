@@ -227,7 +227,6 @@ class MarkupBuffer():
         self.TextBuffer.remove_tag(self.centertext, rulecontext, context_end)
 
         for match in matches:
-            print "hr"
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             startIter.forward_chars(2)
             endIter = buf.get_iter_at_offset(context_offset + match.end())
@@ -250,6 +249,8 @@ class MarkupBuffer():
         if self.parent.focusmode:
             self.focusmode_highlight()
 
+        if self.parent.spellcheck and mode == 1:
+            self.parent.SpellChecker.check_range(context_start, context_end)
 
     def focusmode_highlight(self):
         self.TextBuffer.apply_tag(self.grayfont, 

@@ -39,11 +39,10 @@ class UberwriterAdvancedExportDialog(AdvancedExportDialog):
         self.builder.get_object("highlight_style").set_active(0)
 
         format_store = Gtk.ListStore(int, str)
-        for el in self.export_formats:
-            format_store.append(el)
+        for fmt_id in self.formats_dict:
+            format_store.append([fmt_id, self.formats_dict[fmt_id]["name"]])
         self.format_field = builder.get_object('choose_format')
         self.format_field.set_model(format_store)
-        self.format_field.connect("changed", self.on_name_combo_changed)
 
         format_renderer = Gtk.CellRendererText()
         self.format_field.pack_start(format_renderer, True)
@@ -51,73 +50,111 @@ class UberwriterAdvancedExportDialog(AdvancedExportDialog):
         self.format_field.set_active(0)
         self.show_all()
 
-    def on_name_combo_changed(self, combo, data=None):
-        tree_iter = combo.get_active_iter()
-        if tree_iter != None:
-            model = combo.get_model()
-            row_id, name = model[tree_iter][:2]
-            print "Selected: ID=%d, name=%s" % (row_id, name)
-        else:
-            entry = combo.get_child()
-            print "Entered: %s" % entry.get_text()
-
     formats_dict = {
         1: {
-            "name": "Latex Source",
+            "name": "LaTeX Source",
             "ext": "tex",
             "to": "latex"
         },
         2: {
+            "name": "LaTeX PDF",
+            "ext": "pdf",
+            "to": "pdf"
+        },
+        3: {
+            "name": "LaTeX beamer slide show Source .tex",
+            "ext": "tex",
+            "to": "beamer"
+        },
+        4: {
+            "name": "LaTeX beamer slide show PDF",
+            "ext": "pdf",
+            "to": "beamer"
+        },
+        5: {
             "name": "HTML",
             "ext": "html",
             "to": "html"
         },
-        "odt": {
+        6: {
+            "name": "Textile",
+            "ext": "txt",
+            "to": "textile"
+        },
+        7: {
+            "name": "OpenOffice text document",
             "ext": "odt",
             "to": "odt"
         },
-        "pdf": {
-            "ext": "pdf"
+        8: {
+            "name": "Word docx",
+            "ext": "docx",
+            "to": "docx"
         },
-        "rst": {
-            "format": "rst"
+        9: {
+            "name": "reStructuredText txt",
+            "ext": "txt",
+            "to": "rst"
         },
-        "beamer_tex": {
-            "format": "tex"
+        10: {
+            "name": "ConTeXt tex",
+            "ext": "tex",
+            "to": "context"
         },
-        "beamer_pdf": {
-            "format": "pdf"
+        11: {
+            "name": "groff man",
+            "ext": "man",
+            "to": "man"
         },
-        "context": {
-            "format": "tex"
+        12: {
+            "name": "MediaWiki markup",
+            "ext": "txt",
+            "to": "mediawiki"
         },
-        "s5": {
-            "format": "html"
+        13: {
+            "name": "OpenDocument XML",
+            "ext": "xml",
+            "to": "opendocument"        
         },
-        "man": {
-            "format": "man"
+        14: {
+            "name": "OpenDocument XML",
+            "ext": "texi",
+            "to": "texinfo"        
         },
-        "mediawiki": {
-            "format": "txt"
+        15: {
+            "name": "Slidy HTML and javascript slide show",
+            "ext": "html",
+            "to": "slidy"        
         },
-        "textile": {
-            "format": "txt"
+        16: {
+            "name": "Slideous HTML and javascript slide show",
+            "ext": "html",
+            "to": "slideous"
         },
-        "docx": {
-            "format": "docx"
+        17: {
+            "name": "HTML5 + javascript slide show",
+            "ext": "html",
+            "to": "dzslides"
+        },
+        18: {
+            "name": "S5 HTML and javascript slide show",
+            "ext": "html",
+            "to": "s5"
+        },
+        19: {
+            "name": "EPub electronic publication",
+            "ext": "epub",
+            "to": "epub"
+        },
+        20: {
+            "name": "RTF Rich Text Format",
+            "ext": "rtf",
+            "to": "rtf"
         }
+
     }
 
-    export_formats = [
-    	[1, "Latex source"],
-    	[2, "Latex PDF"], 
-    	[3, "Beamer PDF"],
-    	[4, "Beamer Latex Source"],
-    	[5, "HTML"],
-    	[6, "Textile"]
-    ]
     def advanced_export(self, text = ""):
-    	export_type = "html"
         tree_iter = self.format_field.get_active_iter()
         if tree_iter != None:
             model = self.format_field.get_model()
@@ -138,8 +175,6 @@ class UberwriterAdvancedExportDialog(AdvancedExportDialog):
         response = filechooser.run()
         if response == Gtk.ResponseType.OK:
             filename = filechooser.get_filename()
-            if filename.endswith("." + export_type):
-                filename = filename[:-len(export_type)-1]
             filechooser.destroy()
         else: 
             filechooser.destroy()
@@ -151,27 +186,70 @@ class UberwriterAdvancedExportDialog(AdvancedExportDialog):
 
         args = ['pandoc', '--from=markdown']
         
-        to = "-t%s" % fmt["to"]
+        to = "--to=%s" % fmt["to"]
         
-        output_file = "-o%s.%s" % (basename, fmt["ext"])
-        
+        if basename.endswith("." + fmt["ext"]):
+            output_file = "--output=%s" % basename
+        else:
+            output_file = "--output=%s.%s" % (basename, fmt["ext"])
+
         if self.builder.get_object("toc").get_active():
             args.append('--toc')
         if self.builder.get_object("normalize").get_active():
             args.append('--normalize')
         if self.builder.get_object("smart").get_active():
             args.append('--smart')
+
         if self.builder.get_object("highlight").get_active == False:
             args.append('--no-highlight')
         else:
             hs = self.builder.get_object("highlight_style").get_active_text()
             args.append("--highlight-style=%s" % hs)
-        args.append(to)
+        
+        if self.builder.get_object("standalone").get_active():
+            args.append("--standalone")
+
+        if self.builder.get_object("number_sections").get_active():
+            args.append("--number-sections")
+        
+        if self.builder.get_object("strict").get_active():
+            args.append("--strict")
+        
+        if self.builder.get_object("incremental").get_active():
+            args.append("--incremental")
+
+        if self.builder.get_object("self_contained").get_active():
+            args.append("--self-contained")
+
+        if self.builder.get_object("html5").get_active():
+            if fmt["to"] == "html":
+                to = "--to=%s" % "html5"
+
+        # Pandoc can't handle verbose -t pdf (#571)
+
+        if fmt["to"] != "pdf":
+            args.append(to)
+
+        css_uri = self.builder.get_object("css_filechooser").get_uri()
+        if css_uri:
+            if css_uri.startswith("file://"):
+                css_uri = css_uri[7:]
+            args.append("--css=%s" % css_uri)
+
+        bib_uri = self.builder.get_object("bib_filechooser").get_uri()
+        if bib_uri:
+            if bib_uri.startswith("file://"):
+                bib_uri = bib_uri[7:]
+            args.append("--bibliography=%s" % bib_uri)
+
+
         args.append(output_file)
 
         print args
 
-        p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, cwd=output_dir)
+        p = subprocess.Popen(args, stdin=subprocess.PIPE, 
+            stdout=subprocess.PIPE, cwd=output_dir)
+        
         output = p.communicate(text)[0]
         
         return filename

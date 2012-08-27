@@ -21,7 +21,7 @@ Depends: ${misc:Depends},
  pandoc,
  python-enchant,
  yelp
-Suggests: texlive-luatex
+Suggests: texlive
 Description: UberWriter, beautiful distraction free writing
  With UberWriter you get only one thing: An empty textbox, that is to
  fill with your ideas. There are no settings, you don't have to choose a
