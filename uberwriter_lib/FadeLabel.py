@@ -1,11 +1,13 @@
-class FadeLabel(gtk.Label):
-    """ GTK Label with timed fade out effect """
+from gi.repository import Gtk, Gdk, GObject
+
+class FadeLabel(Gtk.Label):
+    """ Gtk Label with timed fade out effect """
 
     active_duration = 3000  # Fade start after this time
     fade_duration = 1500.0  # Fade duration
 
     def __init__(self, message='', active_color=None, inactive_color=None):
-        gtk.Label.__init__(self, message)
+        Gtk.Label.__init__(self, message)
         if not active_color:
             active_color = '#ffffff'
         self.active_color = active_color
@@ -21,30 +23,31 @@ class FadeLabel(gtk.Label):
         @param duration: duration in miliseconds"""
         if not duration:
             duration = self.active_duration
-        self.modify_fg(gtk.STATE_NORMAL,
-                       gtk.gdk.color_parse(self.active_color))
-        gtk.Label.set_text(self, message)
+        self.modify_fg(Gtk.StateFlags.NORMAL,
+                       Gdk.color_parse(self.active_color))
+        Gtk.Label.set_text(self, message)
         if self.idle:
-            gobject.source_remove(self.idle)
-        self.idle = gobject.timeout_add(duration, self.fade_start)
+            GObject.source_remove(self.idle)
+        self.idle = GObject.timeout_add(duration, self.fade_start)
 
     def fade_start(self):
         """start fading timer"""
         self.fade_level = 1.0
         if self.idle:
-            gobject.source_remove(self.idle)
-        self.idle = gobject.timeout_add(25, self.fade_out)
+            GObject.source_remove(self.idle)
+        self.idle = GObject.timeout_add(25, self.fade_out)
 
     def fade_out(self):
         """now fade out"""
-        color = gtk.gdk.color_parse(self.inactive_color)
+        print "fadeout"
+        color = Gdk.color_parse(self.inactive_color)
         (red1, green1, blue1) = (color.red, color.green, color.blue)
-        color = gtk.gdk.color_parse(self.active_color)
+        color = Gdk.color_parse(self.active_color)
         (red2, green2, blue2) = (color.red, color.green, color.blue)
         red = red1 + int(self.fade_level * (red2 - red1))
         green = green1 + int(self.fade_level * (green2 - green1))
         blue = blue1 + int(self.fade_level * (blue2 - blue1))
-        self.modify_fg(gtk.STATE_NORMAL, gtk.gdk.Color(red, green, blue))
+        self.modify_fg(Gtk.StateFlags.NORMAL, Gdk.Color(red, green, blue))
         self.fade_level -= 1.0 / (self.fade_duration / 25)
         if self.fade_level > 0:
             return True

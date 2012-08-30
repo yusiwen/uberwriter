@@ -1,9 +1,15 @@
-Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: uberwriter
 Upstream-Contact: Wolf Vollprecht <w.vollprecht@gmail.com>
-Source: https://launchpad.net/uberwriter
+Source: https://launchpad.com/uberwriter
 
 Files: *
+Copyright: (C) 2007 Joe Smith
+Copyright: (C) 2012, Carlos Jenkins <carlos@jenkins.co.cr>
+Copyright: (C) 2012 &lt;Wolf Vollprecht&gt; &lt;w.vollprecht@googlemail.com&gt;
+Copyright: (C) 2012 &lt;Wolf Vollprecht&gt; &lt;w.vollprecht@googlemail.com&gt;</property>
+Copyright: (C) 2012, Maximilian Köhl <linuxmaxi@googlemail.com>
+Copyright: (C) 2012 <Wolf Vollprecht> <w.vollprecht@gmail.com>
 Copyright: (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>
 License: GPL-3
  The full text of the GPL is distributed in

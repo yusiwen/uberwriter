@@ -81,13 +81,19 @@ DistUtilsExtra.auto.setup(
     author='Wolf Vollprecht',
     author_email='w.vollprecht@gmail.com',
     description='A beautiful, simple and distraction free markdown editor.',
-    long_description="""UberWriter, beautiful distraction free writing
- With UberWriter you get only one thing: An empty textbox, that is to
- fill with your ideas. There are no settings, you don't have to choose a
- font, it is only for writing.You can use markdown for all your markup
- needs. PDF, RTF and HTML are generated with pandoc. For PDF generation it
- is also required that you choose to install the texlive-luatex package.""",
+    long_description="UberWriter, beautiful distraction free writing \
+ With UberWriter you get only one thing: An empty textbox, that is to \
+ fill with your ideas. There are no settings, you don't have to choose a \
+ font, it is only for writing.You can use markdown for all your markup \
+ needs. PDF, RTF and HTML are generated with pandoc. For PDF generation it \
+ is also required that you choose to install the texlive-luatex package.",
     url='https://launchpad.com/uberwriter',
     cmdclass={'install': InstallAndUpdateDataDirectory},
+    package_dir = {'gtkspellcheck': 'uberwriter_lib/thirdparty/gtkspellcheck',
+        'pylocales': 'uberwriter_lib/thirdparty/pylocales'},
+    packages=[
+        "gtkspellcheck",
+        "pylocales"
+    ],
     package_data={'pylocales' : ['locales.db']}
     )

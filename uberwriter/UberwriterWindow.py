@@ -50,6 +50,7 @@ except ImportError:
 
 from uberwriter_lib import Window
 from uberwriter_lib import helpers
+from uberwriter_lib.FadeLabel import FadeLabel
 from uberwriter.AboutUberwriterDialog import AboutUberwriterDialog
 from uberwriter.UberwriterAdvancedExportDialog import UberwriterAdvancedExportDialog
 
@@ -161,17 +162,17 @@ class UberwriterWindow(Window):
 
         text = self.get_text().decode("utf-8")
         text = unicode(text)
-        #words = re.split(self.WORDCOUNT, text)
-        #length = len(words)
-        ## Last word a "space"
-        #if len(words[-1]) == 0:
-        #    length = length - 1
-        ## First word a "space" (happens in focus mode...)
-        #if len(words[0]) == 0:
-        #    length = length - 1
-        #if length == -1: 
-        #    length = 0
-        #self.word_count.set_text(str(length))
+        words = re.split(self.WORDCOUNT, text)
+        length = len(words)
+        # Last word a "space"
+        if len(words[-1]) == 0:
+            length = length - 1
+        # First word a "space" (happens in focus mode...)
+        if len(words[0]) == 0:
+            length = length - 1
+        if length == -1: 
+            length = 0
+        self.word_count.set_text(str(length))
 
         # TODO rename line_count to word_count
 
@@ -1095,6 +1096,9 @@ class UberwriterWindow(Window):
 
         self.connect("delete-event", self.on_delete_called)
         #self.connect("motion-notify-event", self.motion)
+    
+        self.box = builder.get_object('box3')
+        #self.box.hide()
         #self.i = 0
     
     def on_delete_called(self, widget, data=None):
@@ -1104,8 +1108,8 @@ class UberwriterWindow(Window):
         return False
  
     def motion(self, widget, data=None):
-        print "Momow %i" % self.i
-        self.i = self.i + 1
+        #self.box.show()
+        pass
 
     def on_destroy(self, widget, data=None):
         """Called when the TexteditorWindow is closed."""
