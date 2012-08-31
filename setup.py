@@ -89,8 +89,10 @@ DistUtilsExtra.auto.setup(
  is also required that you choose to install the texlive-luatex package.",
     url='https://launchpad.com/uberwriter',
     cmdclass={'install': InstallAndUpdateDataDirectory},
-    package_dir = {'gtkspellcheck': 'uberwriter_lib/thirdparty/gtkspellcheck',
-        'pylocales': 'uberwriter_lib/thirdparty/pylocales'},
+    package_dir = {
+        'gtkspellcheck': 'uberwriter_lib/thirdparty/gtkspellcheck',
+        'pylocales': 'uberwriter_lib/thirdparty/pylocales'
+    },
     packages=[
         "gtkspellcheck",
         "pylocales"

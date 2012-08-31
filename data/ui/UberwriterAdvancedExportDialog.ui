@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.0 -->
+  <!-- interface-requires uberwriter_advanced_export_dialog 1.0 -->
   <object class="UberwriterAdvancedExportDialog" id="uberwriter_advanced_export_dialog">
     <property name="can_focus">False</property>
     <property name="border_width">5</property>
@@ -118,6 +119,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Removes things like double spaces or spaces at the beginning of a paragraph</property>
                             <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -152,6 +154,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Use a header and footer to include things like stylesheets and meta information</property>
                             <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="active">True</property>
@@ -187,6 +190,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Use "strict" markdown instead of "pandoc" markdown</property>
                             <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -204,6 +208,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Show one bullet point after another in a slideshow</property>
                             <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -279,6 +284,7 @@
                               <object class="GtkLabel" id="label1">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Choose a color theme for syntax highlighting</property>
                                 <property name="label" translatable="yes">Highlight style  </property>
                               </object>
                               <packing>
@@ -291,23 +297,25 @@
                               <object class="GtkComboBoxText" id="highlight_style">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Choose a color theme for syntax highlighting</property>
                                 <property name="active">0</property>
                                 <property name="entry_text_column">0</property>
                                 <property name="id_column">1</property>
                                 <property name="active_id">0</property>
                                 <items>
-                                  <item translatable="yes">pygments</item>
-                                  <item translatable="yes">kate</item>
-                                  <item translatable="yes">monochrome</item>
-                                  <item translatable="yes">espresso</item>
-                                  <item translatable="yes">zenburn</item>
-                                  <item translatable="yes">haddock</item>
-                                  <item translatable="yes">tango</item>
+                                  <item>pygments</item>
+                                  <item>kate</item>
+                                  <item>monochrome</item>
+                                  <item>espresso</item>
+                                  <item>zenburn</item>
+                                  <item>haddock</item>
+                                  <item>tango</item>
                                 </items>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
+                                <property name="expand">True</property>
                                 <property name="fill">True</property>
+                                <property name="pack_type">end</property>
                                 <property name="position">1</property>
                               </packing>
                             </child>
@@ -365,6 +373,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Produces a HTML that has no external dependencies (all images and stylesheets are included)</property>
                             <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -382,6 +391,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
+                            <property name="tooltip_text" translatable="yes">Use HTML 5 syntax</property>
                             <property name="use_action_appearance">False</property>
                             <property name="xalign">0</property>
                             <property name="draw_indicator">True</property>
@@ -400,6 +410,7 @@
                               <object class="GtkLabel" id="label5">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Choose a CSS File that you want to use</property>
                                 <property name="margin_right">10</property>
                                 <property name="label" translatable="yes">CSS File</property>
                               </object>
@@ -413,6 +424,7 @@
                               <object class="GtkFileChooserButton" id="css_filechooser">
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
+                                <property name="tooltip_text" translatable="yes">Choose a CSS File that you want to use</property>
                                 <property name="orientation">vertical</property>
                               </object>
                               <packing>

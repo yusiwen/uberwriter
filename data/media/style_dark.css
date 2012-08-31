@@ -85,3 +85,12 @@ GtkTextView:selected {
     -unico-inner-stroke-width: 1;
 
 }
+
+.separator {
+    border-color: #444;
+    border-style: solid;
+
+    -unico-border-gradient: none;
+    -unico-inner-stroke-color: alpha (#444, 0.6);
+    -unico-inner-stroke-gradient: none;
+}

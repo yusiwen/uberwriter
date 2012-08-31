@@ -45,7 +45,7 @@
   <object class="UberwriterWindow" id="uberwriter_window">
     <property name="app_paintable">True</property>
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">UberWriter</property>
+    <property name="title">UberWriter</property>
     <property name="default_width">800</property>
     <property name="default_height">500</property>
     <property name="icon">../media/uberwriter.svg</property>
@@ -292,8 +292,8 @@
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
-                        <accelerator key="y" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <accelerator key="z" signal="activate" modifiers="GDK_SHIFT_MASK | GDK_CONTROL_MASK"/>
+                        <accelerator key="y" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="redo" swapped="no"/>
                       </object>
                     </child>
@@ -332,8 +332,8 @@
                         <property name="can_focus">False</property>
                         <property name="image">image6</property>
                         <property name="use_stock">False</property>
-                        <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <accelerator key="F11" signal="activate"/>
+                        <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="menu_activate_fullscreen" swapped="no"/>
                       </object>
                     </child>
@@ -450,6 +450,17 @@
                         <property name="use_underline">True</property>
                         <accelerator key="r" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="insert_horizontal_rule" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="heading">
+                        <property name="use_action_appearance">False</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Heading</property>
+                        <property name="use_underline">True</property>
+                        <accelerator key="h" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <signal name="activate" handler="insert_heading" swapped="no"/>
                       </object>
                     </child>
                   </object>
@@ -621,7 +632,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_right">5</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">0</property>
+                    <property name="label">0</property>
                     <property name="justify">right</property>
                     <property name="width_chars">4</property>
                   </object>
@@ -663,7 +674,7 @@
                     <property name="can_focus">False</property>
                     <property name="margin_right">10</property>
                     <property name="xalign">1</property>
-                    <property name="label" translatable="yes">0</property>
+                    <property name="label">0</property>
                     <property name="width_chars">6</property>
                   </object>
                   <packing>

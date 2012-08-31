@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-27 11:09+0200\n"
+"POT-Creation-Date: 2012-08-30 22:06+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,9 +17,266 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:1 ../data/ui/ExportDialog.ui.h:1
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:86
+msgid "Extract path is not a directory."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:138
+msgid "'{0}' declared in registry but not found within the extension."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:141
+msgid "Error while processing extension {0}."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:144
+msgid "Extension '{0}' has no dictionary registry."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:146
+msgid "Extension '{0}' is not a valid zip file."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:160
+msgid "Unable to move extension, file with same name exists within move_path."
+msgstr ""
+
+#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:162
+msgid "Unable to move extension, move_path is not a directory."
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:1 ../uberwriter.desktop.in.h:1
+msgid "UberWriter"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:2
+msgid "_File"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:3
+msgid "Open Recent File"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:4
+msgid "Export as ODT"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:5
+msgid "Advanced Export..."
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:6
+msgid "Copy raw HTML to clipboard"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:7
+msgid "_Edit"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:8
+msgid "_View"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:9
+msgid "Light text on  a dark background"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:10
+msgid "Dark Mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:11
+msgid "Auto _Spellcheck"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:12
+msgid "F_ormat"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:13
+msgid "Unordered List Item"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:14
+msgid "Horizontal Rule"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:15
+msgid "_Help"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:16
+msgid "Contents"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:17
+msgid "Get Help Online..."
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:18
+msgid "Translate This Application..."
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:19
+msgid "Focus Mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:20
+msgid "Go into focus mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:21
+msgid "Fullscreen"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:22
+msgid "Go into fullscreen mode"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:23
+msgid "Words:"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:24
+msgid "0"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:25
+msgid "Characters:"
+msgstr ""
+
+#: ../uberwriter/__init__.py:34
+msgid "Show debug messages (-vv debugs uberwriter_lib also)"
+msgstr ""
+
 #: ../data/ui/UberwriterAdvancedExportDialog.ui.h:1
+#: ../data/ui/UberwriterAdvancedExport.ui.h:1 ../data/ui/ExportDialog.ui.h:1
 msgid "Export"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:2
+#: ../data/ui/ExportDialog.ui.h:2
+msgid "Smart"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:3
+#: ../data/ui/ExportDialog.ui.h:3
+msgid "Pandoc can automatically make \"--\" to a long dash and more"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:4
+#: ../data/ui/ExportDialog.ui.h:4
+msgid "Normalize"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:5
+#: ../data/ui/UberwriterAdvancedExport.ui.h:14 ../data/ui/ExportDialog.ui.h:5
+msgid "Table of Contents"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:6
+#: ../data/ui/ExportDialog.ui.h:6
+msgid "Standalone"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:7
+#: ../data/ui/ExportDialog.ui.h:7
+msgid "Number Sections"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:8
+#: ../data/ui/ExportDialog.ui.h:8
+msgid "Strict Markdown"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:9
+#: ../data/ui/ExportDialog.ui.h:9
+msgid "Slideshow incremental bullets"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:10
+#: ../data/ui/ExportDialog.ui.h:10
+msgid "<b>General Options</b>"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:11
+#: ../data/ui/UberwriterAdvancedExport.ui.h:15 ../data/ui/ExportDialog.ui.h:11
+msgid "Highlight syntax"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:12
+#: ../data/ui/UberwriterAdvancedExport.ui.h:16 ../data/ui/ExportDialog.ui.h:12
+msgid "Highlight style  "
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:13
+#: ../data/ui/ExportDialog.ui.h:13
+msgid "pygments"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:14
+#: ../data/ui/UberwriterAdvancedExport.ui.h:18 ../data/ui/ExportDialog.ui.h:14
+msgid "kate"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:15
+#: ../data/ui/UberwriterAdvancedExport.ui.h:19 ../data/ui/ExportDialog.ui.h:15
+msgid "monochrome"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:16
+#: ../data/ui/UberwriterAdvancedExport.ui.h:20 ../data/ui/ExportDialog.ui.h:16
+msgid "espresso"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:17
+#: ../data/ui/UberwriterAdvancedExport.ui.h:21 ../data/ui/ExportDialog.ui.h:17
+msgid "zenburn"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:18
+#: ../data/ui/UberwriterAdvancedExport.ui.h:22 ../data/ui/ExportDialog.ui.h:18
+msgid "haddock"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:19
+#: ../data/ui/UberwriterAdvancedExport.ui.h:23 ../data/ui/ExportDialog.ui.h:19
+msgid "tango"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:20
+#: ../data/ui/ExportDialog.ui.h:20
+msgid "<b>Syntax highlighting</b> (HTML, LaTeX)"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:21
+#: ../data/ui/ExportDialog.ui.h:21
+msgid "Self Contained"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:22
+#: ../data/ui/ExportDialog.ui.h:22
+msgid "HTML 5"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:23
+#: ../data/ui/ExportDialog.ui.h:23
+msgid "CSS File"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:24
+#: ../data/ui/ExportDialog.ui.h:24
+msgid "<b>HTML Options</b>"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:25
+#: ../data/ui/ExportDialog.ui.h:25
+msgid "<b>Bibliography File</b>"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:26
+#: ../data/ui/ExportDialog.ui.h:26
+msgid "Commandline Reference"
 msgstr ""
 
 #: ../data/ui/UberwriterAdvancedExport.ui.h:2
@@ -70,141 +327,33 @@ msgstr ""
 msgid "MediaWiki"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExport.ui.h:14 ../data/ui/ExportDialog.ui.h:5
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:5
-msgid "Table of Contents"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:15 ../data/ui/ExportDialog.ui.h:11
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:11
-msgid "Highlight syntax"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:16 ../data/ui/ExportDialog.ui.h:12
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:12
-msgid "Highlight style  "
-msgstr ""
-
 #: ../data/ui/UberwriterAdvancedExport.ui.h:17
 msgid "pygment (default)"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:18 ../data/ui/ExportDialog.ui.h:14
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:14
-msgid "kate"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:19 ../data/ui/ExportDialog.ui.h:15
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:15
-msgid "monochrome"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:20 ../data/ui/ExportDialog.ui.h:16
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:16
-msgid "espresso"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:21 ../data/ui/ExportDialog.ui.h:17
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:17
-msgid "zenburn"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:22 ../data/ui/ExportDialog.ui.h:18
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:18
-msgid "haddock"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:23 ../data/ui/ExportDialog.ui.h:19
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:19
-msgid "tango"
-msgstr ""
-
-#: ../uberwriter.desktop.in.h:1 ../data/ui/UberwriterWindow.ui.h:1
-msgid "UberWriter"
 msgstr ""
 
 #: ../uberwriter.desktop.in.h:2
 msgid "UberWriter, a simple and distraction free Markdown Editor"
 msgstr ""
 
-#: ../data/ui/ExportDialog.ui.h:2
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:2
-msgid "Smart"
+#: ../data/ui/AboutUberwriterDialog.ui.h:1
+msgid ""
+"# Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>\n"
+"# This program is free software: you can redistribute it and/or modify it \n"
+"# under the terms of the GNU General Public License version 3, as "
+"published \n"
+"# by the Free Software Foundation.\n"
+"# \n"
+"# This program is distributed in the hope that it will be useful, but \n"
+"# WITHOUT ANY WARRANTY; without even the implied warranties of \n"
+"# MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR \n"
+"# PURPOSE.  See the GNU General Public License for more details.\n"
+"# \n"
+"# You should have received a copy of the GNU General Public License along \n"
+"# with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
 msgstr ""
 
-#: ../data/ui/ExportDialog.ui.h:3
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:3
-msgid "Pandoc can automatically make \"--\" to a long dash and more"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:4
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:4
-msgid "Normalize"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:6
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:6
-msgid "Standalone"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:7
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:7
-msgid "Number Sections"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:8
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:8
-msgid "Strict Markdown"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:9
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:9
-msgid "Slideshow incremental bullets"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:10
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:10
-msgid "<b>General Options</b>"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:13
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:13
-msgid "pygments"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:20
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:20
-msgid "<b>Syntax highlighting</b> (HTML, LaTeX)"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:21
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:21
-msgid "Self Contained"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:22
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:22
-msgid "HTML 5"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:23
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:23
-msgid "CSS File"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:24
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:24
-msgid "<b>HTML Options</b>"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:25
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:25
-msgid "<b>Bibliography File</b>"
-msgstr ""
-
-#: ../data/ui/ExportDialog.ui.h:26
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:26
-msgid "Commandline Reference"
+#: ../data/ui/AboutUberwriterDialog.ui.h:14
+msgid "Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>"
 msgstr ""
 
 #: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:437
@@ -229,157 +378,4 @@ msgstr ""
 #: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:495
 #: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:498
 msgid "Suggestions"
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:86
-msgid "Extract path is not a directory."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:138
-msgid "'{0}' declared in registry but not found within the extension."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:141
-msgid "Error while processing extension {0}."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:144
-msgid "Extension '{0}' has no dictionary registry."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:146
-msgid "Extension '{0}' is not a valid zip file."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:160
-msgid "Unable to move extension, file with same name exists within move_path."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:162
-msgid "Unable to move extension, move_path is not a directory."
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:2
-msgid "_File"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:3
-msgid "Open Recent File"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:4
-msgid "Export as ODT"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:5
-msgid "Advanced Export..."
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:6
-msgid "Copy raw HTML to clipboard"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:7
-msgid "_Edit"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:8
-msgid "_View"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:9
-msgid "Light text on  a dark background"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:10
-msgid "Dark Mode"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:11
-msgid "Auto _Spellcheck"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:12
-msgid "_Format"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:13
-msgid "Unordered List Item"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:14
-msgid "Horizontal Rule"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:15
-msgid "_Help"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:16
-msgid "Contents"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:17
-msgid "Get Help Online..."
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:18
-msgid "Translate This Application..."
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:19
-msgid "Focus Mode"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:20
-msgid "Go into focus mode"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:21
-msgid "Fullscreen"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:22
-msgid "Go into fullscreen mode"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:23
-msgid "Characters: "
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:24
-msgid "0"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:25
-msgid "Words:"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:26
-msgid "1"
-msgstr ""
-
-#: ../uberwriter/__init__.py:34
-msgid "Show debug messages (-vv debugs uberwriter_lib also)"
-msgstr ""
-
-#: ../data/ui/AboutUberwriterDialog.ui.h:1
-msgid ""
-"# Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>\n"
-"# This program is free software: you can redistribute it and/or modify it \n"
-"# under the terms of the GNU General Public License version 3, as "
-"published \n"
-"# by the Free Software Foundation.\n"
-"# \n"
-"# This program is distributed in the hope that it will be useful, but \n"
-"# WITHOUT ANY WARRANTY; without even the implied warranties of \n"
-"# MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR \n"
-"# PURPOSE.  See the GNU General Public License for more details.\n"
-"# \n"
-"# You should have received a copy of the GNU General Public License along \n"
-"# with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
-msgstr ""
-
-#: ../data/ui/AboutUberwriterDialog.ui.h:14
-msgid "Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>"
 msgstr ""
