@@ -47,7 +47,7 @@ import locale
 try:
     from gtkspellcheck import SpellChecker
 except ImportError:
-    from uberwriter_lib.thirdparty.gtkspellcheck import SpellChecker
+    from uberwriter_lib.gtkspellcheck import SpellChecker
 
 from uberwriter_lib import Window
 from uberwriter_lib import helpers
@@ -814,6 +814,20 @@ class UberwriterWindow(Window):
             self.status_bar.set_state_flags(Gtk.StateFlags.NORMAL, True)
             GObject.timeout_add(3000, self.poll_for_motion)
 
+    def populate_popup(self, editor, menu,  data=None):
+        return
+        item = Gtk.MenuItem.new()
+        image = Gtk.Image.new_from_file('/home/wolf/test.jpg')
+        image.show()
+        item.add(image)
+        item.show()
+        print menu, item
+        menu.prepend(item)
+        menu.show()
+
+    def move_popup(self, widget, data=None):
+        pass
+        
     def finish_initializing(self, builder): # pylint: disable=E1002
         """Set up the main window"""
         super(UberwriterWindow, self).finish_initializing(builder)
@@ -965,6 +979,11 @@ class UberwriterWindow(Window):
         self.TextEditor.connect_after('move-cursor', self.after_cursor_moved)
         self.TextEditor.connect_after('insert-at-cursor', self.after_insert_at_cursor)
         
+        # Events for popup menu
+        self.TextEditor.connect_after('populate-popup', self.populate_popup)
+        self.TextEditor.connect_after('popup-menu', self.move_popup)
+
+
         # Vertical scrolling
         self.vadjustment = self.TextEditor.get_vadjustment()
         self.vadjustment.connect('value-changed', self.scrolled)

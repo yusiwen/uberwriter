@@ -101,33 +101,21 @@ class MarkupBuffer():
         self.table_env = self.TextBuffer.create_tag('table_env')
         self.table_env.set_property('wrap-mode', Gtk.WrapMode.NONE)
 
-
-    # *asdasd* // _asdasd asd asd_ 
-    ITALIC = re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ", re.UNICODE)
-    
-    # **as das** // __asdasdasd asd ad a__
-    STRONG = re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ", re.UNICODE)
-    
-    ITALICEMPH = re.compile(r"\*{3}\w(.+?)\*{3}| [_]{3}\w(.+?)[_]{3} ")
-    
-
-    BLOCKQUOTE = re.compile(r"^([\>]+ )", re.MULTILINE)
-    
-    STRIKETHROUGH = re.compile(r"~~[^ `~\n].+?~~")
-    
-    LIST = re.compile(r"^[\-\*\+] ", re.MULTILINE)
-    NUMERICLIST = re.compile(r"^((\d|[a-z]|\#)+[\.\)]) ", re.MULTILINE)
-    INDENTEDLIST = re.compile(r"^(\t{1,6})((\d|[a-z]|\#)+[\.\)]|[\-\*\+]) ", re.MULTILINE)
-
-    HEADINDICATOR = re.compile(r"^(#{1,6}) ", re.MULTILINE)
-    HEADLINE = re.compile(r"^(#{1,6} [^\n]+)", re.MULTILINE)
-
-    MATH = re.compile(r"\${1,2}[^` ](.+?)[^`\\ ]\${1,2}")
-
-    HORIZONTALRULE = re.compile(r"(\n\n[\*\-]{3,}\n)")
-
-    TABLE = re.compile(r"^:table:\n(.+?)\n:endtable:", re.DOTALL)
-
+    regex  = {
+        "ITALIC": re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ", re.UNICODE),     # *asdasd* // _asdasd asd asd_ 
+        "STRONG": re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ", re.UNICODE),     # **as das** // __asdasdasd asd ad a__
+        "STRONGITALIC": re.compile(r"\*{3}\w(.+?)\*{3}| [_]{3}\w(.+?)[_]{3} "),
+        "BLOCKQUOTE": re.compile(r"^([\>]+ )", re.MULTILINE),
+        "STRIKETHROUGH": re.compile(r"~~[^ `~\n].+?~~"),
+        "LIST": re.compile(r"^[\-\*\+] ", re.MULTILINE),
+        "NUMERICLIST": re.compile(r"^((\d|[a-z]|\#)+[\.\)]) ", re.MULTILINE),
+        "INDENTEDLIST": re.compile(r"^(\t{1,6})((\d|[a-z]|\#)+[\.\)]|[\-\*\+]) ", re.MULTILINE),
+        "HEADINDICATOR": re.compile(r"^(#{1,6}) ", re.MULTILINE),
+        "HEADLINE": re.compile(r"^(#{1,6} [^\n]+)", re.MULTILINE),
+        "MATH": re.compile(r"\${1,2}[^` ](.+?)[^`\\ ]\${1,2}"),
+        "HORIZONTALRULE": re.compile(r"(\n\n[\*\-]{3,}\n)"),
+        "TABLE": re.compile(r"^:table:\n(.+?)\n:endtable:", re.DOTALL)
+    }
 
     def markup_buffer(self, mode=0):
         buf = self.TextBuffer
@@ -154,7 +142,7 @@ class MarkupBuffer():
 
         self.TextBuffer.remove_tag(self.italic, context_start, context_end)
 
-        matches = re.finditer(self.ITALIC, text)
+        matches = re.finditer(self.regex["ITALIC"], text)
     	for match in matches: 
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
@@ -162,13 +150,13 @@ class MarkupBuffer():
         
         self.TextBuffer.remove_tag(self.emph, context_start, context_end)
 
-        matches = re.finditer(self.STRONG, text)
+        matches = re.finditer(self.regex["STRONG"], text)
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             self.TextBuffer.apply_tag(self.emph, startIter, endIter)
 
-        matches = re.finditer(self.ITALICEMPH, text)
+        matches = re.finditer(self.regex["STRONGITALIC"], text)
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
@@ -177,7 +165,7 @@ class MarkupBuffer():
 
         self.TextBuffer.remove_tag(self.strikethrough, context_start, context_end)
 
-        matches = re.finditer(self.STRIKETHROUGH, text)
+        matches = re.finditer(self.regex["STRIKETHROUGH"], text)
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
@@ -185,7 +173,7 @@ class MarkupBuffer():
 
         self.TextBuffer.remove_tag(self.green_text, context_start, context_end)
 
-        matches = re.finditer(self.MATH, text) 
+        matches = re.finditer(self.regex["MATH"], text) 
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
@@ -194,13 +182,13 @@ class MarkupBuffer():
         for margin in self.rev_leftmargin:
             self.TextBuffer.remove_tag(margin, context_start, context_end)
 
-        matches = re.finditer(self.LIST, text) 
+        matches = re.finditer(self.regex["LIST"], text) 
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             self.TextBuffer.apply_tag(self.rev_leftmargin[0], startIter, endIter)
    
-        matches = re.finditer(self.NUMERICLIST, text)
+        matches = re.finditer(self.regex["NUMERICLIST"], text)
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
@@ -209,7 +197,7 @@ class MarkupBuffer():
                 margin = self.rev_leftmargin[index]
                 self.TextBuffer.apply_tag(margin, startIter, endIter)
 
-        matches = re.finditer(self.BLOCKQUOTE, text) 
+        matches = re.finditer(self.regex["BLOCKQUOTE"], text) 
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
@@ -220,7 +208,7 @@ class MarkupBuffer():
         for leftindent in self.leftindent:
             self.TextBuffer.remove_tag(leftindent, context_start, context_end)
 
-        matches = re.finditer(self.INDENTEDLIST, text)
+        matches = re.finditer(self.regex["INDENTEDLIST"], text)
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
@@ -228,7 +216,7 @@ class MarkupBuffer():
             if index < len(self.leftindent):
                 self.TextBuffer.apply_tag(self.leftindent[index], startIter, endIter)
 
-        matches = re.finditer(self.HEADINDICATOR, text) 
+        matches = re.finditer(self.regex["HEADINDICATOR"], text) 
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
@@ -237,7 +225,7 @@ class MarkupBuffer():
                 margin = self.rev_leftmargin[index]
                 self.TextBuffer.apply_tag(margin, startIter, endIter)
 
-        matches = re.finditer(self.HORIZONTALRULE, text)
+        matches = re.finditer(self.regex["HORIZONTALRULE"], text)
         rulecontext = context_start.copy()
         rulecontext.forward_lines(3)
         self.TextBuffer.remove_tag(self.centertext, rulecontext, context_end)
@@ -248,14 +236,14 @@ class MarkupBuffer():
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             self.TextBuffer.apply_tag(self.centertext, startIter, endIter)
 
-        matches = re.finditer(self.HEADLINE, text) 
+        matches = re.finditer(self.regex["HEADLINE"], text) 
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             self.TextBuffer.apply_tag(self.emph, startIter, endIter)
         
 
-        matches = re.finditer(self.TABLE, text) 
+        matches = re.finditer(self.regex["TABLE"], text) 
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())

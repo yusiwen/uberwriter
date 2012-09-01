@@ -24,6 +24,7 @@ from gi.repository import Pango # pylint: disable=E0611
 from gettext import gettext as _
 gettext.textdomain('uberwriter')
 
+from . MarkupBuffer import MarkupBuffer
 
 class FormatShortcuts():
 
@@ -34,6 +35,7 @@ class FormatShortcuts():
 	def rule(self):
 		self.TextBuffer.insert_at_cursor("\n\n-------\n")
 		self.TextEditor.scroll_mark_onscreen(self.TextBuffer.get_insert())
+		self.regex = MarkupBuffer.regex
 
 	def bold(self):
 		self.apply_format("**")
@@ -100,44 +102,44 @@ class FormatShortcuts():
 		text_length = len(helptext)
 		move_back = 0
 		if self.TextBuffer.get_has_selection():
-		    (start, end) = self.TextBuffer.get_selection_bounds()
-		    if start.starts_line():
-		        text = self.TextBuffer.get_text(start, end, False)
-		        if text.startswith(("- ", "* ", "+ ")):
-		            delete_end = start.forward_chars(2)
-		            self.TextBuffer.delete(start, delete_end)
-		        else:
-		            self.TextBuffer.insert(start, "- ")
+			(start, end) = self.TextBuffer.get_selection_bounds()
+			if start.starts_line():
+				text = self.TextBuffer.get_text(start, end, False)
+				if text.startswith(("- ", "* ", "+ ")):
+					delete_end = start.forward_chars(2)
+					self.TextBuffer.delete(start, delete_end)
+				else:
+					self.TextBuffer.insert(start, "- ")
 		else:
-		    move_back = 0
-		    cursor_mark = self.TextBuffer.get_insert()
-		    cursor_iter = self.TextBuffer.get_iter_at_mark(cursor_mark)
+			move_back = 0
+			cursor_mark = self.TextBuffer.get_insert()
+			cursor_iter = self.TextBuffer.get_iter_at_mark(cursor_mark)
 
-		    start_ext = cursor_iter.copy()
-		    start_ext.backward_lines(3)
-		    text = self.TextBuffer.get_text(cursor_iter, start_ext, False).decode("utf-8")
-		    lines = text.splitlines()
+			start_ext = cursor_iter.copy()
+			start_ext.backward_lines(3)
+			text = self.TextBuffer.get_text(cursor_iter, start_ext, False).decode("utf-8")
+			lines = text.splitlines()
 
-		    for line in reversed(lines):
-		        if len(line) and line.startswith(("- ", "* ", "+ ")):
-		            if cursor_iter.starts_line():
-		                self.TextBuffer.insert_at_cursor(line[:2] + helptext)
-		            else:
-		                self.TextBuffer.insert_at_cursor("\n" + line[:2] + helptext)
-		            break
-		        else:
-		            if len(lines[-1]) == 0 and len(lines[-2]) == 0:
-		                self.TextBuffer.insert_at_cursor("- " + helptext)
-		            elif len(lines[-1]) == 0:
-		                if cursor_iter.starts_line():
-		                    self.TextBuffer.insert_at_cursor("- " + helptext)
-		                else:
-		                    self.TextBuffer.insert_at_cursor("\n- " + helptext)
-		            else:
-		                self.TextBuffer.insert_at_cursor("\n\n- " + helptext)
-		            break
+			for line in reversed(lines):
+				if len(line) and line.startswith(("- ", "* ", "+ ")):
+					if cursor_iter.starts_line():
+						self.TextBuffer.insert_at_cursor(line[:2] + helptext)
+					else:
+						self.TextBuffer.insert_at_cursor("\n" + line[:2] + helptext)
+					break
+				else:
+					if len(lines[-1]) == 0 and len(lines[-2]) == 0:
+						self.TextBuffer.insert_at_cursor("- " + helptext)
+					elif len(lines[-1]) == 0:
+						if cursor_iter.starts_line():
+							self.TextBuffer.insert_at_cursor("- " + helptext)
+						else:
+							self.TextBuffer.insert_at_cursor("\n- " + helptext)
+					else:
+						self.TextBuffer.insert_at_cursor("\n\n- " + helptext)
+					break
 
-	    	self.select_edit(move_back, text_length)
+			self.select_edit(move_back, text_length)
 
 	def ordered_list_item(self):
 		pass
@@ -151,19 +153,65 @@ class FormatShortcuts():
 		self.TextBuffer.move_mark_by_name('insert', cursor_iter)
 		self.TextEditor.scroll_mark_onscreen(self.TextBuffer.get_insert())
 
+	def above(self, linestart = ""):
+		if not cursor_iter.starts_line():
+			return ""
+		else:
+			cursor_mark = self.TextBuffer.get_insert()
+			cursor_iter = self.TextBuffer.get_iter_at_mark(cursor_mark)
+
+			start_ext = cursor_iter.copy()
+			start_ext.backward_lines(2)
+			text = self.TextBuffer.get_text(cursor_iter, start_ext, False).decode("utf-8")
+			lines = text.splitlines()
+
+			#if line[-1].startswith
+
+	def get_lines(self, cursor_iter):
+
+		start_ext = cursor_iter.copy()
+		start_ext.backward_lines(2)
+		text = self.TextBuffer.get_text(cursor_iter, start_ext, False).decode("utf-8")
+		lines = text.splitlines()
+
+		abs_line = cursor_iter.get_line()
+
+		return reversed(lines)
 
 	def heading(self, level = 0):
 		helptext = _("Heading")
+		before = ""		
 		if self.TextBuffer.get_has_selection():
 			(start, end) = self.TextBuffer.get_selection_bounds()
-		    text = self.TextBuffer.get_text(start, end, False)
+			text = self.TextBuffer.get_text(start, end, False)
 			self.TextBuffer.delete(start, end)
 		else:
 			text = helptext
 
 		cursor_mark = self.TextBuffer.get_insert()
 		cursor_iter = self.TextBuffer.get_iter_at_mark(cursor_mark)
-		level = 1
-		heading_indicator = "#" * level
-		self.TextBuffer.insert_at_cursor(heading_indicator + " " + text)
+
+		#lines = self.get_lines(cursor_iter)
+
+		#if cursor_iter.starts_line():
+		#	if lines[1] != '':
+		#		before = before + "\n"
+		#else:
+		#	match = re.match(r'([\#]+ )(.+)', lines[0])
+		#	if match: 
+		#		if match.group(1):
+		#			
+		#		print match.group(0)
+		#		if len(match.group(0)) < 6:
+		#			before = before + "#" * (len(match.group(0)) + 1) 
+		#		else:
+		#			before = before + "#"
+		#	else:
+		#		before = before + "\n\n"
+		#		
+		#	
+		#	check_text = self.TextBuffer.get_text(start, cursor_iter, False).decode("utf-8")
+		#	print check_text
+
+		self.TextBuffer.insert_at_cursor("#" + " " + text)
 		self.select_edit(0, len(text))

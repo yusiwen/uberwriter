@@ -90,12 +90,16 @@ DistUtilsExtra.auto.setup(
     url='https://launchpad.com/uberwriter',
     cmdclass={'install': InstallAndUpdateDataDirectory},
     package_dir = {
-        'gtkspellcheck': 'uberwriter_lib/thirdparty/gtkspellcheck',
-        'pylocales': 'uberwriter_lib/thirdparty/pylocales'
+        'gtkspellcheck': 'uberwriter_lib/gtkspellcheck',
+        'pylocales': 'uberwriter_lib/pylocales'
     },
     packages=[
-        "gtkspellcheck",
-        "pylocales"
+        "uberwriter_lib.gtkspellcheck",
+        "uberwriter_lib.pylocales",
+        "uberwriter_lib",
+        "uberwriter"
     ],
-    package_data={'pylocales' : ['locales.db']}
+    package_data={
+            'pylocales' : ['locales.db']
+            }
     )

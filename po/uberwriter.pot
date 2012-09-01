@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-30 22:06+0200\n"
+"POT-Creation-Date: 2012-09-01 06:11+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,88 +17,60 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:86
-msgid "Extract path is not a directory."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:138
-msgid "'{0}' declared in registry but not found within the extension."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:141
-msgid "Error while processing extension {0}."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:144
-msgid "Extension '{0}' has no dictionary registry."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:146
-msgid "Extension '{0}' is not a valid zip file."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:160
-msgid "Unable to move extension, file with same name exists within move_path."
-msgstr ""
-
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/oxt_import.py:162
-msgid "Unable to move extension, move_path is not a directory."
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:1 ../uberwriter.desktop.in.h:1
-msgid "UberWriter"
-msgstr ""
-
-#: ../data/ui/UberwriterWindow.ui.h:2
+#: ../data/ui/UberwriterWindow.ui.h:1
 msgid "_File"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:3
+#: ../data/ui/UberwriterWindow.ui.h:2
 msgid "Open Recent File"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:4
+#: ../data/ui/UberwriterWindow.ui.h:3
 msgid "Export as ODT"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:5
+#: ../data/ui/UberwriterWindow.ui.h:4
 msgid "Advanced Export..."
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:6
+#: ../data/ui/UberwriterWindow.ui.h:5
 msgid "Copy raw HTML to clipboard"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:7
+#: ../data/ui/UberwriterWindow.ui.h:6
 msgid "_Edit"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:8
+#: ../data/ui/UberwriterWindow.ui.h:7
 msgid "_View"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:9
+#: ../data/ui/UberwriterWindow.ui.h:8
 msgid "Light text on  a dark background"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:10
+#: ../data/ui/UberwriterWindow.ui.h:9
 msgid "Dark Mode"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:11
+#: ../data/ui/UberwriterWindow.ui.h:10
 msgid "Auto _Spellcheck"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:12
+#: ../data/ui/UberwriterWindow.ui.h:11
 msgid "F_ormat"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:13
+#: ../data/ui/UberwriterWindow.ui.h:12
 msgid "Unordered List Item"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:14
+#: ../data/ui/UberwriterWindow.ui.h:13
 msgid "Horizontal Rule"
+msgstr ""
+
+#: ../data/ui/UberwriterWindow.ui.h:14 ../uberwriter/FormatShortcuts.py:182
+msgid "Heading"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:15
@@ -138,197 +110,141 @@ msgid "Words:"
 msgstr ""
 
 #: ../data/ui/UberwriterWindow.ui.h:24
-msgid "0"
+msgid "Characters:"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:25
-msgid "Characters:"
+#: ../uberwriter/FormatShortcuts.py:85
+msgid "emphasized text"
+msgstr ""
+
+#: ../uberwriter/FormatShortcuts.py:87
+msgid "strong text"
+msgstr ""
+
+#: ../uberwriter/FormatShortcuts.py:101
+msgid "List item"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:1
+msgid "Export"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:2
+msgid "Smart"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:3
+msgid "Pandoc can automatically make \"--\" to a long dash and more"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:4
+msgid "Normalize"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:5
+msgid ""
+"Removes things like double spaces or spaces at the beginning of a paragraph"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:6
+msgid "Table of Contents"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:7
+msgid "Standalone"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:8
+msgid ""
+"Use a header and footer to include things like stylesheets and meta "
+"information"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:9
+msgid "Number Sections"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:10
+msgid "Strict Markdown"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:11
+msgid "Use \"strict\" markdown instead of \"pandoc\" markdown"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:12
+msgid "Slideshow incremental bullets"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:13
+msgid "Show one bullet point after another in a slideshow"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:14
+msgid "<b>General Options</b>"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:15
+msgid "Highlight syntax"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:16
+msgid "Choose a color theme for syntax highlighting"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:17
+msgid "Highlight style  "
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:18
+msgid "<b>Syntax highlighting</b> (HTML, LaTeX)"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:19
+msgid "Self Contained"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:20
+msgid ""
+"Produces a HTML that has no external dependencies (all images and "
+"stylesheets are included)"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:21
+msgid "HTML 5"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:22
+msgid "Use HTML 5 syntax"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:23
+msgid "Choose a CSS File that you want to use"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:24
+msgid "CSS File"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:25
+msgid "<b>HTML Options</b>"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:26
+msgid "<b>Bibliography File</b>"
+msgstr ""
+
+#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:27
+msgid "Commandline Reference"
 msgstr ""
 
 #: ../uberwriter/__init__.py:34
 msgid "Show debug messages (-vv debugs uberwriter_lib also)"
 msgstr ""
 
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:1
-#: ../data/ui/UberwriterAdvancedExport.ui.h:1 ../data/ui/ExportDialog.ui.h:1
-msgid "Export"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:2
-#: ../data/ui/ExportDialog.ui.h:2
-msgid "Smart"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:3
-#: ../data/ui/ExportDialog.ui.h:3
-msgid "Pandoc can automatically make \"--\" to a long dash and more"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:4
-#: ../data/ui/ExportDialog.ui.h:4
-msgid "Normalize"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:5
-#: ../data/ui/UberwriterAdvancedExport.ui.h:14 ../data/ui/ExportDialog.ui.h:5
-msgid "Table of Contents"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:6
-#: ../data/ui/ExportDialog.ui.h:6
-msgid "Standalone"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:7
-#: ../data/ui/ExportDialog.ui.h:7
-msgid "Number Sections"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:8
-#: ../data/ui/ExportDialog.ui.h:8
-msgid "Strict Markdown"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:9
-#: ../data/ui/ExportDialog.ui.h:9
-msgid "Slideshow incremental bullets"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:10
-#: ../data/ui/ExportDialog.ui.h:10
-msgid "<b>General Options</b>"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:11
-#: ../data/ui/UberwriterAdvancedExport.ui.h:15 ../data/ui/ExportDialog.ui.h:11
-msgid "Highlight syntax"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:12
-#: ../data/ui/UberwriterAdvancedExport.ui.h:16 ../data/ui/ExportDialog.ui.h:12
-msgid "Highlight style  "
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:13
-#: ../data/ui/ExportDialog.ui.h:13
-msgid "pygments"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:14
-#: ../data/ui/UberwriterAdvancedExport.ui.h:18 ../data/ui/ExportDialog.ui.h:14
-msgid "kate"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:15
-#: ../data/ui/UberwriterAdvancedExport.ui.h:19 ../data/ui/ExportDialog.ui.h:15
-msgid "monochrome"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:16
-#: ../data/ui/UberwriterAdvancedExport.ui.h:20 ../data/ui/ExportDialog.ui.h:16
-msgid "espresso"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:17
-#: ../data/ui/UberwriterAdvancedExport.ui.h:21 ../data/ui/ExportDialog.ui.h:17
-msgid "zenburn"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:18
-#: ../data/ui/UberwriterAdvancedExport.ui.h:22 ../data/ui/ExportDialog.ui.h:18
-msgid "haddock"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:19
-#: ../data/ui/UberwriterAdvancedExport.ui.h:23 ../data/ui/ExportDialog.ui.h:19
-msgid "tango"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:20
-#: ../data/ui/ExportDialog.ui.h:20
-msgid "<b>Syntax highlighting</b> (HTML, LaTeX)"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:21
-#: ../data/ui/ExportDialog.ui.h:21
-msgid "Self Contained"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:22
-#: ../data/ui/ExportDialog.ui.h:22
-msgid "HTML 5"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:23
-#: ../data/ui/ExportDialog.ui.h:23
-msgid "CSS File"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:24
-#: ../data/ui/ExportDialog.ui.h:24
-msgid "<b>HTML Options</b>"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:25
-#: ../data/ui/ExportDialog.ui.h:25
-msgid "<b>Bibliography File</b>"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExportDialog.ui.h:26
-#: ../data/ui/ExportDialog.ui.h:26
-msgid "Commandline Reference"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:2
-msgid "LaTeX"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:3
-msgid "HTML"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:4
-msgid "ConTeXt"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:5
-msgid "DocBook"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:6
-msgid "Groff man"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:7
-msgid "RTF"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:8
-msgid "OpenDocument XML"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:9
-msgid "Texinfo"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:10
-msgid "Textile"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:11
-msgid "Org-mode"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:12
-msgid "Asciidoc"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:13
-msgid "MediaWiki"
-msgstr ""
-
-#: ../data/ui/UberwriterAdvancedExport.ui.h:17
-msgid "pygment (default)"
+#. import SpellChecker class
+#: ../uberwriter.desktop.in.h:1
+msgid "UberWriter"
 msgstr ""
 
 #: ../uberwriter.desktop.in.h:2
@@ -356,26 +272,105 @@ msgstr ""
 msgid "Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>"
 msgstr ""
 
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:437
+#: ../uberwriter_lib/gtkspellcheck/spellcheck.py:437
 msgid "(no suggestions)"
 msgstr ""
 
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:458
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:461
+#: ../uberwriter_lib/gtkspellcheck/spellcheck.py:458
+#: ../uberwriter_lib/gtkspellcheck/spellcheck.py:461
 msgid "Add \"{word}\" to Dictionary"
 msgstr ""
 
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:465
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:467
+#: ../uberwriter_lib/gtkspellcheck/spellcheck.py:465
+#: ../uberwriter_lib/gtkspellcheck/spellcheck.py:467
 msgid "Ignore All"
 msgstr ""
 
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:482
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:484
+#: ../uberwriter_lib/gtkspellcheck/spellcheck.py:482
+#: ../uberwriter_lib/gtkspellcheck/spellcheck.py:484
 msgid "Languages"
 msgstr ""
 
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:495
-#: ../uberwriter_lib/thirdparty/gtkspellcheck/spellcheck.py:498
+#: ../uberwriter_lib/gtkspellcheck/spellcheck.py:495
+#: ../uberwriter_lib/gtkspellcheck/spellcheck.py:498
 msgid "Suggestions"
+msgstr ""
+
+#: ../uberwriter_lib/gtkspellcheck/oxt_import.py:86
+msgid "Extract path is not a directory."
+msgstr ""
+
+#: ../uberwriter_lib/gtkspellcheck/oxt_import.py:138
+msgid "'{0}' declared in registry but not found within the extension."
+msgstr ""
+
+#: ../uberwriter_lib/gtkspellcheck/oxt_import.py:141
+msgid "Error while processing extension {0}."
+msgstr ""
+
+#: ../uberwriter_lib/gtkspellcheck/oxt_import.py:144
+msgid "Extension '{0}' has no dictionary registry."
+msgstr ""
+
+#: ../uberwriter_lib/gtkspellcheck/oxt_import.py:146
+msgid "Extension '{0}' is not a valid zip file."
+msgstr ""
+
+#: ../uberwriter_lib/gtkspellcheck/oxt_import.py:160
+msgid "Unable to move extension, file with same name exists within move_path."
+msgstr ""
+
+#: ../uberwriter_lib/gtkspellcheck/oxt_import.py:162
+msgid "Unable to move extension, move_path is not a directory."
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:400
+msgid "Save your File"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:537
+msgid "You can not export to PDF."
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:539
+msgid ""
+"Please install <a href=\"apt:texlive\">texlive</a> from the software center."
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:567
+msgid "MarkDown or Plain Text"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:570
+msgid "Open a .md-File"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:592
+msgid "You have not saved your changes."
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:594
+msgid "Close without Saving"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:595
+msgid "Cancel"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:596
+msgid "Save now"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:597
+msgid "Unsaved changes"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:654
+msgid "You can not enable the Spell Checker."
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:656
+msgid ""
+"Please install 'hunspell' or 'aspell' dictionarys for your language from the "
+"software center."
 msgstr ""
