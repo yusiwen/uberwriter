@@ -37,6 +37,7 @@ import re
 from MarkupBuffer import MarkupBuffer
 from FormatShortcuts import FormatShortcuts
 from UberwriterTextEditor import TextEditor
+from UberwriterInlinePreview import UberwriterInlinePreview
 
 import logging
 logger = logging.getLogger('uberwriter')
@@ -814,17 +815,6 @@ class UberwriterWindow(Window):
             self.status_bar.set_state_flags(Gtk.StateFlags.NORMAL, True)
             GObject.timeout_add(3000, self.poll_for_motion)
 
-    def populate_popup(self, editor, menu,  data=None):
-        return
-        item = Gtk.MenuItem.new()
-        image = Gtk.Image.new_from_file('/home/wolf/test.jpg')
-        image.show()
-        item.add(image)
-        item.show()
-        print menu, item
-        menu.prepend(item)
-        menu.show()
-
     def move_popup(self, widget, data=None):
         pass
         
@@ -978,11 +968,9 @@ class UberwriterWindow(Window):
         self.TextBuffer.connect_after('changed', self.after_modify_text)
         self.TextEditor.connect_after('move-cursor', self.after_cursor_moved)
         self.TextEditor.connect_after('insert-at-cursor', self.after_insert_at_cursor)
-        
-        # Events for popup menu
-        self.TextEditor.connect_after('populate-popup', self.populate_popup)
-        self.TextEditor.connect_after('popup-menu', self.move_popup)
 
+        # Setting up inline preview
+        self.InlinePreview = UberwriterInlinePreview(self.TextEditor, self.TextBuffer)
 
         # Vertical scrolling
         self.vadjustment = self.TextEditor.get_vadjustment()

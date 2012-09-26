@@ -102,8 +102,8 @@ class MarkupBuffer():
         self.table_env.set_property('wrap-mode', Gtk.WrapMode.NONE)
 
     regex  = {
-        "ITALIC": re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ", re.UNICODE),     # *asdasd* // _asdasd asd asd_ 
-        "STRONG": re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ", re.UNICODE),     # **as das** // __asdasdasd asd ad a__
+        "ITALIC": re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ", re.UNICODE),   # *asdasd* // _asdasd asd asd_ 
+        "STRONG": re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ", re.UNICODE),   # **as das** // __asdasdasd asd ad a__
         "STRONGITALIC": re.compile(r"\*{3}\w(.+?)\*{3}| [_]{3}\w(.+?)[_]{3} "),
         "BLOCKQUOTE": re.compile(r"^([\>]+ )", re.MULTILINE),
         "STRIKETHROUGH": re.compile(r"~~[^ `~\n].+?~~"),
@@ -268,21 +268,30 @@ class MarkupBuffer():
         end_sentence = cursor_iter.copy()
         end_sentence.forward_sentence_end()
         
+        end_line = cursor_iter.copy()
+        end_line.forward_to_line_end()
+        
+        comp = end_line.compare(end_sentence)
+        print comp
+        if comp == 0:
+            end_sentence = end_line
+
         start_sentence = cursor_iter.copy()
         start_sentence.backward_sentence_start()
         
+
         self.TextBuffer.apply_tag(self.blackfont, 
             start_sentence, end_sentence)
 
     def recalculate(self, lm):
     	for i in range(0,6):
-    	    name = "rev_indent_left" + str(i)
-    	    self.rev_leftmargin[i].set_property("left-margin", (lm-10) - 10*(i+1))
-    	    self.rev_leftmargin[i].set_property("indent", - 10*(i+1) - 10)
+    	   name = "rev_indent_left" + str(i)
+    	   self.rev_leftmargin[i].set_property("left-margin", (lm-10) - 10*(i+1))
+    	   self.rev_leftmargin[i].set_property("indent", - 10*(i+1) - 10)
 
     	for i in range(0,6):
-    	    self.leftmargin[i].set_property("left-margin", (lm-10) + 10 + 10 * (i+1))
-    	    self.leftmargin[i].set_property("indent", - 9*(i+1) - 10) ## Was - 10 ...
+    	   self.leftmargin[i].set_property("left-margin", (lm-10) + 10 + 10 * (i+1))
+    	   self.leftmargin[i].set_property("indent", - 9*(i+1) - 10) ## Was - 10 ...
 
     def dark_mode(self, active = False):
         if active:
