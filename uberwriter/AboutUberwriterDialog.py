@@ -14,9 +14,9 @@
 # with this program.  If not, see <http://www.gnu.org/licenses/>.
 ### END LICENSE
 
-import gettext
-from gettext import gettext as _
-gettext.textdomain('uberwriter')
+import locale
+from locale import gettext as _
+locale.textdomain('uberwriter')
 
 import logging
 logger = logging.getLogger('uberwriter')

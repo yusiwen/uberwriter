@@ -15,14 +15,14 @@
 ### END LICENSE
 
 
-import gettext
+import locale
 
 import re
 from gi.repository import Gtk, Gdk # pylint: disable=E0611
 from gi.repository import Pango # pylint: disable=E0611
 
-from gettext import gettext as _
-gettext.textdomain('uberwriter')
+from locale import gettext as _
+locale.textdomain('uberwriter')
 
 from . MarkupBuffer import MarkupBuffer
 
