@@ -14,15 +14,15 @@
 # with this program.  If not, see <http://www.gnu.org/licenses/>.
 ### END LICENSE
 
-import gettext
+import locale
 import subprocess
 import os
 import codecs
 import webbrowser
 import apt
 
-from gettext import gettext as _
-gettext.textdomain('uberwriter')
+from locale import gettext as _
+locale.textdomain('uberwriter')
 
 import mimetypes
 
