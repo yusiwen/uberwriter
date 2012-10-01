@@ -108,7 +108,10 @@ class Window(Gtk.Window):
 
     def on_mnu_close_activate(self, widget, data=None):
         """Signal handler for closing the UberwriterWindow."""
-        self.destroy()
+        if self.on_delete_called(self): #Really destroy?
+            return 
+        else: 
+            self.destroy()
 
     def on_destroy(self, widget, data=None):
         """Called when the UberwriterWindow is closed."""

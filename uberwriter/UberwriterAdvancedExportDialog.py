@@ -161,7 +161,7 @@ class UberwriterAdvancedExportDialog(AdvancedExportDialog):
             row_id, name = model[tree_iter][:2]
 
         fmt = self.formats_dict[row_id]
-        print fmt
+        logger.info(fmt)
         filechooser = Gtk.FileChooserDialog(
             "Export as %s" % fmt["name"],
             self,
@@ -245,7 +245,7 @@ class UberwriterAdvancedExportDialog(AdvancedExportDialog):
 
         args.append(output_file)
 
-        print args
+        logger.info(args)
 
         p = subprocess.Popen(args, stdin=subprocess.PIPE, 
             stdout=subprocess.PIPE, cwd=output_dir)

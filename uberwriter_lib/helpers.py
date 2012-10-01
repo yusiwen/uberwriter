@@ -51,6 +51,14 @@ def get_media_file(media_file_name):
 
     return "file:///"+media_filename
 
+def get_media_path(media_file_name):
+    media_filename = get_data_file('media', '%s' % (media_file_name,))
+    if not os.path.exists(media_filename):
+        media_filename = None
+
+    return "/"+media_filename
+
+
 class NullHandler(logging.Handler):
     def emit(self, record):
         pass

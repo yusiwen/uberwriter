@@ -36,7 +36,7 @@ def parse_options():
 
     set_up_logging(options)
 
-    print args
+    # print args
 
     return options, args
 
