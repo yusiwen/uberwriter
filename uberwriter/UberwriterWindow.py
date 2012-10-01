@@ -20,6 +20,7 @@ import os
 import codecs
 import webbrowser
 import apt
+import urllib
 
 from locale import gettext as _
 locale.textdomain('uberwriter')
@@ -51,7 +52,6 @@ except ImportError:
 
 from uberwriter_lib import Window
 from uberwriter_lib import helpers
-from uberwriter_lib.FadeLabel import FadeLabel
 from uberwriter.AboutUberwriterDialog import AboutUberwriterDialog
 from uberwriter.UberwriterAdvancedExportDialog import UberwriterAdvancedExportDialog
 
@@ -379,7 +379,7 @@ class UberwriterWindow(Window):
 
     def save_document(self, widget, data=None):
         if self.filename:
-            print "saving"
+            logger.info("saving")
             filename = self.filename
             f = codecs.open(filename, encoding="utf-8", mode='w')
             f.write(self.get_text().decode("utf-8") )
@@ -422,9 +422,6 @@ class UberwriterWindow(Window):
                 self.filename = filename
                 self.set_title(os.path.basename(filename) + self.title_end)
                 
-                
-                #for item in self.recent_manager.get_items():
-                #   print item.get_display_name() + " App: " + item.last_application()
                 self.did_change = False
                 filechooser.destroy()
                 return response
@@ -665,7 +662,8 @@ class UberwriterWindow(Window):
         if info == 1:
             # uri target
             uris = data.get_uris()
-            for uri in uris: 
+            for uri in uris:
+                uri = urllib.unquote_plus(uri)
                 mime = mimetypes.guess_type(uri)
 
                 if mime[0] is not None and mime[0].startswith('image'):
@@ -695,7 +693,11 @@ class UberwriterWindow(Window):
     def dark_mode_toggled(self, widget, data=None):
         if widget.get_active():
             # Dark Mode is on
-            css = open(helpers.get_media_path('style_dark.css'), 'r')
+            # Hack for fucking unico-shit
+            if Gtk.get_minor_version() == 4:
+                css = open(helpers.get_media_path('style_dark_old.css'), 'r')
+            else:
+                css = open(helpers.get_media_path('style_dark.css'), 'r')
             css_data = css.read()
             css.close()
             self.style_provider.load_from_data(css_data)
@@ -712,6 +714,10 @@ class UberwriterWindow(Window):
             self.background_image = helpers.get_media_path('bg_light.png')
             self.MarkupBuffer.dark_mode(False)
 
+        surface = cairo.ImageSurface.create_from_png(self.background_image)
+        self.background_pattern = cairo.SurfacePattern(surface)
+        self.background_pattern.set_extend(cairo.EXTEND_REPEAT)
+
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), self.style_provider,     
             Gtk.STYLE_PROVIDER_PRIORITY_USER
@@ -724,6 +730,7 @@ class UberwriterWindow(Window):
         if filename:
             if filename.startswith('file://'):
                 filename = filename[7:]
+            filename = urllib.unquote_plus(filename)
             self.filename = filename
             try:                
                 f = codecs.open(filename, encoding="utf-8", mode='r')
@@ -735,16 +742,14 @@ class UberwriterWindow(Window):
                 self.TextEditor.redos = []
             
             except:
-                print "Error Reading File"
+                logger.warning("Error Reading File")
             self.did_change = False
         else:
-            print "No File arg"
+            logger.warning("No File arg")
+
 
     def draw_bg(self, widget, context):
-        surface = cairo.ImageSurface.create_from_png(self.background_image)
-        sp = cairo.SurfacePattern(surface)
-        sp.set_extend(cairo.EXTEND_REPEAT)
-        context.set_source(sp)
+        context.set_source(self.background_pattern)
         context.paint()
 
     def open_launchpad_translation(self, widget, data = None):
@@ -765,6 +770,7 @@ class UberwriterWindow(Window):
 
     def open_recent(self, widget, data=None):
         if data:
+            logger.info("Filename: %s" % data)
             if self.check_change() == Gtk.ResponseType.CANCEL:
                 return
             else:
@@ -821,7 +827,7 @@ class UberwriterWindow(Window):
         image.show()
         item.add(image)
         item.show()
-        print menu, item
+        logger.info("%s %s" % (menu, item)) 
         menu.prepend(item)
         menu.show()
 
@@ -890,6 +896,13 @@ class UberwriterWindow(Window):
         #if not os.path.exists(p):
         #    os.makedirs(p)
 
+        # Setting up light background
+
+        surface = cairo.ImageSurface.create_from_png(self.background_image)
+        self.background_pattern = cairo.SurfacePattern(surface)
+        self.background_pattern.set_extend(cairo.EXTEND_REPEAT)
+
+
         self.TextEditor = TextEditor()
 
         base_leftmargin = 100
@@ -904,7 +917,7 @@ class UberwriterWindow(Window):
 
         self.ScrolledWindow.add(self.TextEditor)
 
-		pangoFont = Pango.FontDescription("Ubuntu Mono 14px")
+		pangoFont = Pango.FontDescription("Ubuntu Mono 15px")
 
 		self.TextEditor.modify_font(pangoFont)
 
@@ -1011,9 +1024,10 @@ class UberwriterWindow(Window):
 
         # Window destroyed??
         self.connect("delete-event", self.on_delete_called)
-        
+    
     def on_delete_called(self, widget, data=None):
-        """Called when the TexteditorWindow is closed."""        
+        """Called when the TexteditorWindow is closed.""" 
+        logger.info('delete called')       
         if self.check_change() == Gtk.ResponseType.CANCEL:
             return True
         return False

@@ -29,7 +29,7 @@ import logging
 import re
 import sys
 
-from pylocales import code_to_name
+from ..pylocales import code_to_name
 
 # public objects
 __all__ = ['SpellChecker', 'NoDictionariesFound', 'NoGtkBindingFound']

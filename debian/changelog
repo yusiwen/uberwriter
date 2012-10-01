@@ -1,3 +1,12 @@
+uberwriter (12.08.28-public1) precise quantal; urgency=low
+ 
+  [ Wolf ]
+  * Bug resolved involving copy+paste and unicode chars
+  * Statusbar now fades away (at least in quantal)
+
+ -- Wolf <w.vollprecht@googlemail.com>  Mon, 01 Oct 11:20:00 +0200
+
+
 uberwriter (12.08.28-public1) precise; urgency=low
  
   [ Wolf ]
