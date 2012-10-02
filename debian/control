@@ -1,3 +1,4 @@
+Source: uberwriter
 Section: python
 Priority: extra
 Build-Depends:  libglib2.0-bin,
@@ -6,11 +7,10 @@ Build-Depends:  libglib2.0-bin,
  python-distutils-extra (>= 2.10)
 Maintainer: Wolf Vollprecht <w.vollprecht@gmail.com>
 Standards-Version: 3.9.3
-XS-Python-Version: current
+X-Python-Version: current
 
 Package: uberwriter
 Architecture: all
-XB-Python-Version: ${python:Versions}
 Depends: ${misc:Depends},
  ${python:Depends},
  python-gi-cairo,

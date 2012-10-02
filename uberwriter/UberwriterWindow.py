@@ -412,7 +412,10 @@ class UberwriterWindow(Window):
                 
                 if filename[-3:] != ".md":
                     filename = filename + ".md"
-                    self.recent_manager.add_item("file:/ " + filename)
+                    try:
+                        self.recent_manager.add_item("file:/ " + filename)
+                    except:
+                        pass
 
                 f = codecs.open(filename, encoding="utf-8", mode='w')
 
@@ -445,9 +448,12 @@ class UberwriterWindow(Window):
 
             filename = filechooser.get_filename()
             if filename[-3:] != ".md":
-                self.recent_manager.remove_item("file:/" + filename)
                 filename = filename + ".md"
-                self.recent_manager.add_item("file:/ " + filename)
+                try:
+                    self.recent_manager.remove_item("file:/" + filename)        
+                    self.recent_manager.add_item("file:/ " + filename)
+                except: 
+                    pass
 
             f = codecs.open(filename, encoding="utf-8", mode='w')
             f.write(self.get_text().decode("utf-8") )
@@ -456,8 +462,11 @@ class UberwriterWindow(Window):
             self.filename = filename
             self.set_title(os.path.basename(filename) + self.title_end)
 
-            self.recent_manager.add_item(filename)
-
+            try:
+                self.recent_manager.add_item(filename)
+            except:
+                pass
+                
             filechooser.destroy()
             self.did_change = False
 
