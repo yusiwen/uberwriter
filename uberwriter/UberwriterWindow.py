@@ -35,10 +35,10 @@ import cairo
 import re
 
 
-from MarkupBuffer import MarkupBuffer
-from FormatShortcuts import FormatShortcuts
-from UberwriterTextEditor import TextEditor
-from UberwriterInlinePreview import UberwriterInlinePreview
+from .MarkupBuffer import MarkupBuffer
+from .FormatShortcuts import FormatShortcuts
+from .UberwriterTextEditor import TextEditor
+from .UberwriterInlinePreview import UberwriterInlinePreview
 
 import logging
 logger = logging.getLogger('uberwriter')
@@ -53,10 +53,8 @@ except ImportError:
 
 from uberwriter_lib import Window
 from uberwriter_lib import helpers
-from uberwriter.AboutUberwriterDialog import AboutUberwriterDialog
-from uberwriter.UberwriterAdvancedExportDialog import UberwriterAdvancedExportDialog
-
-
+from .AboutUberwriterDialog import AboutUberwriterDialog
+from .UberwriterAdvancedExportDialog import UberwriterAdvancedExportDialog
 
 # gtk_text_view_forward_display_line_end () !! !
 # move-viewport signal
@@ -165,8 +163,7 @@ class UberwriterWindow(Window):
         self.char_count.set_text(str(self.TextBuffer.get_char_count() - 
                 (2 * self.fflines)))
 
-        text = self.get_text().decode("utf-8")
-        text = unicode(text)
+        text = self.get_text()
         words = re.split(self.WORDCOUNT, text)
         length = len(words)
         # Last word a "space"
@@ -282,11 +279,17 @@ class UberwriterWindow(Window):
             key, mod = Gtk.accelerator_parse("Escape")
             self.fullscreen_button.add_accelerator("activate", 
             self.accel_group, key, mod, Gtk.AccelFlags.VISIBLE)
+            
+            # Hide Menu
+            self.menubar.hide()
+
         else:
             self.unfullscreen()
             key, mod = Gtk.accelerator_parse("Escape")
             self.fullscreen_button.remove_accelerator(
                 self.accel_group, key, mod)
+            self.menubar.show()
+
         self.TextEditor.grab_focus()
 
     def delete_text(self, widget):
@@ -383,7 +386,7 @@ class UberwriterWindow(Window):
             logger.info("saving")
             filename = self.filename
             f = codecs.open(filename, encoding="utf-8", mode='w')
-            f.write(self.get_text().decode("utf-8") )
+            f.write(self.get_text())
             f.close()
             if self.did_change:
                 self.did_change = False
@@ -420,7 +423,7 @@ class UberwriterWindow(Window):
 
                 f = codecs.open(filename, encoding="utf-8", mode='w')
 
-                f.write(self.get_text().decode("utf-8") )
+                f.write(self.get_text())
                 f.close()
                 
                 self.filename = filename
@@ -457,7 +460,7 @@ class UberwriterWindow(Window):
                     pass
 
             f = codecs.open(filename, encoding="utf-8", mode='w')
-            f.write(self.get_text().decode("utf-8") )
+            f.write(self.get_text())
             f.close()
             
             self.filename = filename
@@ -672,7 +675,8 @@ class UberwriterWindow(Window):
         if info == 1:
             # uri target
             uris = data.get_uris()
-            for uri in uris: 
+            for uri in uris:
+                uri = urllib.parse.unquote_plus(uri)
                 mime = mimetypes.guess_type(uri)
 
                 if mime[0] is not None and mime[0].startswith('image'):
@@ -702,7 +706,11 @@ class UberwriterWindow(Window):
     def dark_mode_toggled(self, widget, data=None):
         if widget.get_active():
             # Dark Mode is on
-            css = open(helpers.get_media_path('style_dark.css'), 'r')
+            # Hack for fucking unico-shit
+            if Gtk.get_minor_version() == 4:
+                css = open(helpers.get_media_path('style_dark_old.css'), 'r')
+            else:
+                css = open(helpers.get_media_path('style_dark.css'), 'r')
             css_data = css.read()
             css.close()
             self.style_provider.load_from_data(css_data)
@@ -719,6 +727,10 @@ class UberwriterWindow(Window):
             self.background_image = helpers.get_media_path('bg_light.png')
             self.MarkupBuffer.dark_mode(False)
 
+        surface = cairo.ImageSurface.create_from_png(self.background_image)
+        self.background_pattern = cairo.SurfacePattern(surface)
+        self.background_pattern.set_extend(cairo.EXTEND_REPEAT)
+
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), self.style_provider,     
             Gtk.STYLE_PROVIDER_PRIORITY_USER
@@ -731,6 +743,7 @@ class UberwriterWindow(Window):
         if filename:
             if filename.startswith('file://'):
                 filename = filename[7:]
+            filename = urllib.parse.unquote_plus(filename)
             self.filename = filename
             try:                
                 f = codecs.open(filename, encoding="utf-8", mode='r')
@@ -742,16 +755,14 @@ class UberwriterWindow(Window):
                 self.TextEditor.redos = []
             
             except:
-                print "Error Reading File"
+                logger.warning("Error Reading File")
             self.did_change = False
         else:
-            print "No File arg"
+            logger.warning("No File arg")
+
 
     def draw_bg(self, widget, context):
-        surface = cairo.ImageSurface.create_from_png(self.background_image)
-        sp = cairo.SurfacePattern(surface)
-        sp.set_extend(cairo.EXTEND_REPEAT)
-        context.set_source(sp)
+        context.set_source(self.background_pattern)
         context.paint()
 
     def open_launchpad_translation(self, widget, data = None):
@@ -859,7 +870,7 @@ class UberwriterWindow(Window):
 
         self.word_count = builder.get_object('word_count')
         self.char_count = builder.get_object('char_count')
-
+        self.menubar = builder.get_object('menubar1')
         self.fullscreen_button = builder.get_object('fullscreen_toggle')
         self.focusmode_button = builder.get_object('focus_toggle')
         self.fullscreen_button.set_name('fullscreen_toggle')
@@ -886,6 +897,14 @@ class UberwriterWindow(Window):
         #if not os.path.exists(p):
         #    os.makedirs(p)
 
+        # Setup light background
+
+        surface = cairo.ImageSurface.create_from_png(self.background_image)
+        self.background_pattern = cairo.SurfacePattern(surface)
+        self.background_pattern.set_extend(cairo.EXTEND_REPEAT)
+
+
+
         self.TextEditor = TextEditor()
 
         base_leftmargin = 100
@@ -900,16 +919,16 @@ class UberwriterWindow(Window):
 
         self.ScrolledWindow.add(self.TextEditor)
 
-		pangoFont = Pango.FontDescription("Ubuntu Mono 14px")
+        pangoFont = Pango.FontDescription("Ubuntu Mono 15px")
 
-		self.TextEditor.modify_font(pangoFont)
+        self.TextEditor.modify_font(pangoFont)
 
         self.TextEditor.set_margin_top(38)
         self.TextEditor.set_margin_bottom(16)
 
-        self.TextEditor.set_pixels_above_lines(5)
-        self.TextEditor.set_pixels_below_lines(5)
-        self.TextEditor.set_pixels_inside_wrap(10)
+        self.TextEditor.set_pixels_above_lines(4)
+        self.TextEditor.set_pixels_below_lines(4)
+        self.TextEditor.set_pixels_inside_wrap(8)
 
         tab_array = Pango.TabArray.new(1, True)
         tab_array.set_tab(0, Pango.TabAlign.LEFT, 20)
@@ -934,7 +953,7 @@ class UberwriterWindow(Window):
 
         self.style_provider = Gtk.CssProvider()
 
-        css = open(helpers.get_media_path('style.css'), 'r')
+        css = open(helpers.get_media_path('style.css'), 'rb')
         css_data = css.read()
         css.close()
 

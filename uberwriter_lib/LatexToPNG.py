@@ -15,7 +15,7 @@ COPYING
 	granted under the terms of the MIT License.
 """
 
-import os, sys, tempfile, md5
+import os, sys, tempfile, hashlib
 
 class LatexToPNG():
 
