@@ -1,6 +1,6 @@
 # -*- Mode: Python; coding: utf-8; indent-tabs-mode: nil; tab-width: 4 -*-
 ### BEGIN LICENSE
-# Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>
+# Copyright (C) 2012, Wolf Vollprecht <w.vollprecht@gmail.com>
 # This program is free software: you can redistribute it and/or modify it 
 # under the terms of the GNU General Public License version 3, as published 
 # by the Free Software Foundation.
@@ -20,6 +20,7 @@ import os
 import codecs
 import webbrowser
 import apt
+import urllib
 
 from locale import gettext as _
 locale.textdomain('uberwriter')
@@ -52,7 +53,6 @@ except ImportError:
 
 from uberwriter_lib import Window
 from uberwriter_lib import helpers
-from uberwriter_lib.FadeLabel import FadeLabel
 from uberwriter.AboutUberwriterDialog import AboutUberwriterDialog
 from uberwriter.UberwriterAdvancedExportDialog import UberwriterAdvancedExportDialog
 
@@ -380,7 +380,7 @@ class UberwriterWindow(Window):
 
     def save_document(self, widget, data=None):
         if self.filename:
-            print "saving"
+            logger.info("saving")
             filename = self.filename
             f = codecs.open(filename, encoding="utf-8", mode='w')
             f.write(self.get_text().decode("utf-8") )
@@ -413,7 +413,10 @@ class UberwriterWindow(Window):
                 
                 if filename[-3:] != ".md":
                     filename = filename + ".md"
-                    self.recent_manager.add_item("file:/ " + filename)
+                    try:
+                        self.recent_manager.add_item("file:/ " + filename)
+                    except:
+                        pass
 
                 f = codecs.open(filename, encoding="utf-8", mode='w')
 
@@ -423,9 +426,6 @@ class UberwriterWindow(Window):
                 self.filename = filename
                 self.set_title(os.path.basename(filename) + self.title_end)
                 
-                
-                #for item in self.recent_manager.get_items():
-                #   print item.get_display_name() + " App: " + item.last_application()
                 self.did_change = False
                 filechooser.destroy()
                 return response
@@ -449,9 +449,12 @@ class UberwriterWindow(Window):
 
             filename = filechooser.get_filename()
             if filename[-3:] != ".md":
-                self.recent_manager.remove_item("file:/" + filename)
                 filename = filename + ".md"
-                self.recent_manager.add_item("file:/ " + filename)
+                try:
+                    self.recent_manager.remove_item("file:/" + filename)        
+                    self.recent_manager.add_item("file:/ " + filename)
+                except: 
+                    pass
 
             f = codecs.open(filename, encoding="utf-8", mode='w')
             f.write(self.get_text().decode("utf-8") )
@@ -460,8 +463,11 @@ class UberwriterWindow(Window):
             self.filename = filename
             self.set_title(os.path.basename(filename) + self.title_end)
 
-            self.recent_manager.add_item(filename)
-
+            try:
+                self.recent_manager.add_item(filename)
+            except:
+                pass
+                
             filechooser.destroy()
             self.did_change = False
 
@@ -999,9 +1005,10 @@ class UberwriterWindow(Window):
 
         # Window destroyed??
         self.connect("delete-event", self.on_delete_called)
-        
+    
     def on_delete_called(self, widget, data=None):
-        """Called when the TexteditorWindow is closed."""        
+        """Called when the TexteditorWindow is closed.""" 
+        logger.info('delete called')       
         if self.check_change() == Gtk.ResponseType.CANCEL:
             return True
         return False

@@ -7,13 +7,13 @@ Build-Depends:  libglib2.0-bin,
  python-distutils-extra (>= 2.10)
 Maintainer: Wolf Vollprecht <w.vollprecht@gmail.com>
 Standards-Version: 3.9.3
-XS-Python-Version: current
+X-Python-Version: current
 
 Package: uberwriter
 Architecture: all
-XB-Python-Version: ${python:Versions}
 Depends: ${misc:Depends},
  ${python:Depends},
+ python-gi-cairo,
  gir1.2-glib-2.0,
  gir1.2-gtk-3.0,
  gir1.2-pango-1.0,

@@ -1,6 +1,6 @@
 # -*- Mode: Python; coding: utf-8; indent-tabs-mode: nil; tab-width: 4 -*-
 ### BEGIN LICENSE
-# Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>
+# Copyright (C) 2012, Wolf Vollprecht <w.vollprecht@gmail.com>
 # This program is free software: you can redistribute it and/or modify it 
 # under the terms of the GNU General Public License version 3, as published 
 # by the Free Software Foundation.
@@ -161,7 +161,7 @@ class UberwriterAdvancedExportDialog(AdvancedExportDialog):
             row_id, name = model[tree_iter][:2]
 
         fmt = self.formats_dict[row_id]
-        print fmt
+        logger.info(fmt)
         filechooser = Gtk.FileChooserDialog(
             "Export as %s" % fmt["name"],
             self,
@@ -245,7 +245,7 @@ class UberwriterAdvancedExportDialog(AdvancedExportDialog):
 
         args.append(output_file)
 
-        print args
+        logger.info(args)
 
         p = subprocess.Popen(args, stdin=subprocess.PIPE, 
             stdout=subprocess.PIPE, cwd=output_dir)
