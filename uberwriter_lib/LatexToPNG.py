@@ -56,6 +56,7 @@ class LatexToPNG():
 		tex = '%s\n%s\n%s\n' % (self.TEX_HEADER, tex.strip(), self.TEX_FOOTER)
 
 		open(texfile, 'w').write(tex)
+		print(texfile)
 		saved_pwd = os.getcwd()
 
 		os.chdir(outdir)
@@ -77,5 +78,6 @@ class LatexToPNG():
 
 	def generatepng(self, formula):
 		self.temp_result = tempfile.NamedTemporaryFile(suffix='.png')
+		formula = "$" + formula + "$"
 		self.latex2png(formula, self.temp_result.name, 300, False)
 		return self.temp_result.name

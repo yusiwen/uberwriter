@@ -961,10 +961,9 @@ class UberwriterWindow(Window):
 
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), self.style_provider,     
-            Gtk.STYLE_PROVIDER_PRIORITY_USER
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
-
-
+ 
         # Still needed.
         self.fflines = 0
 

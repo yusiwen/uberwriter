@@ -117,7 +117,7 @@ class FormatShortcuts():
 
 			start_ext = cursor_iter.copy()
 			start_ext.backward_lines(3)
-			text = self.TextBuffer.get_text(cursor_iter, start_ext, False).decode("utf-8")
+			text = self.TextBuffer.get_text(cursor_iter, start_ext, False)
 			lines = text.splitlines()
 
 			for line in reversed(lines):
@@ -162,7 +162,7 @@ class FormatShortcuts():
 
 			start_ext = cursor_iter.copy()
 			start_ext.backward_lines(2)
-			text = self.TextBuffer.get_text(cursor_iter, start_ext, False).decode("utf-8")
+			text = self.TextBuffer.get_text(cursor_iter, start_ext, False)
 			lines = text.splitlines()
 
 			#if line[-1].startswith
@@ -171,7 +171,7 @@ class FormatShortcuts():
 
 		start_ext = cursor_iter.copy()
 		start_ext.backward_lines(2)
-		text = self.TextBuffer.get_text(cursor_iter, start_ext, False).decode("utf-8")
+		text = self.TextBuffer.get_text(cursor_iter, start_ext, False)
 		lines = text.splitlines()
 
 		abs_line = cursor_iter.get_line()
