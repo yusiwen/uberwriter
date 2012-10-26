@@ -92,8 +92,18 @@
   color: @selected_fg_color;
 }
 
+#UberwriterWindow GtkPaned, #UberwriterWindow GtkScrolledWindow,
+#UberwriterWindow GtkScrolledWindow:backdrop {
+  background-color: transparent;
+  background-clip: initial;
+  background-origin: initial;
+  background-size: initial;
+  background-position: initial;
+  background-repeat: initial;
+  background-image: initial;
+}
 
-#status_bar_box GtkLabel{
+#status_bar_box GtkLabel {
   color: #666;
   transition: 500ms ease-in-out;
 }

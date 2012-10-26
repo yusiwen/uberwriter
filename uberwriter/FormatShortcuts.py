@@ -58,9 +58,9 @@ class FormatShortcuts():
 				ext_start.backward_chars(len(wrap))
 				ext_end = end.copy()
 				ext_end.forward_chars(len(wrap))
-				text = self.TextBuffer.get_text(ext_start, ext_end, True).decode("utf-8")
+				text = self.TextBuffer.get_text(ext_start, ext_end, True)
 			else:
-				text = self.TextBuffer.get_text(start, end, True).decode("utf-8")
+				text = self.TextBuffer.get_text(start, end, True)
 			
 			if moved and text.startswith(wrap) and text.endswith(wrap):
 				text = text[len(wrap):-len(wrap)]

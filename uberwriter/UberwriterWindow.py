@@ -21,13 +21,14 @@ import codecs
 import webbrowser
 import apt
 import urllib
+import pickle
 
 from locale import gettext as _
 locale.textdomain('uberwriter')
 
 import mimetypes
 
-from gi.repository import Gtk, Gdk, GObject# pylint: disable=E0611
+from gi.repository import Gtk, Gdk, GObject, WebKit# pylint: disable=E0611
 from gi.repository import Pango # pylint: disable=E0611
 
 import cairo
@@ -55,6 +56,14 @@ from uberwriter_lib import Window
 from uberwriter_lib import helpers
 from .AboutUberwriterDialog import AboutUberwriterDialog
 from .UberwriterAdvancedExportDialog import UberwriterAdvancedExportDialog
+
+# Some Globals 
+# TODO move them somewhere for better 
+# accesibility from other files
+
+CONFIG_PATH = os.path.expanduser("~/.config/uberwriter/")
+
+
 
 # gtk_text_view_forward_display_line_end () !! !
 # move-viewport signal
@@ -436,6 +445,7 @@ class UberwriterWindow(Window):
             elif response == Gtk.ResponseType.CANCEL:
                 filechooser.destroy()
                 return response
+
     def save_document_as(self, widget, data=None):
         filechooser = Gtk.FileChooserDialog(
             "Save your File",
@@ -500,8 +510,9 @@ class UberwriterWindow(Window):
             filechooser.destroy()
             return 
 
-        text = self.get_text()
-                
+        # Converting text to bytes for python 3
+        text = bytes(self.get_text(), "utf-8")
+
         output_dir = os.path.abspath(os.path.join(filename, os.path.pardir))
         
         basename = os.path.basename(filename)
@@ -703,14 +714,70 @@ class UberwriterWindow(Window):
 
         self.present()
 
-    def dark_mode_toggled(self, widget, data=None):
+    def toggle_preview(self, widget, data=None):
         if widget.get_active():
+            # Insert a tag with ID to scroll to
+            self.TextBuffer.insert_at_cursor('<span id="scroll_mark"></span>')
+
+            args = ['pandoc', 
+                    '--from=markdown', 
+                    '--smart', 
+                    '-thtml', 
+                    '--mathjax', 
+                    '-c', helpers.get_media_file('uberwriter.css')]
+            
+            p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+            
+            text = bytes(self.get_text(), "utf-8")
+            output = p.communicate(text)[0]
+
+            # Load in Webview and scroll to #ID
+            self.webview = WebKit.WebView()
+            self.webview.load_html_string(output.decode("utf-8"), 'file://localhost/' + '#scroll_mark')
+
+            # Delete the cursor-scroll mark again
+            cursor_iter = self.TextBuffer.get_iter_at_mark(self.TextBuffer.get_insert())
+            begin_del = cursor_iter.copy()
+            begin_del.backward_chars(30)
+            self.TextBuffer.delete(begin_del, cursor_iter)
+
+            self.ScrolledWindow.remove(self.TextEditor)
+            self.ScrolledWindow.add(self.webview)
+            self.webview.show()
+
+            # Making the background white
+
+            white_background = helpers.get_media_path('white.png')
+            surface = cairo.ImageSurface.create_from_png(white_background)
+            self.background_pattern = cairo.SurfacePattern(surface)
+            self.background_pattern.set_extend(cairo.EXTEND_REPEAT)
+
+            # This saying that all links will be opened in default browser, but local files are opened in appropriate apps:
+            
+            self.webview.connect("navigation-requested", self.on_click_link)
+        else:
+            # self.PreviewPane.hide()
+            
+            self.ScrolledWindow.remove(self.webview)
+            self.webview.destroy()
+            self.ScrolledWindow.add(self.TextEditor)
+            self.TextEditor.show()
+            surface = cairo.ImageSurface.create_from_png(self.background_image)            
+            self.background_pattern = cairo.SurfacePattern(surface)
+            self.background_pattern.set_extend(cairo.EXTEND_REPEAT)
+
+    def on_click_link(self, view, frame, req, data=None):
+        # This provide ability for self.webview to open links in default browser
+        # uri = req.get_uri()
+        webbrowser.open(req.get_uri())
+        return True # that string is god-damn-important: without it link will be opened in default browser AND also in self.webview
+
+    def dark_mode_toggled(self, widget, data=None):
+        # Save state for saving settings later
+        self.dark_mode = widget.get_active()
+        if self.dark_mode:
             # Dark Mode is on
-            # Hack for fucking unico-shit
-            if Gtk.get_minor_version() == 4:
-                css = open(helpers.get_media_path('style_dark_old.css'), 'r')
-            else:
-                css = open(helpers.get_media_path('style_dark.css'), 'r')
+            css = open(helpers.get_media_path('style_dark.css'), 'rb')
             css_data = css.read()
             css.close()
             self.style_provider.load_from_data(css_data)
@@ -719,10 +786,9 @@ class UberwriterWindow(Window):
 
         else: 
             # Dark mode off
-            css = open(helpers.get_media_path('style.css'), 'r')
+            css = open(helpers.get_media_path('style.css'), 'rb')
             css_data = css.read()
             css.close()
-
             self.style_provider.load_from_data(css_data)
             self.background_image = helpers.get_media_path('bg_light.png')
             self.MarkupBuffer.dark_mode(False)
@@ -744,8 +810,8 @@ class UberwriterWindow(Window):
             if filename.startswith('file://'):
                 filename = filename[7:]
             filename = urllib.parse.unquote_plus(filename)
-            self.filename = filename
-            try:                
+            try:
+                self.filename = filename
                 f = codecs.open(filename, encoding="utf-8", mode='r')
                 self.TextBuffer.set_text(f.read())
                 f.close()
@@ -754,12 +820,11 @@ class UberwriterWindow(Window):
                 self.TextEditor.undos = []
                 self.TextEditor.redos = []
             
-            except:
-                logger.warning("Error Reading File")
+            except Exception as e:
+                logger.warning("Error Reading File: %r" % e)
             self.did_change = False
         else:
             logger.warning("No File arg")
-
 
     def draw_bg(self, widget, context):
         context.set_source(self.background_pattern)
@@ -777,7 +842,7 @@ class UberwriterWindow(Window):
 
             response = advexp.run()
             if response == 1:
-                advexp.advanced_export(self.get_text())
+                advexp.advanced_export(bytes(self.get_text(), "utf-8"))
 
             advexp.destroy()
 
@@ -876,7 +941,6 @@ class UberwriterWindow(Window):
         self.fullscreen_button.set_name('fullscreen_toggle')
         self.focusmode_button.set_name('focus_toggle')
         
-
         # Setup status bar hide after 3 seconds
 
         self.status_bar = builder.get_object('status_bar_box')
@@ -887,23 +951,14 @@ class UberwriterWindow(Window):
         self.connect("motion-notify-event", self.on_motion_notify)
         GObject.timeout_add(3000, self.poll_for_motion)
 
-
         self.accel_group = Gtk.AccelGroup()
         self.add_accel_group(self.accel_group)
-
-        # p = "~/.uberwriter/"
-        #p = os.path.expanduser(p)
-        #self.temp_dir = p     
-        #if not os.path.exists(p):
-        #    os.makedirs(p)
 
         # Setup light background
 
         surface = cairo.ImageSurface.create_from_png(self.background_image)
         self.background_pattern = cairo.SurfacePattern(surface)
         self.background_pattern.set_extend(cairo.EXTEND_REPEAT)
-
-
 
         self.TextEditor = TextEditor()
 
@@ -915,9 +970,10 @@ class UberwriterWindow(Window):
 
         self.TextEditor.show()
 
-        self.ScrolledWindow = builder.get_object('scrolledwindow1')
-
+        self.ScrolledWindow = builder.get_object('editor_scrolledwindow')
         self.ScrolledWindow.add(self.TextEditor)
+        
+        self.PreviewPane = builder.get_object('preview_scrolledwindow')
 
         pangoFont = Pango.FontDescription("Ubuntu Mono 15px")
 
@@ -1012,28 +1068,67 @@ class UberwriterWindow(Window):
         if self.spellcheck:
             self.SpellChecker.append_filter('[#*]+', SpellChecker.FILTER_WORD)
 
-
-        # Open file from commandline
-
         self.did_change = False
-
 
         # Window resize
         self.connect("configure-event", self.window_resize)
-
-        # Window destroyed??
         self.connect("delete-event", self.on_delete_called)
-    
+        self.load_settings(builder)
+
     def on_delete_called(self, widget, data=None):
         """Called when the TexteditorWindow is closed.""" 
-        logger.info('delete called')       
+        logger.info('delete called')
         if self.check_change() == Gtk.ResponseType.CANCEL:
             return True
         return False
- 
+
+    def on_mnu_close_activate(self, widget, data=None):
+        """
+            Signal handler for closing the UberwriterWindow.
+            Overriden from parent Window Class 
+        """
+        if self.on_delete_called(self): #Really destroy?
+            return 
+        else: 
+            self.destroy()        
+        return 
+
     def on_destroy(self, widget, data=None):
         """Called when the TexteditorWindow is closed."""
         # Clean up code for saving application state should be added here.
         self.window_close(widget)        
+        self.save_settings()
         Gtk.main_quit()
 
+    def save_settings(self):
+        
+        if not os.path.exists(CONFIG_PATH):
+            try:
+                os.makedirs(CONFIG_PATH)
+            except Exception as e:
+                log.debug("Failed to make uberwriter config path in ~/.config/uberwriter. Error: %r" % e)
+        try:
+            settings = dict()
+            settings["dark_mode"] = self.dark_mode
+            settings["spellcheck"] = self.SpellChecker.enabled
+            f = open(CONFIG_PATH + "settings.pickle", "wb+")
+            pickle.dump(settings, f)
+            f.close()
+            logger.debug("Saved settings: %r" % settings)
+        except Exception as e:
+            logger.debug("Error writing settings file to disk. Error: %r" % e)
+
+    def load_settings(self, builder):
+        dark_mode_button = builder.get_object("dark_mode")
+        spellcheck_button = builder.get_object("disable_spellcheck")        
+        try:
+            f = open(CONFIG_PATH + "settings.pickle", "rb")
+            settings = pickle.load(f)
+            f.close()
+            self.dark_mode = settings['dark_mode']
+            dark_mode_button.set_active(settings['dark_mode'])
+            spellcheck_button.set_active(settings['spellcheck'])
+            logger.debug("loaded settings: %r" % settings)
+        except Exception as e:
+            logger.debug("(First Run?) Error loading settings from home dir. Error: %r", e)
+        return 1

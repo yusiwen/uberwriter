@@ -17,6 +17,7 @@
 import optparse
 
 import locale
+import os
 from locale import gettext as _
 locale.textdomain('uberwriter')
 
