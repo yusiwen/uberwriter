@@ -19,7 +19,6 @@ import subprocess
 import os
 import codecs
 import webbrowser
-import apt
 import urllib
 import pickle
 
@@ -51,6 +50,12 @@ try:
     from gtkspellcheck import SpellChecker
 except ImportError:
     from uberwriter_lib.gtkspellcheck import SpellChecker
+
+try:
+    import apt
+    APT_ENABLED = True
+except:
+    APT_ENABLED = False
 
 from uberwriter_lib import Window
 from uberwriter_lib import helpers
@@ -543,7 +548,7 @@ class UberwriterWindow(Window):
         self.export("html")
 
     def export_as_pdf(self, widget, data=None):
-        if self.texlive_installed == False:
+        if self.texlive_installed == False and APT_ENABLED:
             try:
                 cache = apt.Cache()
                 inst = cache["texlive"].is_installed

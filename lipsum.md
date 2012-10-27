@@ -10,6 +10,12 @@ Lorem ipsum dolor sit amet, exerci mucius perpetua vix at, quo persius nostrum s
 
 Ius ex timeam appetere[^1], mea id sumo partiendo, qui at viris patrioque gloriatur. Sit ferri oratio tamquam eu. Persius senserit ei his, an nec mundi ponderum dissentias. Placerat erroribus pri in, his te dolor diceret.
 
+```javascript
+function(3) {
+	exit();
+}
+```
+
 In eos civibus tincidunt, paulo voluptatibus cum ei. Eu mei reprehendunt necessitatibus, ea mundi sententiae vix. Mel dico impetus te, pro an nihil epicurei phaedrum. Nulla labitur meliore no vel, soleat facilisi pro te, et aliquam suscipiantur reprehendunt vis. Duo minim explicari ei, lobortis scripserit ex eam. Eum ea nobis latine, ad mazim latine tritani cum, homero eruditi vivendo ex nam.
 
 Esse inermis pri et, sea pericula petentium te, eum urbanitas signiferumque et. Tantas graece ad sed, pertinax erroribus no mei. Ei elitr melius antiopam est. In ius cetero inermis electram. Quot aliquid dolorem ne eos.
