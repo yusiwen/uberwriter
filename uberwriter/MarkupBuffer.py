@@ -22,8 +22,8 @@ from gi.repository import Pango # pylint: disable=E0611
 class MarkupBuffer():
  
     def __init__(self, Parent, TextBuffer, base_leftmargin):
-    	self.parent = Parent
-    	self.TextBuffer = TextBuffer
+        self.parent = Parent
+        self.TextBuffer = TextBuffer
         
         # Styles 
 
@@ -43,7 +43,7 @@ class MarkupBuffer():
         self.green_text = self.TextBuffer.create_tag(
             "greentext",
             foreground="#00364C"
-           	)
+            )
 
         self.grayfont = self.TextBuffer.create_tag('graytag', 
             foreground="gray")
@@ -102,8 +102,8 @@ class MarkupBuffer():
         self.table_env.set_property('wrap-mode', Gtk.WrapMode.NONE)
 
     regex  = {
-        "ITALIC": re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ", re.UNICODE),     # *asdasd* // _asdasd asd asd_ 
-        "STRONG": re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ", re.UNICODE),     # **as das** // __asdasdasd asd ad a__
+        "ITALIC": re.compile(r"\*\w(.+?)\*| _\w(.+?)_ ", re.UNICODE),   # *asdasd* // _asdasd asd asd_ 
+        "STRONG": re.compile(r"\*{2}\w(.+?)\*{2}| [_]{2}\w(.+?)[_]{2} ", re.UNICODE),   # **as das** // __asdasdasd asd ad a__
         "STRONGITALIC": re.compile(r"\*{3}\w(.+?)\*{3}| [_]{3}\w(.+?)[_]{3} "),
         "BLOCKQUOTE": re.compile(r"^([\>]+ )", re.MULTILINE),
         "STRIKETHROUGH": re.compile(r"~~[^ `~\n].+?~~"),
@@ -112,9 +112,10 @@ class MarkupBuffer():
         "INDENTEDLIST": re.compile(r"^(\t{1,6})((\d|[a-z]|\#)+[\.\)]|[\-\*\+]) ", re.MULTILINE),
         "HEADINDICATOR": re.compile(r"^(#{1,6}) ", re.MULTILINE),
         "HEADLINE": re.compile(r"^(#{1,6} [^\n]+)", re.MULTILINE),
-        "MATH": re.compile(r"\${1,2}[^` ](.+?)[^`\\ ]\${1,2}"),
+        "MATH": re.compile(r"[\$]{1,2}([^` ].+?[^`\\ ])[\$]{1,2}"),
         "HORIZONTALRULE": re.compile(r"(\n\n[\*\-]{3,}\n)"),
-        "TABLE": re.compile(r"^:table:\n(.+?)\n:endtable:", re.DOTALL)
+        "TABLE": re.compile(r"^:table:\n(.+?)\n:endtable:", re.DOTALL),
+        "LINK": re.compile(r"\(http(.+?)\)")
     }
 
     def markup_buffer(self, mode=0):
@@ -137,13 +138,12 @@ class MarkupBuffer():
             context_end.forward_lines(2)
             context_offset = context_start.get_offset()
 
-    	text = buf.get_slice(context_start, context_end, False).decode("utf-8")
-        text = unicode(text)
+        text = buf.get_slice(context_start, context_end, False)
 
         self.TextBuffer.remove_tag(self.italic, context_start, context_end)
 
         matches = re.finditer(self.regex["ITALIC"], text)
-    	for match in matches: 
+        for match in matches: 
             startIter = buf.get_iter_at_offset(context_offset + match.start())
             endIter = buf.get_iter_at_offset(context_offset + match.end())
             self.TextBuffer.apply_tag(self.italic, startIter, endIter)
@@ -268,21 +268,30 @@ class MarkupBuffer():
         end_sentence = cursor_iter.copy()
         end_sentence.forward_sentence_end()
         
+        end_line = cursor_iter.copy()
+        end_line.forward_to_line_end()
+        
+        comp = end_line.compare(end_sentence)
+        
+        if comp == 0:
+            end_sentence = end_line
+
         start_sentence = cursor_iter.copy()
         start_sentence.backward_sentence_start()
         
+
         self.TextBuffer.apply_tag(self.blackfont, 
             start_sentence, end_sentence)
 
     def recalculate(self, lm):
-    	for i in range(0,6):
-    	    name = "rev_indent_left" + str(i)
-    	    self.rev_leftmargin[i].set_property("left-margin", (lm-10) - 10*(i+1))
-    	    self.rev_leftmargin[i].set_property("indent", - 10*(i+1) - 10)
+        for i in range(0,6):
+           name = "rev_indent_left" + str(i)
+           self.rev_leftmargin[i].set_property("left-margin", (lm-10) - 10*(i+1))
+           self.rev_leftmargin[i].set_property("indent", - 10*(i+1) - 10)
 
-    	for i in range(0,6):
-    	    self.leftmargin[i].set_property("left-margin", (lm-10) + 10 + 10 * (i+1))
-    	    self.leftmargin[i].set_property("indent", - 9*(i+1) - 10) ## Was - 10 ...
+        for i in range(0,6):
+           self.leftmargin[i].set_property("left-margin", (lm-10) + 10 + 10 * (i+1))
+           self.leftmargin[i].set_property("indent", - 9*(i+1) - 10) ## Was - 10 ...
 
     def dark_mode(self, active = False):
         if active:

@@ -51,7 +51,7 @@ try:
     from gi.repository import Gdk
     import re
 except:
-    print "couldn't load depencies"
+    print("couldn't load depencies")
 
 
 class TextEditor( Gtk.TextView ):
@@ -397,7 +397,7 @@ class TestWindow(Gtk.Window):
         redo_button.show()
         windowbox.pack_start(redo_button, False, False, 0)
 
-        print self.editor.text
+        print(self.editor.text)
 
 
 if __name__== "__main__":

@@ -52,4 +52,4 @@ __metadata__ = {'__version__' : __version__,
                 '__desc_long__' : __desc_long__}
 
 # Should only import Public Objects
-from locales import *
+from .locales import *

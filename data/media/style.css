@@ -92,8 +92,18 @@
   color: @selected_fg_color;
 }
 
+#UberwriterWindow GtkPaned, #UberwriterWindow GtkScrolledWindow,
+#UberwriterWindow GtkScrolledWindow:backdrop {
+  background-color: transparent;
+  background-clip: initial;
+  background-origin: initial;
+  background-size: initial;
+  background-position: initial;
+  background-repeat: initial;
+  background-image: initial;
+}
 
-#status_bar_box GtkLabel{
+#status_bar_box GtkLabel {
   color: #666;
   transition: 500ms ease-in-out;
 }
@@ -122,7 +132,7 @@
   padding: 3px 5px;
   
   -GtkButton-child-displacement-y: 0px;
-  -GtkButton-child-displacement-x: 0; 
+  -GtkButton-child-displacement-x: 0px; 
   -GtkButton-default-border: 0;
   -GtkButton-image-spacing: 5px;
   -GtkButton-interior-focus: false;
@@ -145,7 +155,7 @@
   color: #EEE;
   background-color: #EEE;
   background-image: none;
-  box-shadow: 0 0 2 rgba(0,0,0,0.4)
+  box-shadow: 0 0 2px rgba(0,0,0,0.4)
 }
 
 #status_bar_box GtkLabel:insensitive {
@@ -168,4 +178,12 @@
   background: rgba(255,255,255,0);
   border-color: rgba(255,255,255,0);
   transition: 500ms ease-in-out;
+}
+
+#PreviewMenuItem GtkImage {
+  border-radius: 2px;
+  color: #666;
+  padding: 3px 5px;
+  border: none;
+  background: #FFF;
 }

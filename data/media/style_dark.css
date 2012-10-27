@@ -92,6 +92,15 @@
   color: @selected_fg_color;
 }
 
+#UberwriterWindow GtkPaned {
+  background-color: transparent;
+  background-clip: initial;
+  background-origin: initial;
+  background-size: initial;
+  background-position: initial;
+  background-repeat: initial;
+  background-image: initial;
+}
 
 #status_bar_box GtkLabel{
   color: #666;
