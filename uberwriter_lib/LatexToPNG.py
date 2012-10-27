@@ -56,7 +56,6 @@ class LatexToPNG():
 		tex = '%s\n%s\n%s\n' % (self.TEX_HEADER, tex.strip(), self.TEX_FOOTER)
 
 		open(texfile, 'w').write(tex)
-		print(texfile)
 		saved_pwd = os.getcwd()
 
 		os.chdir(outdir)

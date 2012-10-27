@@ -565,17 +565,16 @@ class UberwriterWindow(Window):
         self.export("pdf")
 
     def copy_html_to_clipboard(self, widget, date=None):
-        # TODO connect to item in Menubar, and make new pandoc template for 
-        # only HTML, no headers etc.
-        
+        """Copies only html without headers etc. to Clipboard"""
+
         args = ['pandoc', '--from=markdown', '--smart', '-thtml']
         p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-        
-        text = self.get_text()
+
+        text = bytes(self.get_text(), "utf-8")
         output = p.communicate(text)[0]
                 
         cb = Gtk.Clipboard.get(Gdk.SELECTION_CLIPBOARD)
-        cb.set_text(output, -1)
+        cb.set_text(output.decode("utf-8"), -1)
         cb.store()
 
     def open_document(self, widget):
@@ -751,13 +750,10 @@ class UberwriterWindow(Window):
             surface = cairo.ImageSurface.create_from_png(white_background)
             self.background_pattern = cairo.SurfacePattern(surface)
             self.background_pattern.set_extend(cairo.EXTEND_REPEAT)
-
             # This saying that all links will be opened in default browser, but local files are opened in appropriate apps:
             
             self.webview.connect("navigation-requested", self.on_click_link)
         else:
-            # self.PreviewPane.hide()
-            
             self.ScrolledWindow.remove(self.webview)
             self.webview.destroy()
             self.ScrolledWindow.add(self.TextEditor)
@@ -765,10 +761,10 @@ class UberwriterWindow(Window):
             surface = cairo.ImageSurface.create_from_png(self.background_image)            
             self.background_pattern = cairo.SurfacePattern(surface)
             self.background_pattern.set_extend(cairo.EXTEND_REPEAT)
+        self.queue_draw()
 
     def on_click_link(self, view, frame, req, data=None):
         # This provide ability for self.webview to open links in default browser
-        # uri = req.get_uri()
         webbrowser.open(req.get_uri())
         return True # that string is god-damn-important: without it link will be opened in default browser AND also in self.webview
 
@@ -799,10 +795,10 @@ class UberwriterWindow(Window):
 
         Gtk.StyleContext.add_provider_for_screen(
             Gdk.Screen.get_default(), self.style_provider,     
-            Gtk.STYLE_PROVIDER_PRIORITY_USER
+            Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
         )
-        (w, h) = self.get_size()
-        self.resize(w+1, h+1)
+        # Redraw contents of window (self)
+        self.queue_draw()
 
     def load_file(self, filename = None):
         """Open File from command line"""
@@ -1041,7 +1037,7 @@ class UberwriterWindow(Window):
         self.TextEditor.connect('backspace', self.backspace)
 
         self.TextBuffer.connect('paste-done', self.paste_done)
-
+        # self.connect('key-press-event', self.alt_mod)
 
         # Events for Typewriter mode
         self.TextBuffer.connect_after('mark-set', self.after_mark_set)
@@ -1074,6 +1070,12 @@ class UberwriterWindow(Window):
         self.connect("configure-event", self.window_resize)
         self.connect("delete-event", self.on_delete_called)
         self.load_settings(builder)
+
+    def alt_mod(self, widget, event, data=None):
+        # TODO: Click and open when alt is pressed
+        if event.state & Gdk.ModifierType.MOD2_MASK:
+            logger.info("Alt pressed")
+        return
 
     def on_delete_called(self, widget, data=None):
         """Called when the TexteditorWindow is closed.""" 

@@ -205,6 +205,8 @@ class UberwriterInlinePreview():
                             result = result[:-1]
                     else: 
                         result = _("No matching footnote found")
+                    label.set_max_width_chars(40)
+                    label.set_line_wrap(True)
                     label.set_text(result)
                     label.show()
                     item.add(label)
