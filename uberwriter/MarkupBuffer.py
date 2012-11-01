@@ -38,6 +38,10 @@ class MarkupBuffer():
             weight=Pango.Weight.BOLD,
             style =Pango.Style.ITALIC)
 
+        self.headline_two = self.TextBuffer.create_tag("headline_two", 
+            weight=Pango.Weight.BOLD,
+            style =Pango.Style.NORMAL)
+
         self.normal_indent = self.TextBuffer.create_tag('normal_indent', indent=100)
         
         self.green_text = self.TextBuffer.create_tag(
@@ -112,6 +116,7 @@ class MarkupBuffer():
         "INDENTEDLIST": re.compile(r"^(\t{1,6})((\d|[a-z]|\#)+[\.\)]|[\-\*\+]) ", re.MULTILINE),
         "HEADINDICATOR": re.compile(r"^(#{1,6}) ", re.MULTILINE),
         "HEADLINE": re.compile(r"^(#{1,6} [^\n]+)", re.MULTILINE),
+        "HEADLINE_TWO": re.compile(r"^\w.+\n[\=\-]{3,}", re.MULTILINE),
         "MATH": re.compile(r"[\$]{1,2}([^` ].+?[^`\\ ])[\$]{1,2}"),
         "HORIZONTALRULE": re.compile(r"(\n\n[\*\-]{3,}\n)"),
         "TABLE": re.compile(r"^:table:\n(.+?)\n:endtable:", re.DOTALL),
@@ -243,6 +248,13 @@ class MarkupBuffer():
             self.TextBuffer.apply_tag(self.emph, startIter, endIter)
         
 
+        matches = re.finditer(self.regex["HEADLINE_TWO"], text)
+        self.TextBuffer.remove_tag(self.headline_two, rulecontext, context_end)
+        for match in matches:
+            startIter = buf.get_iter_at_offset(context_offset + match.start())
+            endIter = buf.get_iter_at_offset(context_offset + match.end())
+            self.TextBuffer.apply_tag(self.headline_two, startIter, endIter)
+
         matches = re.finditer(self.regex["TABLE"], text) 
         for match in matches:
             startIter = buf.get_iter_at_offset(context_offset + match.start())
@@ -272,8 +284,8 @@ class MarkupBuffer():
         end_line.forward_to_line_end()
         
         comp = end_line.compare(end_sentence)
-        
-        if comp == 0:
+        # if comp < 0, end_line is BEFORE end_sentence
+        if comp <= 0:
             end_sentence = end_line
 
         start_sentence = cursor_iter.copy()
