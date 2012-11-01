@@ -1,10 +1,10 @@
 ### This is Lorem Ipsum
 
-$1 12+2=14$ Testing more input whatt.
+$\frac{1}{2} + 1 12+2=14$ Testing more input whatt.
 
 [](http://www.wolfvollprecht.de/)
-
-![Testimage](file:///home/wolf/logos.png)
+[](http://google.com)
+![Tolles Bild](file:///home/wolf/Pictures/2012/10/03/IMG_0322.JPG)
 
 Lorem ipsum dolor sit amet, exerci mucius perpetua vix at, quo persius nostrum singulis ei, integre delicata ei vel. Cu eum dicant copiosae philosophia, nec ad vide insolens. His propriae pericula periculis at, mei et aeque commune efficiendi, eum ea quis consetetur. Ius ut iuvaret denique. Mei ea odio legere suscipit.
 

@@ -27,7 +27,7 @@ locale.textdomain('uberwriter')
 
 import mimetypes
 
-from gi.repository import Gtk, Gdk, GObject, WebKit# pylint: disable=E0611
+from gi.repository import Gtk, Gdk, GObject, WebKit # pylint: disable=E0611
 from gi.repository import Pango # pylint: disable=E0611
 
 import cairo
@@ -655,6 +655,9 @@ class UberwriterWindow(Window):
     def menu_activate_fullscreen(self, widget):
         self.fullscreen_button.emit('activate')
 
+    def menu_activate_preview(self, widget):
+        self.preview_button.emit('activate')
+
     # Not added as menu button as of now. Standard is typewriter active.
     def toggle_typewriter(self, widget, data=None):
         self.typewriter_active = widget.get_active()
@@ -806,12 +809,13 @@ class UberwriterWindow(Window):
         self.queue_draw()
 
     def load_file(self, filename = None):
-        """Open File from command line"""
+        """Open File from command line or open / open recent etc."""
         if filename:
             if filename.startswith('file://'):
                 filename = filename[7:]
             filename = urllib.parse.unquote_plus(filename)
             try:
+                self.preview_button.set_active(False)
                 self.filename = filename
                 f = codecs.open(filename, encoding="utf-8", mode='r')
                 self.TextBuffer.set_text(f.read())
@@ -831,11 +835,18 @@ class UberwriterWindow(Window):
         context.set_source(self.background_pattern)
         context.paint()
 
+    # Help Menu
     def open_launchpad_translation(self, widget, data = None):
         webbrowser.open("https://translations.launchpad.net/uberwriter")
 
     def open_launchpad_help(self, widget, data = None):
         webbrowser.open("https://answers.launchpad.net/uberwriter")
+
+    def open_pandoc_markdown(self, widget, data=None):
+        webbrowser.open("http://johnmacfarlane.net/pandoc/README.html#pandocs-markdown")
+
+    def open_uberwriter_markdown(self, widget, data=None):
+        self.load_file(helpers.get_media_file('uberwriter_markdown.md'))
 
     def open_advanced_export(self, widget, data=None):
         if self.UberwriterAdvancedExportDialog is not None:
@@ -937,10 +948,15 @@ class UberwriterWindow(Window):
         self.word_count = builder.get_object('word_count')
         self.char_count = builder.get_object('char_count')
         self.menubar = builder.get_object('menubar1')
+        
+        # Wire up buttons
         self.fullscreen_button = builder.get_object('fullscreen_toggle')
         self.focusmode_button = builder.get_object('focus_toggle')
+        self.preview_button = builder.get_object('preview_toggle')
+
         self.fullscreen_button.set_name('fullscreen_toggle')
         self.focusmode_button.set_name('focus_toggle')
+        self.preview_button.set_name('preview_toggle')
         
         # Setup status bar hide after 3 seconds
 

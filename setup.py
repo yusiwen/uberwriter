@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- Mode: Python; coding: utf-8; indent-tabs-mode: nil; tab-width: 4 -*-
 ### BEGIN LICENSE
 # Copyright (C) 2012, Wolf Vollprecht <w.vollprecht@gmail.com>
@@ -32,8 +32,8 @@ def update_config(libdir, values = {}):
     filename = os.path.join(libdir, 'uberwriter_lib/uberwriterconfig.py')
     oldvalues = {}
     try:
-        fin = file(filename, 'r')
-        fout = file(filename + '.new', 'w')
+        fin = open(filename, 'r')
+        fout = open(filename + '.new', 'w')
 
         for line in fin:
             fields = line.split(' = ') # Separate variable from value
@@ -46,7 +46,7 @@ def update_config(libdir, values = {}):
         fout.close()
         fin.close()
         os.rename(fout.name, fin.name)
-    except (OSError, IOError), e:
+    except (OSError, IOError) as e:
         print ("ERROR: Can't find %s" % filename)
         sys.exit(1)
     return oldvalues
@@ -83,8 +83,8 @@ def move_desktop_file(root, target_data, prefix):
 def update_desktop_file(filename, target_pkgdata, target_scripts):
 
     try:
-        fin = file(filename, 'r')
-        fout = file(filename + '.new', 'w')
+        fin = open(filename, 'r')
+        fout = open(filename + '.new', 'w')
 
         for line in fin:
             if 'Icon=' in line:
@@ -100,7 +100,7 @@ def update_desktop_file(filename, target_pkgdata, target_scripts):
         fout.close()
         fin.close()
         os.rename(fout.name, fin.name)
-    except (OSError, IOError), e:
+    except (OSError, IOError) as e:
         print ("ERROR: Can't find %s" % filename)
         sys.exit(1)
 

@@ -20,6 +20,8 @@ import urllib
 from urllib.error import URLError, HTTPError
 import webbrowser
 import locale
+import subprocess
+import tempfile
 
 import threading
 
@@ -34,7 +36,13 @@ locale.textdomain('uberwriter')
 import logging
 logger = logging.getLogger('uberwriter')
 
-GObject.threads_init()
+GObject.threads_init() # Still needed?
+
+# TODO:
+# - Don't insert a span with id, it breaks the text to often
+#   Would be better to search for the nearest title and generate
+#   A jumping URL from that (for preview)
+#   Also, after going to preview, set cursor back to where it was
 
 def check_url(url, item, spinner):
     logger.debug("thread started, checking url")
@@ -54,6 +62,32 @@ def check_url(url, item, spinner):
     logger.debug("Response: %s" % text)
     spinner.destroy()
     item.set_label(text)
+
+def get_web_thumbnail(url, item, spinner):
+    logger.debug("thread started, generating thumb")
+    
+    error = False
+    filename = tempfile.mktemp(suffix='.png')
+    thumb_size = '256' # size can only be 32, 64, 96, 128 or 256!
+    args = ['gnome-web-photo', '--mode=thumbnail', '-s', thumb_size, url, filename]
+    p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+    output = p.communicate()[0]
+
+    image = Gtk.Image.new_from_file(filename)
+    image.show()
+
+    
+    # if not error:
+    #    if (response.code / 100) >= 4:
+    #        logger.debug("Website not available")
+    #        text = _("Website is not available")
+    #    else:
+    #        text = _("Website is available")
+    
+    spinner.destroy()
+    item.add(image)
+    item.show()
+
 
 class UberwriterInlinePreview():
 
@@ -109,11 +143,19 @@ class UberwriterInlinePreview():
         for match in matches:
             logger.debug(match.group(1))
             if match.start() < line_offset and match.end() > line_offset:
-                latex_image = self.LatexConverter.generatepng(match.group(1))
-                image = Gtk.Image.new_from_file(latex_image)
-                image.show()
-                item.add(image)
-                item.set_property('width-request', 50)
+                success, result = self.LatexConverter.generatepng(match.group(1))
+                if success:
+                    image = Gtk.Image.new_from_file(result)
+                    image.show()
+                    item.add(image)
+                    item.set_property('width-request', 50)
+                else: 
+                    label = Gtk.Label()
+                    msg = 'Formula looks incorrect:\n' + result
+                    label.set_alignment(0.0, 0.5)
+                    label.set_text(msg)
+                    label.show()
+                    item.add(label)
                 item.show()
                 menu.prepend(separator)
                 separator.show()
@@ -123,6 +165,7 @@ class UberwriterInlinePreview():
                 break
 
         if not found_match:
+            # Links
             matches = re.finditer(link, text)
             for match in matches:
                 if match.start() < line_offset and match.end() > line_offset:
@@ -130,17 +173,6 @@ class UberwriterInlinePreview():
                     
                     item.connect("activate", lambda w: webbrowser.open(text))                    
 
-                    # spinner = Gtk.Spinner()
-
-                    # # get off brackets and other text
-                    # # print text
-                    # url = urllib.parse.urlparse(text)
-                    # # netloc = url.netloc
-                    # # path = url.path
-                    # conn = http.client.HTTPConnection(url.netloc)
-                    # conn.request("HEAD", url.path)
-                    # code = conn.getresponse().status
-                    # # print code
                     logger.debug(text)
 
                     statusitem = Gtk.MenuItem.new()
@@ -152,18 +184,34 @@ class UberwriterInlinePreview():
                     statusitem.add(spinner)
                     spinner.show()
                     
-                    thread = threading.Thread(target=check_url, args=(text, statusitem, spinner))
+                    thread = threading.Thread(target=check_url, 
+                        args=(text, statusitem, spinner))
                     thread.start()
+
+                    webphoto_item = Gtk.MenuItem.new()
+                    webphoto_item.show()
+                    spinner_2 = Gtk.Spinner.new()
+                    spinner_2.start()
+                    webphoto_item.add(spinner_2)
+                    spinner_2.show()
+
+                    thread_image = threading.Thread(target=get_web_thumbnail, 
+                        args=(text, webphoto_item, spinner_2))
+
+                    thread_image.start()
 
                     item.set_label(_("Open Link in Webbrowser"))
                     item.show()
-                    # # print menu, item
-                    # conn.close()
+    
                     menu.prepend(separator)
                     separator.show()
+
+                    menu.prepend(webphoto_item)
+                    menu.prepend(statusitem)
                     menu.prepend(item)
                     menu.show()
-                    menu.prepend(statusitem)
+
+
                     found_match = True
                     break
         
@@ -198,6 +246,7 @@ class UberwriterInlinePreview():
                     start, end = self.TextBuffer.get_bounds()
                     fn_match = re.search(footnote_match, self.TextBuffer.get_text(start, end, False))
                     label = Gtk.Label()
+                    label.set_alignment(0.0, 0.5)
                     logger.debug(fn_match)
                     if fn_match:
                         result = re.sub(replace, "", fn_match.group(1))
@@ -211,8 +260,7 @@ class UberwriterInlinePreview():
                     label.show()
                     item.add(label)
                     item.show()
-                    # # print menu, item
-                    # conn.close()
+
                     menu.prepend(separator)
                     separator.show()
                     menu.prepend(item)

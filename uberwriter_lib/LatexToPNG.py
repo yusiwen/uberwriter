@@ -1,3 +1,4 @@
+# -*- Mode: Python; coding: utf-8; indent-tabs-mode: nil; tab-width: 4 -*-
 """
 Based on latex2png.py from Stuart Rackham
 
@@ -15,7 +16,7 @@ COPYING
 	granted under the terms of the MIT License.
 """
 
-import os, sys, tempfile, hashlib
+import os, sys, tempfile, subprocess
 
 class LatexToPNG():
 
@@ -35,18 +36,10 @@ class LatexToPNG():
 	def __init__(self):
 		self.temp_result = tempfile.NamedTemporaryFile(suffix='.png')
 
-	def run(self, cmd):
-		cmd += ' >/dev/null 2>&1'
-		if os.system(cmd):
-			raise 'failed command: %s' % cmd
-
-
 	def latex2png(self, tex, outfile, dpi, modified):
 		'''Convert LaTeX input file infile to PNG file named outfile.'''
 		outfile = os.path.abspath(outfile)
 		outdir = os.path.dirname(outfile)
-		#if not os.path.isdir(outdir):
-		#	raise EApp, 'directory does not exist: %s' % outdir
 		texfile = tempfile.mktemp(suffix='.tex', dir=os.path.dirname(outfile))
 		basefile = os.path.splitext(texfile)[0]
 		dvifile = basefile + '.dvi'
@@ -59,24 +52,57 @@ class LatexToPNG():
 		saved_pwd = os.getcwd()
 
 		os.chdir(outdir)
-		try:
-			# Compile LaTeX document to DVI file.
-			self.run('latex %s' % texfile)
+		
+		args = ['latex', '-halt-on-error', texfile]
+		p = subprocess.Popen(args, 
+			stderr=subprocess.STDOUT, 
+			stdout=subprocess.PIPE)
+
+		output = p.stdout
+		output_lines = output.readlines()
+		if os.path.isfile(dvifile): # DVI File exists
 			# Convert DVI file to PNG.
-			cmd = 'dvipng'
-			if dpi:
-				cmd += ' -D %s' % dpi
-			cmd += ' -T tight -x 1000 -z 9 -bg Transparent -o "%s" "%s"' \
-					% (outfile,dvifile)
-			self.run(cmd)
-		finally:
-			os.chdir(saved_pwd)
-		for f in temps:
-			if os.path.isfile(f):
-				os.remove(f)
+			args = ['dvipng', 
+					'-D', str(dpi), 
+					'-T', 'tight', 
+					'-x', '1000', 
+					'-z', '9', 
+					'-bg', 'Transparent', 
+					'-o', outfile, 
+					dvifile]
+
+			p = subprocess.Popen(args)
+			p.communicate()
+			
+		else:
+			self.clean_up(temps)
+			'''
+			Errors in Latex output start with "! "
+			Stripping exclamation marks and superflous newlines
+			and telling the user what he's done wrong.
+			'''
+			i = []
+			error = ""
+			for line in output_lines:
+				line = line.decode('utf-8')
+				if line.startswith("!"):
+					error += line[2:] # removing "! "
+			if error.endswith("\n"):
+				error = error[:-1]
+			raise Exception(error)
 
 	def generatepng(self, formula):
-		self.temp_result = tempfile.NamedTemporaryFile(suffix='.png')
-		formula = "$" + formula + "$"
-		self.latex2png(formula, self.temp_result.name, 300, False)
-		return self.temp_result.name
+		try:	
+			self.temp_result = tempfile.NamedTemporaryFile(suffix='.png')
+			formula = "$" + formula + "$"
+			self.latex2png(formula, self.temp_result.name, 300, False)
+			return (True, self.temp_result.name)
+
+		except Exception as e:
+			self.temp_result.close()
+			return (False, e.args[0])
+
+	def clean_up(self, files):
+		for f in files:
+			if os.path.isfile(f):
+				os.remove(f)		
