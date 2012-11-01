@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-01 22:15+0100\n"
+"POT-Creation-Date: 2012-11-01 22:39+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,34 +41,12 @@ msgstr ""
 msgid "Suggestions"
 msgstr ""
 
-#: ../uberwriter.desktop.in.h:1 ../h/data/ui/UberwriterWindow.ui.h:1
-#: ../h/uberwriter.desktop.in.h:1
+#: ../uberwriter.desktop.in.h:1
 msgid "UberWriter"
 msgstr ""
 
 #: ../uberwriter.desktop.in.h:2
 msgid "UberWriter, a simple and distraction free Markdown Editor"
-msgstr ""
-
-#: ../h/data/ui/AboutUberwriterDialog.ui.h:1
-msgid ""
-"# Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>\n"
-"# This program is free software: you can redistribute it and/or modify it \n"
-"# under the terms of the GNU General Public License version 3, as "
-"published \n"
-"# by the Free Software Foundation.\n"
-"# \n"
-"# This program is distributed in the hope that it will be useful, but \n"
-"# WITHOUT ANY WARRANTY; without even the implied warranties of \n"
-"# MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR \n"
-"# PURPOSE.  See the GNU General Public License for more details.\n"
-"# \n"
-"# You should have received a copy of the GNU General Public License along \n"
-"# with this program.  If not, see <http://www.gnu.org/licenses/>.\n"
-msgstr ""
-
-#: ../h/data/ui/AboutUberwriterDialog.ui.h:14
-msgid "Copyright (C) 2012 <Wolf Vollprecht> <w.vollprecht@googlemail.com>"
 msgstr ""
 
 #: ../uberwriter/UberwriterWindow.py:418
@@ -138,7 +116,7 @@ msgstr ""
 msgid "No matching footnote found"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:1 ../h/data/ui/UberwriterWindow.ui.h:2
+#: ../data/ui/UberwriterWindow.ui.h:1
 msgid "_File"
 msgstr ""
 
@@ -158,11 +136,11 @@ msgstr ""
 msgid "Copy raw HTML to clipboard"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:6 ../h/data/ui/UberwriterWindow.ui.h:5
+#: ../data/ui/UberwriterWindow.ui.h:6
 msgid "_Edit"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:7 ../h/data/ui/UberwriterWindow.ui.h:6
+#: ../data/ui/UberwriterWindow.ui.h:7
 msgid "_View"
 msgstr ""
 
@@ -202,11 +180,11 @@ msgstr ""
 msgid "Heading"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:17 ../h/data/ui/UberwriterWindow.ui.h:7
+#: ../data/ui/UberwriterWindow.ui.h:17
 msgid "_Help"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:18 ../h/data/ui/UberwriterWindow.ui.h:8
+#: ../data/ui/UberwriterWindow.ui.h:18
 msgid "Contents"
 msgstr ""
 
@@ -226,7 +204,7 @@ msgstr ""
 msgid "Translate This Application..."
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:23 ../h/data/ui/UberwriterWindow.ui.h:9
+#: ../data/ui/UberwriterWindow.ui.h:23
 msgid "Focus Mode"
 msgstr ""
 
@@ -234,7 +212,7 @@ msgstr ""
 msgid "Go into focus mode"
 msgstr ""
 
-#: ../data/ui/UberwriterWindow.ui.h:25 ../h/data/ui/UberwriterWindow.ui.h:10
+#: ../data/ui/UberwriterWindow.ui.h:25
 msgid "Fullscreen"
 msgstr ""
 
@@ -254,7 +232,7 @@ msgstr ""
 msgid "Characters:"
 msgstr ""
 
-#: ../uberwriter/__init__.py:35 ../h/uberwriter/__init__.py:34
+#: ../uberwriter/__init__.py:35
 msgid "Show debug messages (-vv debugs uberwriter_lib also)"
 msgstr ""
 
@@ -402,24 +380,4 @@ msgstr ""
 
 #: ../data/ui/AboutUberwriterDialog.ui.h:14
 msgid "Copyright (C) 2012, Wolf Vollprecht <w.vollprecht@gmail.com>"
-msgstr ""
-
-#: ../h/data/ui/UberwriterWindow.ui.h:3
-msgid "Export as RTF"
-msgstr ""
-
-#: ../h/data/ui/UberwriterWindow.ui.h:4
-msgid "_Recent Files"
-msgstr ""
-
-#: ../h/data/ui/UberwriterWindow.ui.h:11
-msgid "Characters: "
-msgstr ""
-
-#: ../h/data/ui/UberwriterWindow.ui.h:12
-msgid "Lines: "
-msgstr ""
-
-#: ../h/uberwriter.desktop.in.h:2
-msgid "UberWriter application"
 msgstr ""
