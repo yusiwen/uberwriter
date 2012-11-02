@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-11-01 22:39+0100\n"
+"POT-Creation-Date: 2012-11-02 03:21+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,57 +47,6 @@ msgstr ""
 
 #: ../uberwriter.desktop.in.h:2
 msgid "UberWriter, a simple and distraction free Markdown Editor"
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:418
-msgid "Save your File"
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:563
-msgid "You can not export to PDF."
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:565
-msgid ""
-"Please install <a href=\"apt:texlive\">texlive</a> from the software center."
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:592
-msgid "MarkDown or Plain Text"
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:595
-msgid "Open a .md-File"
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:617
-msgid "You have not saved your changes."
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:619
-msgid "Close without Saving"
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:620
-msgid "Cancel"
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:621
-msgid "Save now"
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:622
-msgid "Unsaved changes"
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:682
-msgid "You can not enable the Spell Checker."
-msgstr ""
-
-#: ../uberwriter/UberwriterWindow.py:684
-msgid ""
-"Please install 'hunspell' or 'aspell' dictionarys for your language from the "
-"software center."
 msgstr ""
 
 #: ../uberwriter/UberwriterInlinePreview.py:59
@@ -380,4 +329,55 @@ msgstr ""
 
 #: ../data/ui/AboutUberwriterDialog.ui.h:14
 msgid "Copyright (C) 2012, Wolf Vollprecht <w.vollprecht@gmail.com>"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:418
+msgid "Save your File"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:563
+msgid "You can not export to PDF."
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:565
+msgid ""
+"Please install <a href=\"apt:texlive\">texlive</a> from the software center."
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:592
+msgid "MarkDown or Plain Text"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:595
+msgid "Open a .md-File"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:617
+msgid "You have not saved your changes."
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:619
+msgid "Close without Saving"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:620
+msgid "Cancel"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:621
+msgid "Save now"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:622
+msgid "Unsaved changes"
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:682
+msgid "You can not enable the Spell Checker."
+msgstr ""
+
+#: ../uberwriter/UberwriterWindow.py:684
+msgid ""
+"Please install 'hunspell' or 'aspell' dictionarys for your language from the "
+"software center."
 msgstr ""
