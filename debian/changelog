@@ -1,3 +1,10 @@
+uberwriter (12.11.04-public) quantal; urgency=low
+ 
+  [ Wolf ]
+  * Added utf 8 encoding to files, necessary or else build on launchpad 
+    fails
+ -- Wolf <w.vollprecht@googlemail.com>  Mon, 02 Nov 2012 03:20:00 +0200
+
 uberwriter (12.11.03-public) quantal; urgency=low
  
   [ Wolf ]
