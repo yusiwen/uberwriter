@@ -23,7 +23,8 @@ Depends: ${misc:Depends},
  pandoc,
  yelp,
  gnome-web-photo,
- ttf-ubuntu-font-family
+ ttf-ubuntu-font-family,
+ dvipng
 Suggests: texlive
 Description: UberWriter, beautiful distraction free writing
  With UberWriter you get only one thing: An empty textbox, that is to

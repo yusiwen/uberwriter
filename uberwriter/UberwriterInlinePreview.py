@@ -28,6 +28,8 @@ import threading
 from gi.repository import Gtk, Gdk, GdkPixbuf, GObject
 from uberwriter_lib import LatexToPNG
 
+from .FixTable import FixTable
+
 from .MarkupBuffer import MarkupBuffer
 
 from locale import gettext as _
@@ -111,11 +113,24 @@ class UberwriterInlinePreview():
             self.TextBuffer.move_mark(self.ClickMark,
                                       self.TextView.get_iter_at_location(x, y))
 
+    def fix_table(self, widget, data=None):
+        logger.debug('fixing that table')
+        f = FixTable(self.TextBuffer)
+        f.fix_table()
+
     def populate_popup(self, editor, menu, data=None):
 
         item = Gtk.MenuItem.new()
         item.set_name("PreviewMenuItem")
         separator = Gtk.SeparatorMenuItem.new()
+
+        table_item = Gtk.MenuItem.new()
+        table_item.set_label('Fix that table')
+
+        table_item.connect('activate', self.fix_table)
+        table_item.show()
+        menu.prepend(table_item)
+        menu.show()
 
         start_iter = self.TextBuffer.get_iter_at_mark(self.ClickMark)
         # Line offset of click mark

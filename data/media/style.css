@@ -83,6 +83,12 @@
   /*font: Georgia 15;*/
 }
 
+#UberwriterWindow GtkTextView GtkButton {
+  margin: 0;
+  padding: 0;
+  background: #CCC;
+}
+
 #UberwriterWindow GtkScrolledWindow {
   background: transparent;
 }

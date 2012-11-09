@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 import re
+import vim
+
 
 def cjk_width(text):
     import sys
@@ -8,6 +10,7 @@ def cjk_width(text):
             text = text.decode("utf-8")
     from unicodedata import east_asian_width
     return sum(1+(east_asian_width(c) in "WF") for c in text)
+
 
 def create_separarator(widths, char):
     """Genera una linea para separar filas de una tabla.
@@ -46,7 +49,7 @@ def create_line(columns, widths):
         >>> create_line(['nombre', 'apellido'], [7, 10])
         '| nombre  | apellido   |'
     """
-    
+
     line = zip(columns, widths)
     result = []
 
@@ -57,6 +60,7 @@ def create_line(columns, widths):
 
     result.append("|")
     return ''.join(result)
+
 
 def create_table(content):
     """Imprime una tabla en formato restructuredText.
@@ -94,14 +98,15 @@ def create_table(content):
     return '\n'.join(result)
 
 
-
 def are_in_a_table(current_line):
     "Indica si el cursor se encuentra dentro de una tabla."
     return "|" in current_line or "+" in current_line
 
+
 def are_in_a_paragraph(current_line):
     "Indica si la linea actual es parte de algun parrafo"
     return len(current_line.strip()) >= 1
+
 
 def get_table_bounds(current_row_index, are_in_callback):
     """Obtiene el numero de fila donde comienza y termina la tabla.
@@ -130,9 +135,11 @@ def get_table_bounds(current_row_index, are_in_callback):
 
     return top, bottom
 
+
 def remove_spaces(string):
     "Elimina los espacios innecesarios de una fila de tabla."
     return re.sub("\s\s+", " ", string)
+
 
 def create_separators_removing_spaces(string):
     return re.sub("\s\s+", "|", string)
@@ -143,6 +150,7 @@ def extract_cells_as_list(string):
     string = remove_spaces(string)
     return [item.strip() for item in string.split('|') if item]
 
+
 def extract_table(buffer, top, bottom):
     full_table_text = buffer[top:bottom]
     # selecciona solamente las lineas que tienen celdas con texto.
@@ -150,10 +158,11 @@ def extract_table(buffer, top, bottom):
     # extrae las celdas y descarta los separadores innecesarios.
     return [extract_cells_as_list(x) for x in only_text_lines]
 
+
 def extract_words_as_lists(buffer, top, bottom):
     "Genera una lista de palabras para crear una lista."
-    
-    lines = buffer[top:bottom+1]
+
+    lines = buffer[top:bottom + 1]
     return [create_separators_removing_spaces(line).split('|') for line in lines]
 
 
@@ -162,6 +171,7 @@ def copy_to_buffer(buffer, string, index):
     for line in lines:
         buffer[index] = line
         index += 1
+
 
 def fix_table(current_row_index):
     """Arregla una tabla para que todas las columnas tengan el mismo ancho.
@@ -182,10 +192,10 @@ def fix_table(current_row_index):
 
 def FixTable():
     (row, col) = vim.current.window.cursor
-    line = vim.current.buffer[row-1]
+    line = vim.current.buffer[row - 1]
 
     if are_in_a_table(line):
-        fix_table(row-1)
+        fix_table(row - 1)
     else:
         print("No estoy en una tabla. Terminando...")
 
@@ -196,4 +206,4 @@ def CreateTable():
     top, bottom = get_table_bounds(row - 1, are_in_a_paragraph)
     lines = extract_words_as_lists(vim.current.buffer, top, bottom)
     table_content = create_table(lines)
-    vim.current.buffer[top:bottom+1] = table_content.split('\n')
+    vim.current.buffer[top:bottom + 1] = table_content.split('\n')

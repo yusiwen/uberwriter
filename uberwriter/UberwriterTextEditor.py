@@ -53,6 +53,37 @@ try:
 except:
     print("couldn't load depencies")
 
+import logging
+logger = logging.getLogger('uberwriter')
+
+class UndoableInsert(object):
+    """something that has been inserted into our textbuffer"""
+    def __init__(self, text_iter, text, length, fflines):
+        self.offset = text_iter.get_offset() - fflines
+        self.text = text
+        self.length = length
+        if self.length > 1 or self.text in ("\r", "\n", " "):
+            self.mergeable = False
+        else:
+            self.mergeable = True
+
+class UndoableDelete(object):
+    """something that has ben deleted from our textbuffer"""
+    def __init__(self, text_buffer, start_iter, end_iter, fflines):
+        self.text = text_buffer.get_text(start_iter, end_iter, False)
+        self.start = start_iter.get_offset() - fflines
+        self.end = end_iter.get_offset() - fflines
+        # need to find out if backspace or delete key has been used
+        # so we don't mess up during redo
+        insert_iter = text_buffer.get_iter_at_mark(text_buffer.get_insert())
+        if insert_iter.get_offset() <= self.start:
+            self.delete_key_used = True
+        else:
+            self.delete_key_used = False
+        if self.end - self.start > 1 or self.text in ("\r", "\n", " "):
+            self.mergeable = False
+        else:
+            self.mergeable = True
 
 class TextEditor( Gtk.TextView ):
     """TextEditor encapsulates management of TextBuffer and TextIter for
@@ -68,23 +99,18 @@ class TextEditor( Gtk.TextView ):
 
         Gtk.TextView.__init__(self)
         self.undo_max = None
-        self._highlight_strings = []
-        found_tag = Gtk.TextTag(name="highlight")
-        found_tag.set_property("background","yellow")
-        self.get_buffer().get_tag_table().add(found_tag)
 
-        self.insert_event = self.get_buffer().connect("insert-text",self._on_insert)
-        self.delete_event = self.get_buffer().connect("delete-range",self._on_delete)
-        self.change_event = self.get_buffer().connect("changed",self._on_text_changed)
-        self._auto_bullet = None
-        self.auto_bullets = False
+        self.insert_event = self.get_buffer().connect("insert-text",self.on_insert_text)
+        self.delete_event = self.get_buffer().connect("delete-range",self.on_delete_range)
         display = self.get_display()
         self.clipboard = Gtk.Clipboard.get_for_display(display, Gdk.SELECTION_CLIPBOARD)
 
         self.fflines = 0
 
-        self.undos = []
-        self.redos = []
+        self.undo_stack = []
+        self.redo_stack = []
+        self.not_undoable_action = False
+        self.undo_in_progress = False
 
     @property
     def text(self):
@@ -97,6 +123,15 @@ class TextEditor( Gtk.TextView ):
         start_iter = self.get_buffer().get_iter_at_offset(0)
         end_iter =  self.get_buffer().get_iter_at_offset(-1)
         return self.get_buffer().get_text(start_iter,end_iter, False)
+
+    @property
+    def can_undo(self):
+        return bool(self.undo_stack)
+
+    @property
+    def can_redo(self):
+        return bool(self.redo_stack)
+
 
     @text.setter
     def text(self, text):
@@ -146,63 +181,6 @@ class TextEditor( Gtk.TextView ):
         start_iter = self.get_buffer().get_iter_at_offset(0)
         self.get_buffer().place_cursor(start_iter)
 
-    def add_highlight(self, text):
-        """add_highlight: add string to be highlighted when entered in the
-        buffer.
-
-        arguments:
-        text - a string to be highlighted
-
-        """ 
-
-        if text not in self._highlight_strings:
-            self._highlight_strings.append(text)
-        self._highlight()
-
-    def clear_highlight(self, text):
-        """clear_highlight: stops a string from being highlighted in the 
-        buffer.
-
-        arguments:
-        text - the string to stop highlighting. If the string is not currently
-        being highlighted, the function will be ignored.
-
-        """
-
-        if text in self._highlight_strings:
-            del(self._highlight_strings[text])
-        self._highlight()
-
-    def clear_all_highlights(self):
-        """clear_all_highlight: stops highlighting all strings in the buffer.
-        The TextEditor will forget about all strings specified for highlighting.
-        If no strings are currently set for highlighting, the function will be
-        ignored.
-
-        """
-
-
-        self._highlight_strings = []
-
-        self._highlight()
-
-    def _highlight(self):
-        """_highlight: internal method to trigger highlighting.
-        Do not call directly.
-
-        """
-
-        start_iter = self.get_buffer().get_iter_at_offset(0)
-        end_iter =  self.get_buffer().get_iter_at_offset(-1)
-        text = self.get_buffer().get_text(start_iter,end_iter, False)
-        self.get_buffer().remove_tag_by_name('highlight', start_iter, end_iter)
-        for s in self._highlight_strings:
-            hits = [match.start() for match in re.finditer(re.escape(s), text)]
-            for hit in hits:
-                start_iter = self.get_buffer().get_iter_at_offset(hit)
-                end_iter = self.get_buffer().get_iter_at_offset(hit + len(s))
-                self.get_buffer().apply_tag_by_name("highlight",start_iter,end_iter)                 
-
     def cut(self, widget=None, data=None):
         """cut: cut currently selected text and put it on the clipboard.
         This function can be called as a function, or assigned as a signal
@@ -232,116 +210,173 @@ class TextEditor( Gtk.TextView ):
         self.get_buffer().paste_clipboard(self.clipboard,None,True)
 
     def undo(self, widget=None, data=None):
-        """undo: revert (undo) the last action.
-        This function can be called as a function, or assigned as a signal
-        handler.
-
-        """
-
-        if len(self.undos) == 0:
+        """undo inserts or deletions
+        undone actions are being moved to redo stack"""
+        if not self.undo_stack:
             return
-
-        self.get_buffer().disconnect(self.delete_event)
-        self.get_buffer().disconnect(self.insert_event)
-
-        undo = self.undos[-1]
-        redo = self._do_action(undo)
-        self.redos.append(redo)
-        del(self.undos[-1])
-
-        self.insert_event = self.get_buffer().connect("insert-text",self._on_insert)
-        self.delete_event = self.get_buffer().connect("delete-range",self._on_delete)
-        self._highlight()
-
-    def _do_action(self, action):
-        if action["action"] == "delete":
-            offset = action["offset"] + self.fflines
-            start_iter = self.get_buffer().get_iter_at_offset(offset)
-            end_iter =  self.get_buffer().get_iter_at_offset(offset + len(action["text"]))
-            self.get_buffer().delete(start_iter, end_iter)
-            action["action"] = "insert"
-
-        elif action["action"] == "insert":
-            offset = action["offset"] + self.fflines            
-            start_iter = self.get_buffer().get_iter_at_offset(offset)
-            self.get_buffer().insert(start_iter, action["text"])
-            action["action"] = "delete"
-
-        return action
+        self.begin_not_undoable_action()
+        self.undo_in_progress = True
+        undo_action = self.undo_stack.pop()
+        self.redo_stack.append(undo_action)
+        buf = self.get_buffer()
+        if isinstance(undo_action, UndoableInsert):
+            offset = undo_action.offset + self.fflines
+            start = buf.get_iter_at_offset(offset)
+            stop = buf.get_iter_at_offset(
+                offset + undo_action.length
+            )
+            buf.delete(start, stop)
+            buf.place_cursor(start)
+        else:
+            start = buf.get_iter_at_offset(undo_action.start + self.fflines)
+            buf.insert(start, undo_action.text)
+            if undo_action.delete_key_used:
+                buf.place_cursor(start)
+            else:
+                stop = buf.get_iter_at_offset(undo_action.end + self.fflines)
+                buf.place_cursor(stop)
+        self.end_not_undoable_action()
+        self.undo_in_progress = False
 
     def redo(self, widget=None, data=None):
-        """redo: revert (undo) the last revert (undo) action.
-        This function can be called as a function, or assigned as a signal
-        handler.
+        """redo inserts or deletions
 
+        redone actions are moved to undo stack"""
+        if not self.redo_stack:
+            return
+        self.begin_not_undoable_action()
+        self.undo_in_progress = True
+        redo_action = self.redo_stack.pop()
+        self.undo_stack.append(redo_action)
+        buf = self.get_buffer()
+        if isinstance(redo_action, UndoableInsert):
+            start = buf.get_iter_at_offset(redo_action.offset)
+            buf.insert(start, redo_action.text)
+            new_cursor_pos = buf.get_iter_at_offset(
+                redo_action.offset + redo_action.length
+            )
+            buf.place_cursor(new_cursor_pos)
+        else:
+            start = buf.get_iter_at_offset(redo_action.start)
+            stop = buf.get_iter_at_offset(redo_action.end)
+            buf.delete(start, stop)
+            buf.place_cursor(start)
+        self.end_not_undoable_action()
+        self.undo_in_progress = False
+
+    def on_insert_text(self, textbuffer, text_iter, text, length):
         """
+            _on_insert: internal function to handle programatically inserted
+            text. Do not call directly.
+        """
+        def can_be_merged(prev, cur):
+            """see if we can merge multiple inserts here
 
-        if len(self.redos) == 0:
+            will try to merge words or whitespace
+            can't merge if prev and cur are not mergeable in the first place
+            can't merge when user set the input bar somewhere else
+            can't merge across word boundaries"""
+            WHITESPACE = (' ', '\t')
+            if not cur.mergeable or not prev.mergeable:
+                return False
+            elif cur.offset != (prev.offset + prev.length):
+                return False
+            elif cur.text in WHITESPACE and not prev.text in WHITESPACE:
+                return False
+            elif prev.text in WHITESPACE and not cur.text in WHITESPACE:
+                return False
+            return True
+
+        if not self.undo_in_progress:
+            self.redo_stack = []
+        if self.not_undoable_action:
             return
 
-        self.get_buffer().disconnect(self.delete_event)
-        self.get_buffer().disconnect(self.insert_event)
+        logger.debug(text)
+        logger.debug("b: %i, l: %i" % (length, len(text)))
+        undo_action = UndoableInsert(text_iter, text, len(text), self.fflines)
+        try:
+            prev_insert = self.undo_stack.pop()
+        except IndexError:
+            self.undo_stack.append(undo_action)
+            return
+        if not isinstance(prev_insert, UndoableInsert):
+            self.undo_stack.append(prev_insert)
+            self.undo_stack.append(undo_action)
+            return
+        if can_be_merged(prev_insert, undo_action):
+            prev_insert.length += undo_action.length
+            prev_insert.text += undo_action.text
+            self.undo_stack.append(prev_insert)
+        else:
+            self.undo_stack.append(prev_insert)
+            self.undo_stack.append(undo_action)                
+ 
+    def on_delete_range(self, text_buffer, start_iter, end_iter):
+        """
+            On delete 
+        """
+        def can_be_merged(prev, cur):
+            """see if we can merge multiple deletions here
 
-        redo = self.redos[-1]
-        undo = self._do_action(redo)
-        self.undos.append(undo)
-        del(self.redos[-1])
+            will try to merge words or whitespace
+            can't merge if prev and cur are not mergeable in the first place
+            can't merge if delete and backspace key were both used
+            can't merge across word boundaries"""
+
+            WHITESPACE = (' ', '\t')
+            if not cur.mergeable or not prev.mergeable:
+                return False
+            elif prev.delete_key_used != cur.delete_key_used:
+                return False
+            elif prev.start != cur.start and prev.start != cur.end:
+                return False
+            elif cur.text not in WHITESPACE and \
+               prev.text in WHITESPACE:
+                return False
+            elif cur.text in WHITESPACE and \
+               prev.text not in WHITESPACE:
+                return False
+            return True
+
+        if not self.undo_in_progress:
+            self.redo_stack = []
+        if self.not_undoable_action:
+            return
+        undo_action = UndoableDelete(text_buffer, start_iter, end_iter, self.fflines)
+        try:
+            prev_delete = self.undo_stack.pop()
+        except IndexError:
+            self.undo_stack.append(undo_action)
+            return
+        if not isinstance(prev_delete, UndoableDelete):
+            self.undo_stack.append(prev_delete)
+            self.undo_stack.append(undo_action)
+            return
+        if can_be_merged(prev_delete, undo_action):
+            if prev_delete.start == undo_action.start: # delete key used
+                prev_delete.text += undo_action.text
+                prev_delete.end += (undo_action.end - undo_action.start)
+            else: # Backspace used
+                prev_delete.text = "%s%s" % (undo_action.text,
+                                                     prev_delete.text)
+                prev_delete.start = undo_action.start
+            self.undo_stack.append(prev_delete)
+        else:
+            self.undo_stack.append(prev_delete)
+            self.undo_stack.append(undo_action)    
+
+    def begin_not_undoable_action(self):
+        """don't record the next actions
         
-        self.insert_event = self.get_buffer().connect("insert-text",self._on_insert)
-        self.delete_event = self.get_buffer().connect("delete-range",self._on_delete)
+        toggles self.not_undoable_action"""
+        self.not_undoable_action = True        
 
-        self._highlight()
-
-    def _on_text_changed(self, buff):
-        if self._auto_bullet is not None:
-            self.get_buffer().disconnect(self.change_event)
-            buff.insert_at_cursor(self._auto_bullet)
-            self._auto_bullet = None
-            self.change_event = self.get_buffer().connect("changed",self._on_text_changed)
-
-    def _on_insert(self, text_buffer, iter, text, length, data=None):
-        """_on_insert: internal function to handle programatically inserted
-        text. Do not call directly.
-
-        """
-
-        self._highlight()
-        offset = iter.get_offset() - self.fflines
-        cmd = {"action":"delete","offset": offset,"text":text}
-        self._add_undo(cmd)
-        self.redos = []
-        if text == "\n" and self.auto_bullets:
-            cur_line = iter.get_line()
-            prev_line_iter = self.get_buffer().get_iter_at_line(cur_line)
-            pl_offset = prev_line_iter.get_offset()
-            pl_text = self.get_buffer().get_text(prev_line_iter, iter, False)
-            if pl_text.strip().find("*") == 0:
-                ws = ""
-                if not pl_text.startswith("*"):
-                    ws = (pl_text.split("*")[0])
-                self._auto_bullet = ws + "* "
-                
-    def _on_delete(self, text_buffer, start_iter, end_iter, data=None):
-        """_on_insert: internal function to handle delete
-        text. Do not call directly.
-
-        """
-        self._highlight()
-        text = self.get_buffer().get_text(start_iter,end_iter, False)    
-        offset = start_iter.get_offset() - self.fflines    
-        cmd = {"action":"insert","offset": offset,"text":text}
-        self._add_undo(cmd)
-
-    def _add_undo(self, cmd):
-        """internal function to capture current state to add to undo stack.
-        Do not call directly.
-
-        """
-
-        #delete the oldest undo if undo maximum is in effect
-        if self.undo_max is not None and len(self.undos) >= self.undo_max:
-            del(self.undos[0])
-        self.undos.append(cmd)
+    def end_not_undoable_action(self):
+        """record next actions
+        
+        toggles self.not_undoable_action"""
+        self.not_undoable_action = False
 
 class TestWindow(Gtk.Window):
     """For testing and demonstrating AsycnTaskProgressBox.
@@ -367,11 +402,7 @@ class TestWindow(Gtk.Window):
         self.editor.prepend("Line1\n")
         self.editor.cursor_to_end()
         self.editor.cursor_to_start()
-        self.editor.add_highlight("his")
-        self.editor.clear_all_highlights()
-        self.editor.add_highlight("some")
         self.editor.undo_max = 100
-        self.editor.auto_bullets = True
         cut_button = Gtk.Button("Cut")
         cut_button.connect("clicked",self.editor.cut)
         cut_button.show()
