@@ -43,6 +43,8 @@ from .UberwriterInlinePreview import UberwriterInlinePreview
 import logging
 logger = logging.getLogger('uberwriter')
 
+print('This file is imported')
+
 # Spellcheck
 
 import locale
@@ -1021,6 +1023,53 @@ class UberwriterWindow(Window):
 
         pangoFont = Pango.FontDescription("Ubuntu Mono 15px")
 
+        ###
+        #   Sidebar initialization test
+        ###
+
+        mb = builder.get_object('menubutton_settings')
+        mb_menu = Gtk.Menu.new()
+        mitem = Gtk.MenuItem.new_with_label('etstasd asd as d')
+        mitem.show()
+        mb_menu.append(mitem)
+        mb_menu.show()
+
+        mb.set_popup(mb_menu)
+
+        self.scw = builder.get_object('scrolledwindow1')
+        store = Gtk.TreeStore(str)
+        t_iter = store.append(None, ["Test 1"])
+        t_iter = store.append(None, ["Test 2"])
+        t_iter = store.append(t_iter, ["Test 3"])
+        treeview = Gtk.TreeView(store)
+        renderer = Gtk.CellRendererText()
+        column = Gtk.TreeViewColumn("Title", renderer, text=0)
+        treeview.append_column(column)
+        treeview.show()
+        self.scw.add(treeview)
+
+        # liststore = Gtk.ListStore(str, str)
+        # liststore.append(["Fedora", "http://fedoraproject.org/"])
+        # liststore.append(["Slackware", "http://www.slackware.com/"])
+        # liststore.append(["Sidux", "http://sidux.com/"])
+
+        # treeview = Gtk.TreeView(model=liststore)
+
+        # renderer_text = Gtk.CellRendererText()
+        # column_text = Gtk.TreeViewColumn("Text", renderer_text, text=0)
+        # treeview.append_column(column_text)
+
+        # renderer_editabletext = Gtk.CellRendererText()
+        # renderer_editabletext.set_property("editable", True)
+
+        # column_editabletext = Gtk.TreeViewColumn("Editable Text",
+        #     renderer_editabletext, text=1)
+        # treeview.append_column(column_editabletext)
+
+        # treeview.show()
+        # self.scw.add(treeview)
+        # self.scw.show_all()
+
         #pangoContext = self.TextEditor.get_pango_context()
         #pangoLayout = self.TextEditor.create_pango_layout()
 
@@ -1030,7 +1079,7 @@ class UberwriterWindow(Window):
         # attr_list.insert(Pango.Attribute.LetterSpacing.new(100))
 
         # self.TextEditor.set_attributes(attr_list)
-        
+
         self.TextEditor.modify_font(pangoFont)
 
         self.TextEditor.set_margin_top(38)

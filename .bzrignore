@@ -4,3 +4,5 @@ build/share
 debian/uberwriter/DEBIAN
 debian/uberwriter/opt
 debian/uberwriter/usr
+*.sublime-project
+*.sublime-workspace

@@ -23,7 +23,7 @@ locale.textdomain('uberwriter')
 
 from gi.repository import Gtk # pylint: disable=E0611
 
-from uberwriter import UberwriterWindow
+from . import UberwriterWindow
 
 from uberwriter_lib import set_up_logging, get_version
 

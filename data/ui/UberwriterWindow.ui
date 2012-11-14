@@ -293,18 +293,18 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkMenuItem" id="mnu_focusmode">
-                        <property name="label">Focus Mode</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label">Focus Mode</property>
                         <accelerator key="d" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="menu_activate_focusmode" swapped="no"/>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="mnu_fullscreen">
-                        <property name="label">Fullscreen</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label">Fullscreen</property>
                         <accelerator key="F11" signal="activate"/>
                         <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="menu_activate_fullscreen" swapped="no"/>
@@ -316,7 +316,6 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Light text on a dark background</property>
                         <property name="label" translatable="yes">Dark Mode</property>
-                        <property name="use_underline">False</property>
                         <property name="draw_as_radio">True</property>
                         <signal name="toggled" handler="dark_mode_toggled" swapped="no"/>
                       </object>
@@ -327,12 +326,11 @@
                         <property name="can_focus">False</property>
                         <property name="tooltip_text" translatable="yes">Switch to preview mode</property>
                         <property name="label" translatable="yes">Preview</property>
-                        <property name="use_underline">False</property>
                         <property name="draw_as_radio">True</property>
-                        <signal name="toggled" handler="menu_activate_preview" swapped="no"/>
                         <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <signal name="toggled" handler="menu_activate_preview" swapped="no"/>
                       </object>
-                    </child>                    
+                    </child>
                     <child>
                       <object class="GtkSeparatorMenuItem" id="separatormenuitem6">
                         <property name="can_focus">False</property>
@@ -453,9 +451,9 @@
                     <property name="can_focus">False</property>
                     <child>
                       <object class="GtkMenuItem" id="mnu_contents">
-                        <property name="label" translatable="yes">Contents</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
+                        <property name="label" translatable="yes">Contents</property>
                         <accelerator key="F1" signal="activate"/>
                       </object>
                     </child>
@@ -467,18 +465,18 @@
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="mnu_uberwriter_markdown">
-                        <property name="label" translatable="yes">Short Markdown Tutorial</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <signal name="activate" handler="open_uberwriter_markdown" swapped="no"/>                        
+                        <property name="label" translatable="yes">Short Markdown Tutorial</property>
+                        <signal name="activate" handler="open_uberwriter_markdown" swapped="no"/>
                       </object>
                     </child>
                     <child>
                       <object class="GtkMenuItem" id="mnu_pandoc_markdown">
-                        <property name="label" translatable="yes">Open Pandoc Online Markdown Help ...</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
-                        <signal name="activate" handler="open_pandoc_markdown" swapped="no"/>                        
+                        <property name="label" translatable="yes">Open Pandoc Online Markdown Help ...</property>
+                        <signal name="activate" handler="open_pandoc_markdown" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -526,95 +524,21 @@
           </packing>
         </child>
         <child>
-          <object class="GtkScrolledWindow" id="editor_scrolledwindow">
-            <property name="height_request">500</property>
+          <object class="GtkPaned" id="paned1">
             <property name="visible">True</property>
+            <property name="app_paintable">True</property>
             <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
             <child>
-              <placeholder/>
-            </child>
-          </object>
-          <packing>
-            <property name="expand">True</property>
-            <property name="fill">True</property>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox" id="status_bar_box">
-            <property name="height_request">15</property>
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="valign">end</property>
-            <property name="margin_left">5</property>
-            <property name="margin_bottom">5</property>
-            <property name="spacing">5</property>
-            <child>
-              <object class="GtkToggleButton" id="focus_toggle">
-                <property name="label" translatable="yes">Focus Mode</property>
-                <property name="height_request">15</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Go into focus mode</property>
-                <property name="relief">none</property>
-                <property name="focus_on_click">False</property>
-                <signal name="toggled" handler="set_focusmode" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="padding">3</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="fullscreen_toggle">
-                <property name="label" translatable="yes">Fullscreen</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Go into fullscreen mode</property>
-                <property name="relief">none</property>
-                <property name="focus_on_click">False</property>
-                <signal name="toggled" handler="toggle_fullscreen" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkToggleButton" id="preview_toggle">
-                <property name="label" translatable="yes">Preview</property>
-                <property name="use_action_appearance">False</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
-                <property name="tooltip_text" translatable="yes">Show HTML preview</property>
-                <property name="use_action_appearance">False</property>
-                <property name="relief">none</property>
-                <property name="focus_on_click">False</property>
-                <signal name="toggled" handler="toggle_preview" swapped="no"/>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">2</property>
-              </packing>
-            </child>            
-            <child>
-              <object class="GtkBox" id="box3">
+              <object class="GtkBox" id="box1">
+                <property name="width_request">200</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
+                <property name="margin_left">2</property>
+                <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkLabel" id="label2">
+                  <object class="GtkComboBox" id="combobox1">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="margin_right">5</property>
-                    <property name="label" translatable="yes">Words:</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -623,14 +547,14 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkLabel" id="word_count">
+                  <object class="GtkScrolledWindow" id="scrolledwindow1">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_right">5</property>
-                    <property name="xalign">1</property>
-                    <property name="label">0</property>
-                    <property name="justify">right</property>
-                    <property name="width_chars">4</property>
+                    <property name="can_focus">True</property>
+                    <property name="vexpand">True</property>
+                    <property name="shadow_type">in</property>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -639,59 +563,225 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkSeparator" id="separator1">
+                  <object class="GtkBox" id="box4">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkMenuButton" id="menubutton_settings">
+                      <property name="visible">True</property>
+                      <property name="can_focus">False</property>
+                    </object>
+                    <packing>
+                      <property name="expand">False</property>
+                      <property name="fill">True</property>
+                      <property name="position">0</property>
+                    </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">True</property>
-                    <property name="padding">6</property>
                     <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="label1">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_right">5</property>
-                    <property name="label" translatable="yes">Characters:</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkLabel" id="char_count">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
-                    <property name="margin_right">10</property>
-                    <property name="xalign">1</property>
-                    <property name="label">0</property>
-                    <property name="width_chars">6</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">True</property>
-                    <property name="position">4</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="pack_type">end</property>
-                <property name="position">3</property>
+                <property name="resize">False</property>
+                <property name="shrink">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox" id="box2">
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="editor_scrolledwindow">
+                    <property name="height_request">500</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <child>
+                      <placeholder/>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkBox" id="status_bar_box">
+                    <property name="height_request">15</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">False</property>
+                    <property name="valign">end</property>
+                    <property name="margin_left">5</property>
+                    <property name="margin_bottom">5</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkToggleButton" id="focus_toggle">
+                        <property name="label" translatable="yes">Focus Mode</property>
+                        <property name="height_request">15</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_markup" translatable="yes">Go into focus mode</property>
+                        <property name="tooltip_text" translatable="yes">Go into focus mode</property>
+                        <property name="relief">none</property>
+                        <property name="focus_on_click">False</property>
+                        <signal name="toggled" handler="set_focusmode" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="padding">3</property>
+                        <property name="position">0</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="fullscreen_toggle">
+                        <property name="label" translatable="yes">Fullscreen</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_markup" translatable="yes">Go into fullscreen mode</property>
+                        <property name="tooltip_text" translatable="yes">Go into fullscreen mode</property>
+                        <property name="relief">none</property>
+                        <property name="focus_on_click">False</property>
+                        <signal name="toggled" handler="toggle_fullscreen" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleButton" id="preview_toggle">
+                        <property name="label" translatable="yes">Preview</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip_markup" translatable="yes">Show HTML preview</property>
+                        <property name="tooltip_text" translatable="yes">Show HTML preview</property>
+                        <property name="relief">none</property>
+                        <property name="focus_on_click">False</property>
+                        <signal name="toggled" handler="toggle_preview" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="box3">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <child>
+                          <object class="GtkLabel" id="label2">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_right">5</property>
+                            <property name="label" translatable="yes">Words:</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="word_count">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_right">5</property>
+                            <property name="xalign">1</property>
+                            <property name="label">0</property>
+                            <property name="justify">right</property>
+                            <property name="width_chars">4</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSeparator" id="separator1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="orientation">vertical</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="padding">6</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="label1">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_right">5</property>
+                            <property name="label" translatable="yes">Characters:</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="char_count">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="margin_right">10</property>
+                            <property name="xalign">1</property>
+                            <property name="label">0</property>
+                            <property name="width_chars">6</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">4</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="pack_type">end</property>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="resize">True</property>
+                <property name="shrink">False</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">True</property>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
       </object>
