@@ -1024,45 +1024,12 @@ class UberwriterWindow(Window):
         ###
         #   Sidebar initialization test
         ###
-
-        mb = builder.get_object('menubutton_settings')
-        mb_menu = Gtk.Menu.new()
-        mitem = Gtk.MenuItem.new_with_label('etstasd asd as d')
-        mitem.show()
-        mb_menu.append(mitem)
-        mb_menu.show()
-
-        mb.set_popup(mb_menu)
-
+        self.paned_window = builder.get_object("main_pained")
+        self.sidebar_box = builder.get_object("sidebar_box")
         self.sidebar = UberwriterSidebar(self)
 
-        self.scw = builder.get_object('scrolledwindow1')
-        self.scw.add(self.sidebar.get_treeview())
-
-        # liststore = Gtk.ListStore(str, str)
-        # liststore.append(["Fedora", "http://fedoraproject.org/"])
-        # liststore.append(["Slackware", "http://www.slackware.com/"])
-        # liststore.append(["Sidux", "http://sidux.com/"])
-
-        # treeview = Gtk.TreeView(model=liststore)
-
-        # renderer_text = Gtk.CellRendererText()
-        # column_text = Gtk.TreeViewColumn("Text", renderer_text, text=0)
-        # treeview.append_column(column_text)
-
-        # renderer_editabletext = Gtk.CellRendererText()
-        # renderer_editabletext.set_property("editable", True)
-
-        # column_editabletext = Gtk.TreeViewColumn("Editable Text",
-        #     renderer_editabletext, text=1)
-        # treeview.append_column(column_editabletext)
-
-        # treeview.show()
-        # self.scw.add(treeview)
-        # self.scw.show_all()
-
-        #pangoContext = self.TextEditor.get_pango_context()
-        #pangoLayout = self.TextEditor.create_pango_layout()
+        # self.scw = builder.get_object('scrolledwindow1')
+        # self.scw.add(self.sidebar.get_treeview())
 
         # http://nullege.com/codes/show/src%40c%40o%40comix-HEAD%40trunk%40src%40labels.py/31/gtk.Label.set_attributes/python
         # ## TODO

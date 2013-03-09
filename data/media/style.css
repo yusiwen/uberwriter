@@ -130,3 +130,7 @@
 #UberwriterWindow GtkTreeView {
   color: #333;
 }
+
+#UberwriterWindow GtkBox {
+  background: #FFF;
+}
