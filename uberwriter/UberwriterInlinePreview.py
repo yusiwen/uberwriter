@@ -65,12 +65,14 @@ def check_url(url, item, spinner):
     spinner.destroy()
     item.set_label(text)
 
+
 def get_web_thumbnail(url, item, spinner):
     logger.debug("thread started, generating thumb")
-    
-    error = False
+
+    # error = False
+
     filename = tempfile.mktemp(suffix='.png')
-    thumb_size = '256' # size can only be 32, 64, 96, 128 or 256!
+    thumb_size = '256'  # size can only be 32, 64, 96, 128 or 256!
     args = ['gnome-web-photo', '--mode=thumbnail', '-s', thumb_size, url, filename]
     p = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE)
     output = p.communicate()[0]
@@ -78,14 +80,13 @@ def get_web_thumbnail(url, item, spinner):
     image = Gtk.Image.new_from_file(filename)
     image.show()
 
-    
     # if not error:
     #    if (response.code / 100) >= 4:
     #        logger.debug("Website not available")
     #        text = _("Website is not available")
     #    else:
     #        text = _("Website is available")
-    
+
     spinner.destroy()
     item.add(image)
     item.show()
@@ -164,7 +165,7 @@ class UberwriterInlinePreview():
                     image.show()
                     item.add(image)
                     item.set_property('width-request', 50)
-                else: 
+                else:
                     label = Gtk.Label()
                     msg = 'Formula looks incorrect:\n' + result
                     label.set_alignment(0.0, 0.5)
@@ -185,14 +186,13 @@ class UberwriterInlinePreview():
             for match in matches:
                 if match.start() < line_offset and match.end() > line_offset:
                     text = text[text.find("http://"):-1]
-                    
-                    item.connect("activate", lambda w: webbrowser.open(text))                    
+
+                    item.connect("activate", lambda w: webbrowser.open(text))
 
                     logger.debug(text)
 
                     statusitem = Gtk.MenuItem.new()
                     statusitem.show()
-
 
                     spinner = Gtk.Spinner.new()
                     spinner.start()
@@ -229,7 +229,7 @@ class UberwriterInlinePreview():
 
                     found_match = True
                     break
-        
+
         if not found_match:
             matches = re.finditer(image, text)
             for match in matches:
@@ -267,7 +267,7 @@ class UberwriterInlinePreview():
                         result = re.sub(replace, "", fn_match.group(1))
                         if result.endswith("\n"):
                             result = result[:-1]
-                    else: 
+                    else:
                         result = _("No matching footnote found")
                     label.set_max_width_chars(40)
                     label.set_line_wrap(True)

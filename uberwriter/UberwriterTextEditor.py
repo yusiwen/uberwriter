@@ -49,12 +49,13 @@ A TextEditor is Gtk.TextView
 try:
     from gi.repository import Gtk
     from gi.repository import Gdk
-    import re
+
 except:
     print("couldn't load depencies")
 
 import logging
 logger = logging.getLogger('uberwriter')
+
 
 class UndoableInsert(object):
     """something that has been inserted into our textbuffer"""
@@ -66,6 +67,7 @@ class UndoableInsert(object):
             self.mergeable = False
         else:
             self.mergeable = True
+
 
 class UndoableDelete(object):
     """something that has ben deleted from our textbuffer"""
@@ -85,9 +87,10 @@ class UndoableDelete(object):
         else:
             self.mergeable = True
 
-class TextEditor( Gtk.TextView ):
+
+class TextEditor(Gtk.TextView):
     """TextEditor encapsulates management of TextBuffer and TextIter for
-    common functionality, such as cut, copy, paste, undo, redo, and 
+    common functionality, such as cut, copy, paste, undo, redo, and
     highlighting of text.
 
     """
@@ -100,8 +103,8 @@ class TextEditor( Gtk.TextView ):
         Gtk.TextView.__init__(self)
         self.undo_max = None
 
-        self.insert_event = self.get_buffer().connect("insert-text",self.on_insert_text)
-        self.delete_event = self.get_buffer().connect("delete-range",self.on_delete_range)
+        self.insert_event = self.get_buffer().connect("insert-text", self.on_insert_text)
+        self.delete_event = self.get_buffer().connect("delete-range", self.on_delete_range)
         display = self.get_display()
         self.clipboard = Gtk.Clipboard.get_for_display(display, Gdk.SELECTION_CLIPBOARD)
 
@@ -114,15 +117,15 @@ class TextEditor( Gtk.TextView ):
 
     @property
     def text(self):
-        """text - a string specifying all the text currently 
+        """
+        text - a string specifying all the text currently
         in the TextEditor's buffer.
 
         This property is read/write.
-
         """
         start_iter = self.get_buffer().get_iter_at_offset(0)
         end_iter =  self.get_buffer().get_iter_at_offset(-1)
-        return self.get_buffer().get_text(start_iter,end_iter, False)
+        return self.get_buffer().get_text(start_iter, end_iter, False)
 
     @property
     def can_undo(self):
