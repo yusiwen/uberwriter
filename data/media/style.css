@@ -24,9 +24,11 @@
 #UberwriterWindow GtkScrolledWindow {
   background: white;
 }
+
 #UberwriterWindow GtkToolbar {
   background: transparent;
   border: none;
+  padding: 0;
 }
 
 #UberwriterWindow GtkTextView:selected {
