@@ -40,6 +40,7 @@ from .FormatShortcuts import FormatShortcuts
 from .UberwriterTextEditor import TextEditor
 from .UberwriterInlinePreview import UberwriterInlinePreview
 from .UberwriterSidebar import UberwriterSidebar
+from .UberwriterSearchAndReplace import UberwriterSearchAndReplace
 
 import logging
 logger = logging.getLogger('uberwriter')
@@ -945,6 +946,7 @@ class UberwriterWindow(Window):
 
         self.AboutDialog = AboutUberwriterDialog
         self.UberwriterAdvancedExportDialog = UberwriterAdvancedExportDialog
+        self.builder = builder
 
         # Code for other initialization actions should be added here.
 
@@ -1021,12 +1023,6 @@ class UberwriterWindow(Window):
 
         pangoFont = Pango.FontDescription("Ubuntu Mono 15px")
 
-        ###
-        #   Sidebar initialization test
-        ###
-        self.paned_window = builder.get_object("main_pained")
-        self.sidebar_box = builder.get_object("sidebar_box")
-        self.sidebar = UberwriterSidebar(self)
 
         # self.scw = builder.get_object('scrolledwindow1')
         # self.scw.add(self.sidebar.get_treeview())
@@ -1130,6 +1126,21 @@ class UberwriterWindow(Window):
             self.SpellChecker.append_filter('[#*]+', SpellChecker.FILTER_WORD)
 
         self.did_change = False
+
+        ###
+        #   Sidebar initialization test
+        ###
+        self.paned_window = builder.get_object("main_pained")
+        self.sidebar_box = builder.get_object("sidebar_box")
+        self.sidebar = UberwriterSidebar(self)
+
+        ###
+        #   Search and replace initialization
+        #   Same interface as Sidebar ;)
+        ###
+
+        self.searchreplace = UberwriterSearchAndReplace(self)
+
 
         # Window resize
         self.connect("configure-event", self.window_resize)
