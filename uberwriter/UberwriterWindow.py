@@ -876,6 +876,9 @@ class UberwriterWindow(Window):
     def open_uberwriter_markdown(self, widget, data=None):
         self.load_file(helpers.get_media_file('uberwriter_markdown.md'))
 
+    def open_search_and_replace(self, widget, data=None):
+        self.searchreplace.toggle_search()
+
     def open_advanced_export(self, widget, data=None):
         if self.UberwriterAdvancedExportDialog is not None:
             advexp = self.UberwriterAdvancedExportDialog()  # pylint: disable=

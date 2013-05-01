@@ -88,6 +88,7 @@ class UberwriterSidebar():
         self.active_shelf.get_tree(self.store)
 
         self.treeview = Gtk.TreeView(self.store)
+        self.treeview.set_headers_visible(False)
         # expand first folder (root folder, but not children)
         self.treeview.expand_row(Gtk.TreePath.new_from_string("0"), False)
 

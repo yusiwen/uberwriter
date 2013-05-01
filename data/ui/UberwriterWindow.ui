@@ -22,11 +22,6 @@
     <property name="yalign">0.49000000953674316</property>
     <property name="stock">gtk-help</property>
   </object>
-  <object class="GtkImage" id="image2">
-    <property name="visible">True</property>
-    <property name="can_focus">False</property>
-    <property name="stock">gtk-help</property>
-  </object>
   <object class="GtkImage" id="image3">
     <property name="visible">True</property>
     <property name="can_focus">False</property>
@@ -307,7 +302,6 @@
                         <property name="can_focus">False</property>
                         <property name="label">Fullscreen</property>
                         <accelerator key="F11" signal="activate"/>
-                        <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="activate" handler="menu_activate_fullscreen" swapped="no"/>
                       </object>
                     </child>
@@ -330,6 +324,17 @@
                         <property name="draw_as_radio">True</property>
                         <accelerator key="p" signal="activate" modifiers="GDK_CONTROL_MASK"/>
                         <signal name="toggled" handler="menu_activate_preview" swapped="no"/>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkMenuItem" id="searchreplacemenuitem">
+                        <property name="visible">True</property>
+                        <property name="can_focus">False</property>
+                        <property name="tooltip_text" translatable="yes">Open Search and Replace</property>
+                        <property name="label" translatable="yes">Search and Replace ...</property>
+                        <property name="use_underline">True</property>
+                        <accelerator key="f" signal="activate" modifiers="GDK_CONTROL_MASK"/>
+                        <signal name="activate" handler="open_search_and_replace" swapped="no"/>
                       </object>
                     </child>
                     <child>
@@ -526,7 +531,6 @@
         </child>
         <child>
           <object class="GtkBox" id="searchreplaceholder">
-            <property name="visible">True</property>
             <property name="can_focus">False</property>
             <property name="valign">start</property>
             <property name="orientation">vertical</property>
@@ -541,6 +545,7 @@
                     <property name="width_request">100</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">5</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Search</property>
                   </object>
@@ -662,7 +667,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="box1">
+              <object class="GtkBox" id="replacebox">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="spacing">5</property>
@@ -671,6 +676,7 @@
                     <property name="width_request">100</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">5</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Replace with</property>
                   </object>
@@ -759,7 +765,7 @@
                 <property name="width_request">200</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="margin_left">2</property>
+                <property name="margin_left">5</property>
                 <property name="orientation">vertical</property>
               </object>
               <packing>

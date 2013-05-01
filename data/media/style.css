@@ -38,7 +38,7 @@
 
 #UberwriterWindow GtkPaned, #UberwriterWindow GtkScrolledWindow,
 #UberwriterWindow GtkScrolledWindow:backdrop {
-  background-color: transparent;
+  background-color: white;
   background-clip: initial;
   background-origin: initial;
   background-size: initial;
@@ -135,6 +135,7 @@
 
 #UberwriterWindow GtkTreeView {
   color: #333;
+  font-size: 10;
 }
 
 #UberwriterWindow GtkBox {

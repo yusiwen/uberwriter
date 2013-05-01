@@ -31,10 +31,13 @@ class UberwriterSearchAndReplace():
     def __init__(self, parentwindow):
         self.parentwindow = parentwindow
         self.box = parentwindow.builder.get_object("searchreplaceholder")
-        self.box.show_all()
         self.searchentry = parentwindow.builder.get_object("searchentrybox")
         self.searchentry.connect('changed', self.search)
-        self.searchentry.connect('activate', self.scrolltonext  )
+        self.searchentry.connect('activate', self.scrolltonext)
+
+        self.open_replace_button = parentwindow.builder.get_object("replace")
+        self.open_replace_button.connect("toggled", self.toggle_replace)
+
         self.textbuffer = parentwindow.TextBuffer
         self.texteditor = parentwindow.TextEditor
 
@@ -43,6 +46,8 @@ class UberwriterSearchAndReplace():
         self.regexbutton = parentwindow.builder.get_object("regex")
         self.casesensitivebutton = parentwindow.builder.get_object("case_sensitive")
         
+        self.replacebox = parentwindow.builder.get_object("replacebox")
+        self.replacebox.hide()
         self.replace_one_button = parentwindow.builder.get_object("replace_one")
         self.replace_all_button = parentwindow.builder.get_object("replace_all")
         self.replaceentry = parentwindow.builder.get_object("replaceentrybox")
@@ -58,6 +63,20 @@ class UberwriterSearchAndReplace():
         self.highlight = self.textbuffer.create_tag('search_highlight',
             background="yellow")
 
+    def toggle_replace(self, widget, data=None):
+        if widget.get_active():
+            self.replacebox.show_all()
+        else: 
+            self.replacebox.hide()
+
+    def toggle_search(self, widget=None, data=None):
+        """
+        show search box
+        """
+        if self.box.get_visible():
+            self.box.hide()
+        else:
+            self.box.show()
 
     def search(self, widget=None, data=None, scroll=True):
         searchtext = self.searchentry.get_text()
@@ -119,7 +138,7 @@ class UberwriterSearchAndReplace():
             self.textbuffer.delete(match[0], match[1])
             self.textbuffer.insert(match[0], self.replaceentry.get_text())
             self.search(scroll=False)
-        
+
     def replace(self, searchindex, inloop=False):
         match = self.matchiters[searchindex]
         self.textbuffer.delete(match[0], match[1])
